@@ -15,7 +15,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 
 
-class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView{
+class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
+
+
     override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
         glitcher.restore()
        /* Observable.fromCallable { glitcher.anaglyph(p1).result }
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
     private val imagePresenter = ImagePresenter(this)
 
+    private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,8 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         seekbar!!.setOnSeekBarChangeListener(this )
 
 
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -70,7 +76,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         when (item?.itemId){
             R.id.open_action -> {
                 //open action
-                imagePresenter.openImageFromGallery()
+                pickPhotoBS.show()
             }
 
             R.id.save_action -> {
@@ -78,6 +84,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pickPhotoBS.dismiss()
     }
 
     override fun onStart() {
@@ -104,6 +115,14 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
     }
 
     override fun onSaveImageError(t: Throwable) {
+    }
+
+    override fun openCamera() {
+        imagePresenter.openImageFromCamera(mImageView!!.width,mImageView!!.height)
+    }
+
+    override fun openGallery() {
+        imagePresenter.openImageFromGallery(mImageView!!.width,mImageView!!.height)
     }
 
     lateinit var glitcher : Glitcher
