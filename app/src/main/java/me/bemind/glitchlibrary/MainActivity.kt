@@ -3,6 +3,7 @@ package me.bemind.glitchlibrary
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -31,12 +32,18 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
     private var glitchButton: Button? = null
     private var seekbar: SeekBar? = null
 
+    private var toolbar : Toolbar? = null
+
     private val imagePresenter = ImagePresenter(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.toolbar) as Toolbar
+
+        setSupportActionBar(toolbar)
 
         mImageView = findViewById(R.id.imageView) as ImageView
 
