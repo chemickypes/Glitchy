@@ -21,54 +21,35 @@ object GlitcherUtil {
 }
 
 
-class Glitcher {
+class Glitcher private constructor(){
 
 
     companion object Creator {
-        fun  getGlitcher(bitmap: Bitmap):Glitcher{
+        fun  getGlitcher():Glitcher{
             val glitcher = Glitcher()
-            glitcher.original = bitmap
-            glitcher.result = glitcher.original!!.copy(glitcher.original?.config,true)
+           /* glitcher.original = bitmap
+            glitcher.result = glitcher.original!!.copy(glitcher.original?.config,true)*/
 
             return glitcher
         }
     }
 
-    var original : Bitmap? = null
-    var result : Bitmap? = null
+   /* var original : Bitmap? = null
+    var result : Bitmap? = null*/
 
 
 
 
-    fun restore() : Bitmap?{
+    /*fun restore() : Bitmap?{
 
         result = original!!.copy(original?.config,true)
         return original
-    }
+    }*/
 
 
-    fun corruptBitmap() : Glitcher{
-
-        /*val RANDOM = Random()
-        //val r = List(result!!.width,{ row -> List(result!!.height,{ col -> result!!.getPixel(row,col)})})
-
-        var vv = result!!.copy(result!!.config,true)
-
-        for(i in 0..50000){
-            var indH = RANDOM.nextInt(vv!!.height) %vv!!.height
-            var indW = RANDOM.nextInt(vv!!.width) %vv!!.width
-            val to = RANDOM.nextInt()
-            var pixel = vv!!.getPixel(indW,indH)
-            Log.d("TAG", "pixel $pixel to $to")
-            pixel = (pixel+to)
-            Log.d("TAG", "mod pixel $pixel")
-            vv!!.setPixel(indW,indH,pixel)
+    fun corruptBitmap(result:Bitmap?) : Bitmap{
 
 
-        }
-
-        result = vv.copy(vv!!.config,false)
-        return result*/
 
         val RANDOM = Random()
 
@@ -78,8 +59,6 @@ class Glitcher {
         val arrayLen = (w * h)
         val stride =  w
 
-        val y = h/(RANDOM.nextInt(4)+1)
-        val x = w/(RANDOM.nextInt(4)+1)
 
 
 
@@ -91,14 +70,14 @@ class Glitcher {
         val vv = result!!.copy(result!!.config,true)
         vv!!.setPixels(intArrayM,0,stride,0,0,w,h)
 
-        result = vv
-        return this
+
+        return vv
 
 
 
     }
 
-    fun corruption() : Glitcher{
+    fun corruption(result: Bitmap?) : Bitmap?{
 
         val JPEG_CORRUPTION_COUNT = 5
         val JPEG_HEADER_SIZE = 100
@@ -112,13 +91,13 @@ class Glitcher {
                 res[idx] = (res[idx] + RANDOM.nextInt(3)).toByte()
             }
 
-            result = GlitcherUtil.bitmapFromByteArray(res)
+            return GlitcherUtil.bitmapFromByteArray(res)
         }
 
-        return this
+        return null
     }
 
-    fun negative() : Glitcher{
+    fun negative(result: Bitmap?) : Bitmap?{
 
 
         val h = result!!.height
@@ -142,9 +121,8 @@ class Glitcher {
         paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
         canvas.drawBitmap(result, 0f, 0f, paint)
 
-        result = bitmap
+        return bitmap
 
-        return this
 
         /*
 
@@ -165,16 +143,16 @@ class Glitcher {
         */
     }
 
-    fun shuffle() :Glitcher{
-        return generateBitmap { shuffleRow(it)}
+    fun shuffle(result: Bitmap?) :Bitmap?{
+        return generateBitmap(result) { shuffleRow(it)}
     }
 
 
-    fun pixelSort () : Glitcher{
-        return generateBitmap{sortRow(it)}
+    fun pixelSort (result: Bitmap?) :Bitmap?{
+        return generateBitmap(result){sortRow(it)}
     }
 
-    fun anaglyph (percentage:Int = 20) : Glitcher{
+    fun anaglyph (result: Bitmap?,percentage:Int = 20) : Bitmap?{
 
         val leftArray = floatArrayOf(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
         val rightArray = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
@@ -213,10 +191,8 @@ class Glitcher {
 
         c.drawBitmap(result,0f,0f,anaglyphPaint)
 
-        result = bitmap
+        return bitmap
 
-
-        return this
 
     }
 
@@ -233,21 +209,21 @@ class Glitcher {
         return sortedRow.sorted()
     }
 
-    private fun generateBitmap ( action: (List<Int>) -> List<Int>) : Glitcher{
+    private fun generateBitmap (result: Bitmap?, action: (List<Int>) -> List<Int>) : Bitmap?{
         val r = List(result!!.width,{ row -> List(result!!.height,{ col -> result!!.getPixel(row,col)})})
 
         val  rShuffle = List(result?.height?:0,{row -> action(r[row])})
 
-        result = Bitmap.createBitmap(result!!.width,result!!.height, Bitmap.Config.ARGB_8888)
+        val rr= Bitmap.createBitmap(result!!.width,result!!.height, Bitmap.Config.ARGB_8888)
 
 
-        for(i in 0..(result!!.height)-1){
-            for (j in 0..(result!!.width)-1){
-                result!!.setPixel(j,i,rShuffle[i][j])
+        for(i in 0..(rr!!.height)-1){
+            for (j in 0..(rr!!.width)-1){
+                rr!!.setPixel(j,i,rShuffle[i][j])
             }
         }
 
-        return this
+        return rr
     }
 
 
