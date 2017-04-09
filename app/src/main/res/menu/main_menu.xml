@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/open_action"
+        android:title="@string/title_open_action"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/save_action"
+        android:title="@string/title_save_action"
+        app:showAsAction="always"/>
+</menu>

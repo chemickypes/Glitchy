@@ -4,12 +4,16 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import me.bemind.glitch.Glitcher
 import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
+import android.view.MenuInflater
+import android.view.MenuItem
+
 
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView{
     override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
@@ -55,6 +59,25 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         seekbar!!.setOnSeekBarChangeListener(this )
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.open_action -> {
+                //open action
+                imagePresenter.openImageFromGallery()
+            }
+
+            R.id.save_action -> {
+                imagePresenter.saveImage()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
