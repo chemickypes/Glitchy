@@ -30,6 +30,8 @@ interface IImagePresenter {
     fun subscribe(view: IImageView)
 
     fun unsubscribe()
+
+    fun onBackPressed() :Boolean
 }
 
 class ImagePresenter (val context: Context) : IImagePresenter{
@@ -96,6 +98,15 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
         if(savedInstanceState!=null){
              imageLogic.setStack(savedInstanceState.getParcelableArrayList(BITMAP_K))
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if(imageLogic.canBack()){
+            imageView.setImagebitmap(imageLogic.back()!!)
+            return false
+        }else{
+            return true
         }
     }
 }

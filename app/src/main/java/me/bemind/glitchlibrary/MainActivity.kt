@@ -8,7 +8,6 @@ import android.view.Menu
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
-import me.bemind.glitch.Glitcher
 import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
@@ -56,7 +55,9 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         mImageView?.setOnClickListener { imagePresenter.glitchImage() }
 
         glitchButton = findViewById(R.id.glitch_button) as Button
-        glitchButton?.setOnClickListener { glitchImage() }
+        glitchButton?.setOnClickListener {
+            imagePresenter.openImageFromCamera(mImageView!!.width,mImageView!!.height)
+        }
 
         seekbar = findViewById(R.id.seekBar1) as SeekBar
 
@@ -133,24 +134,13 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         imagePresenter.openImageFromGallery(mImageView!!.width,mImageView!!.height)
     }
 
-    lateinit var glitcher : Glitcher
+    override fun onBackPressed() {
 
-    private fun glitchImage() {
-       /* val bitmap = mImageView?.drawable as BitmapDrawable
-        glitcher = Glitcher.Creator.getGlitcher(bitmap.bitmap)
-
-        glitcher.restore()
-        //val co = glitcher.corruptBitmap()
-
-        Observable.fromCallable { glitcher.negative().result }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{bitmap:Bitmap? -> mImageView?.setImageBitmap(bitmap)}*/
-
-
-        imagePresenter.openImageFromCamera(mImageView!!.width,mImageView!!.height)
-
-
+        if(imagePresenter.onBackPressed()) {
+            super.onBackPressed()
+        }
     }
+
+
 
 }

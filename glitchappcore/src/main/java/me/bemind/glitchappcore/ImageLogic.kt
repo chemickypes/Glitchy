@@ -8,7 +8,7 @@ import me.bemind.glitch.Glitcher
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -23,7 +23,7 @@ interface IImageLogic{
 
     fun getStack():ArrayList<Bitmap>
 
-    fun setStack(list: List<Bitmap>)
+    fun setStack(list: List<Bitmap>?)
 
     fun back() : Bitmap?
 
@@ -64,8 +64,8 @@ class ImageLogic : IImageLogic{
         }
     }
 
-    override fun setStack(list: List<Bitmap>) {
-        stack.addAll(list)
+    override fun setStack(list: List<Bitmap>?) {
+        stack.addAll(list?:LinkedList<Bitmap>())
     }
 
     override fun back(): Bitmap? {
