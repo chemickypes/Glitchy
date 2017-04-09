@@ -47,6 +47,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                 .doOnError {
                     t -> imageView.showGetImageError(t)
                 }
+                .subscribe()
     }
 
     override fun openImageFromGallery(w: Int, h: Int) {
