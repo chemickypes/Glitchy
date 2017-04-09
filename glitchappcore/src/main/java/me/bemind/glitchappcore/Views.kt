@@ -8,10 +8,12 @@ import android.graphics.Bitmap
 
 interface IImageView {
     fun setImagebitmap(bitmap : Bitmap)
+    fun showGetImageError(t : Throwable)
 
     fun showSaveLoader()
     fun onSavedImage()
     fun onSaveImageError(t:Throwable)
+
 }
 
 class NullImageView : IImageView {
@@ -27,4 +29,6 @@ class NullImageView : IImageView {
     override fun onSaveImageError(t: Throwable) {
     }
 
+    override fun showGetImageError(t: Throwable) {
+    }
 }
