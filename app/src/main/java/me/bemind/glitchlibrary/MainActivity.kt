@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+
         imagePresenter.saveInstanceState(outState)
     }
 
