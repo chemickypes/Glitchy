@@ -31,7 +31,7 @@ interface IImagePresenter {
 }
 
 class ImagePresenter (val context: Context) : IImagePresenter{
-    lateinit var bitmap:Bitmap
+    var bitmap:Bitmap? = null
     val BITMAP_K = "bitmap_k"
 
     val imageLogic : IImageLogic = ImageLogic()
@@ -42,7 +42,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     override fun openImage(typeRequest: TypeRequest , w:Int , h:Int ) {
         imageLogic.getImage(context,typeRequest,w,h)
                 .doOnNext {
-                    b -> imageView.setImagebitmap(b)
+                    b -> imageView.setImagebitmap(b); bitmap = b
                 }
                 .doOnError {
                     t -> imageView.showGetImageError(t)
@@ -68,6 +68,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun subscribe(view: IImageView) {
         imageView = view
+
+        if (bitmap!=null) imageView.setImagebitmap(bitmap!!)
     }
 
     override fun unsubscribe() {
@@ -75,10 +77,14 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun saveInstanceState(outState: Bundle?) {
-        outState?.putParcelable(BITMAP_K,bitmap);
+
+        if (bitmap!=null)outState?.putParcelable(BITMAP_K,bitmap)
+
     }
 
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
-        if(savedInstanceState!=null)bitmap = savedInstanceState.getParcelable(BITMAP_K)
+        if(savedInstanceState!=null){
+            bitmap = savedInstanceState.getParcelable(BITMAP_K)
+        }
     }
 }

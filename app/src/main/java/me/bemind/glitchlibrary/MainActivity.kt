@@ -11,7 +11,6 @@ import android.widget.SeekBar
 import me.bemind.glitch.Glitcher
 import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
-import android.view.MenuInflater
 import android.view.MenuItem
 
 
@@ -62,6 +61,8 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
         seekbar!!.setOnSeekBarChangeListener(this )
 
+        imagePresenter.restoreInstanceState(savedInstanceState)
+
 
 
 
@@ -99,6 +100,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
     override fun onStop() {
         super.onStop()
         imagePresenter.unsubscribe()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        imagePresenter.saveInstanceState(outState)
     }
 
     override fun setImagebitmap(bitmap: Bitmap) {
