@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
 
     override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-        glitcher.restore()
+        //glitcher.restore()
        /* Observable.fromCallable { glitcher.anaglyph(p1).result }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         setSupportActionBar(toolbar)
 
         mImageView = findViewById(R.id.imageView) as ImageView
+        mImageView?.setOnClickListener { imagePresenter.glitchImage() }
 
         glitchButton = findViewById(R.id.glitch_button) as Button
         glitchButton?.setOnClickListener { glitchImage() }

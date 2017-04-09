@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import com.github.oliveiradev.lib.RxPhoto
 import com.github.oliveiradev.lib.shared.TypeRequest
+import rx.Observable
+import rx.Subscription
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -38,6 +40,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     var imageView: IImageView = NullImageView()
 
+    var subscriber : Subscription? = null
+
 
     override fun openImage(typeRequest: TypeRequest , w:Int , h:Int ) {
         imageLogic.getImage(context,typeRequest,w,h)
@@ -63,7 +67,12 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun glitchImage() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       subscriber = imageLogic.glitchImage(bitmap)
+                .filter { b -> b!=null }
+                .flatMap { b -> Observable.just(b)  }
+                .doOnNext { b -> imageView.setImagebitmap(b!!) }
+                .doOnError { t -> imageView.showGetImageError(t) }
+                .subscribe()
     }
 
     override fun subscribe(view: IImageView) {
@@ -74,6 +83,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun unsubscribe() {
         imageView = NullImageView()
+        subscriber?.unsubscribe()
     }
 
     override fun saveInstanceState(outState: Bundle?) {

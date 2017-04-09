@@ -53,21 +53,21 @@ class Glitcher private constructor(){
 
         val RANDOM = Random()
 
-        val h = result!!.height
-        val w = result!!.width
+        val h = result?.height?:0
+        val w = result?.width?:0
 
-        val arrayLen = (w * h)
+        val arrayLen = (w) * (h)
         val stride =  w
 
 
 
 
         val intArray = IntArray(arrayLen)
-        result!!.getPixels(intArray,0,stride,0,0,w,h)
+        result?.getPixels(intArray,0,stride,0,0,w,h)
 
         val intArrayM = IntArray(intArray.size,{ i -> intArray[i].xor(RANDOM.nextInt(stride))})
 
-        val vv = result!!.copy(result!!.config,true)
+        val vv = result!!.copy(result.config,true)
         vv!!.setPixels(intArrayM,0,stride,0,0,w,h)
 
 
@@ -80,7 +80,7 @@ class Glitcher private constructor(){
     fun corruption(result: Bitmap?) : Bitmap?{
 
         val JPEG_CORRUPTION_COUNT = 5
-        val JPEG_HEADER_SIZE = 100
+        //val JPEG_HEADER_SIZE = 100
         val RANDOM = Random()
 
         val res = GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
@@ -100,8 +100,8 @@ class Glitcher private constructor(){
     fun negative(result: Bitmap?) : Bitmap?{
 
 
-        val h = result!!.height
-        val w = result!!.width
+        val h = result?.height?:0
+        val w = result?.width?:0
 
         val negativeArray = floatArrayOf(
                 -1f,  0f,  0f,  0f, 255f,
@@ -158,7 +158,10 @@ class Glitcher private constructor(){
         val rightArray = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
 
 
-        val transX = ((result!!.width/2) * percentage).div(100)
+        val w = result?.width?:0
+        val h = result?.height?:0
+
+        val transX = ((w/2) * percentage).div(100)
         val transY = 15
 
         val anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
@@ -168,7 +171,7 @@ class Glitcher private constructor(){
 
         val colorMatrix = ColorMatrix()
 
-        val bitmap = Bitmap.createBitmap(result!!.width,result!!.height,Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
         val c = Canvas(bitmap)
         c.drawColor(0, PorterDuff.Mode.CLEAR)
 
@@ -178,7 +181,7 @@ class Glitcher private constructor(){
         anaglyphShader.setLocalMatrix(matrix)
         colorMatrix.set(leftArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
-        c.drawRect(0.0f, 0.0f, result!!.width.toFloat(), result!!.height.toFloat(), anaglyphPaint)
+        c.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
 
         //right
         val matrix2 = Matrix()
@@ -186,7 +189,7 @@ class Glitcher private constructor(){
         anaglyphShader.setLocalMatrix(matrix2)
         colorMatrix.set(rightArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
-        c.drawRect(0.0f, 0.0f, result!!.width.toFloat(), result!!.height.toFloat(), anaglyphPaint)
+        c.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
 
 
         c.drawBitmap(result,0f,0f,anaglyphPaint)
@@ -210,15 +213,15 @@ class Glitcher private constructor(){
     }
 
     private fun generateBitmap (result: Bitmap?, action: (List<Int>) -> List<Int>) : Bitmap?{
-        val r = List(result!!.width,{ row -> List(result!!.height,{ col -> result!!.getPixel(row,col)})})
+        val r = List(result?.width?:0,{ row -> List(result?.height?:0,{ col -> result!!.getPixel(row,col)})})
 
         val  rShuffle = List(result?.height?:0,{row -> action(r[row])})
 
-        val rr= Bitmap.createBitmap(result!!.width,result!!.height, Bitmap.Config.ARGB_8888)
+        val rr= Bitmap.createBitmap(result?.width?:0,result?.height?:0, Bitmap.Config.ARGB_8888)
 
 
-        for(i in 0..(rr!!.height)-1){
-            for (j in 0..(rr!!.width)-1){
+        for(i in 0..(rr?.height?:1)-1){
+            for (j in 0..(rr?.width?:1)-1){
                 rr!!.setPixel(j,i,rShuffle[i][j])
             }
         }
