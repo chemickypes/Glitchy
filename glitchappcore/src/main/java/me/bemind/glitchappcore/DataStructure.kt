@@ -10,9 +10,9 @@ interface Stack<T> : Iterable<T> {
 
     fun push(item: T)
 
-    fun pop(): T
+    fun pop(): T?
 
-    fun peek(): T
+    fun peek(): T?
 
     fun isEmpty(): Boolean {
         return size() == 0
@@ -22,7 +22,7 @@ interface Stack<T> : Iterable<T> {
 
     fun clear()
 
-    fun clearManteningFirst()
+    fun clearKeepingFirst()
 }
 
 class LinkedStack<T> :Stack<T>{
@@ -32,12 +32,20 @@ class LinkedStack<T> :Stack<T>{
         stack.add(item)
     }
 
-    override fun pop(): T {
-        return stack.removeLast()
+    override fun pop(): T? {
+        return if(stack.size>0){
+            stack.removeLast()
+        }else{
+            null
+        }
     }
 
-    override fun peek(): T {
-        return stack.last
+    override fun peek(): T? {
+        return if(stack.size>0){
+            stack.last
+        }else{
+            null
+        }
     }
 
     override fun size(): Int {
@@ -48,7 +56,7 @@ class LinkedStack<T> :Stack<T>{
         stack.clear()
     }
 
-    override fun clearManteningFirst() {
+    override fun clearKeepingFirst() {
         val  t = stack.first
         stack.clear()
         push(t)
@@ -58,7 +66,11 @@ class LinkedStack<T> :Stack<T>{
         return stack.iterator()
     }
 
-    fun first():T = stack.first
+    fun first():T? =  if(stack.size>0){
+        stack.first
+    }else{
+        null
+    }
 
     fun addAll(collection: Collection<T> = ArrayList<T>()) = stack.addAll(collection)
 

@@ -33,7 +33,6 @@ interface IImagePresenter {
 }
 
 class ImagePresenter (val context: Context) : IImagePresenter{
-    var bitmap:Bitmap? = null
     val BITMAP_K = "bitmap_k"
 
     val imageLogic : IImageLogic = ImageLogic()
@@ -46,7 +45,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     override fun openImage(typeRequest: TypeRequest , w:Int , h:Int ) {
         imageLogic.getImage(context,typeRequest,w,h)
                 .doOnNext {
-                    b -> imageView.setImagebitmap(b); bitmap = b
+                    b -> imageView.setImagebitmap(b)
                 }
                 .doOnError {
                     t -> imageView.showGetImageError(t)
@@ -67,7 +66,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun glitchImage() {
-       subscriber = imageLogic.glitchImage(bitmap)
+       subscriber = imageLogic.glitchImage(
+               imageLogic.firstBitmap())
                 .filter { b -> b!=null }
                 .flatMap { b -> Observable.just(b)  }
                 .doOnNext { b -> imageView.setImagebitmap(b!!) }
@@ -78,7 +78,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     override fun subscribe(view: IImageView) {
         imageView = view
 
-        if (bitmap!=null) imageView.setImagebitmap(bitmap!!)
+        if (imageLogic.hasHistory()) imageView.setImagebitmap(imageLogic.lastBitmap()!!)
     }
 
     override fun unsubscribe() {
@@ -88,13 +88,14 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun saveInstanceState(outState: Bundle?) {
 
-        if (bitmap!=null)outState?.putParcelable(BITMAP_K,bitmap)
+        if (imageLogic.hasHistory()) outState?.putParcelableArrayList(BITMAP_K,
+                imageLogic.getStack())
 
     }
 
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
         if(savedInstanceState!=null){
-            bitmap = savedInstanceState.getParcelable(BITMAP_K)
+             imageLogic.setStack(savedInstanceState.getParcelableArrayList(BITMAP_K))
         }
     }
 }
