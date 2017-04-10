@@ -94,6 +94,6 @@ class ImageLogic : IImageLogic{
     }
 
     override fun hasHistory(): Boolean {
-        return sizeHistory() >0
+        return sizeHistory() > 0
     }
 }

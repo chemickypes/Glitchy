@@ -7,4 +7,5 @@
     <string name="title_save_action">Save</string>
     <string name="fotocamera">Camera</string>
     <string name="galleria">Gallery</string>
+    <string name="want_close_app">Do you want to close %1$s? You\'ll lose modification!</string>
 </resources>

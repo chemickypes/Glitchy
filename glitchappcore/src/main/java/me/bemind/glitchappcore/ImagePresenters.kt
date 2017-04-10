@@ -3,6 +3,7 @@ package me.bemind.glitchappcore
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import com.github.oliveiradev.lib.RxPhoto
 import com.github.oliveiradev.lib.shared.TypeRequest
 import rx.Observable
@@ -90,13 +91,20 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun saveInstanceState(outState: Bundle?) {
 
-        if (imageLogic.hasHistory()) outState?.putParcelableArrayList(BITMAP_K,
-                imageLogic.getStack())
+        Log.d("APP","SaveInstance Method")
+        if (imageLogic.hasHistory()){
+            outState?.putParcelableArrayList(BITMAP_K,
+                    imageLogic.getStack())
+
+            Log.d("APP","SaveInstance")
+        }
 
     }
 
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
-        if(savedInstanceState!=null){
+        Log.d("APP","Restore Istance Method")
+        if(savedInstanceState!=null && savedInstanceState.containsKey(BITMAP_K)){
+            Log.d("APP","Restore Istance")
              imageLogic.setStack(savedInstanceState.getParcelableArrayList(BITMAP_K))
         }
     }

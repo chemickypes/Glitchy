@@ -11,6 +11,9 @@ import android.widget.SeekBar
 import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
+import android.support.v7.app.AlertDialog
+
+
 
 
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
@@ -137,7 +140,20 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
     override fun onBackPressed() {
 
         if(imagePresenter.onBackPressed()) {
-            super.onBackPressed()
+
+            val appname = getString(R.string.app_name)
+            AlertDialog.Builder(this)
+                    //.setTitle("Delete entry")
+                    .setMessage(getString(R.string.want_close_app,appname))
+                    .setPositiveButton(android.R.string.yes, { dialog, which ->
+                        // continue with delete
+                        super.onBackPressed()
+                    })
+                    .setNegativeButton(android.R.string.no,  { dialog, which ->
+                        // do nothing
+                    })
+                    .show()
+
         }
     }
 
