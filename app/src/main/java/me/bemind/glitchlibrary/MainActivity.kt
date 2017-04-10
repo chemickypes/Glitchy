@@ -56,16 +56,14 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         setSupportActionBar(toolbar)
 
         mImageView = findViewById(R.id.imageView) as ImageView
-        mImageView?.setOnClickListener { imagePresenter.glitchImage() }
-
-
-
-
+        mImageView?.setOnClickListener {
+            if(imagePresenter.getIImageLogic().hasHistory()) {
+                imagePresenter.glitchImage()
+            }else{
+                pickPhotoBS.show()
+            }}
 
         imagePresenter.restoreInstanceState(savedInstanceState)
-
-
-
 
     }
 

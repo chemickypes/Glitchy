@@ -10,4 +10,6 @@
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="SeekBarPanelTheme"></style>
+
 </resources>
