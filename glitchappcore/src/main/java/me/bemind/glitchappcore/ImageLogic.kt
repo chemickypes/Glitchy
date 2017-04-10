@@ -57,6 +57,7 @@ class ImageLogic : IImageLogic{
         val uri = Uri.fromFile(file)
 
         val b = Utils.getBitmap(context,uri,w,h)
+        stack.clear()
         stack.push(b)
         return b
     }

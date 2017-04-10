@@ -92,7 +92,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                         Observable.just(Response((response.targetUI() as GlitchyBaseActivity),b))
                     }
                 }
-                .doOnNext { b -> b.activity.setImagebitmap(b.image) }
+                .doOnNext { b -> b.activity.setImagebitmap(b.image); }
                 .doOnError { t -> t.printStackTrace() }
                 .doOnComplete { Log.i(TAG,"Load complete") }
                 .subscribe()
