@@ -24,9 +24,9 @@ interface IImagePresenter {
 
     fun openImage(activity: Activity, file:File) : Bitmap?
 
-    fun openImageFromGallery(activity:GlitchyBaseActivity)
+    fun openImageFromGallery(activity:GlitchyBaseActivity, w: Int = 1024, h:Int = 1024)
 
-    fun openImageFromCamera(activity:GlitchyBaseActivity)
+    fun openImageFromCamera(activity:GlitchyBaseActivity, w: Int = 1024, h:Int = 1024)
 
     fun saveImage()
 
@@ -67,20 +67,21 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         return imageLogic.getImage(activity,file)
     }
 
-    override fun openImageFromGallery(activity: GlitchyBaseActivity) {
+    override fun openImageFromGallery(activity: GlitchyBaseActivity,w:Int,h:Int) {
        handleObservable( RxPaparazzo.single(activity)
-               .usingGallery())
+               .usingGallery(),w,h)
     }
 
 
 
-    override fun openImageFromCamera(activity: GlitchyBaseActivity) {
+    override fun openImageFromCamera(activity: GlitchyBaseActivity,w:Int,h:Int) {
         handleObservable(RxPaparazzo.single(activity)
-                .usingCamera())
+                .usingCamera(),w,h)
 
     }
 
-    private fun handleObservable(observable: Observable<com.miguelbcr.ui.rx_paparazzo2.entities.Response<GlitchyBaseActivity, FileData?>>) {
+    private fun handleObservable(observable: Observable<com.miguelbcr.ui.rx_paparazzo2.entities.Response<GlitchyBaseActivity, FileData?>>,
+                                 w:Int,h:Int) {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap { response ->
@@ -88,7 +89,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                         //nothing
                         Observable.empty<Response<GlitchyBaseActivity,Bitmap>>()
                     }else {
-                        val b = (response.targetUI() as GlitchyBaseActivity).getImagePresenter().getIImageLogic().getImage(response.targetUI(),response.data()!!.file)
+                        val b = (response.targetUI() as GlitchyBaseActivity).getImagePresenter().getIImageLogic()
+                                .getImage(response.targetUI(),response.data()!!.file,w,h)
                         Observable.just(Response((response.targetUI() as GlitchyBaseActivity),b))
                     }
                 }

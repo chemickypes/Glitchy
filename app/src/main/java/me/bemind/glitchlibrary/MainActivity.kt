@@ -58,12 +58,9 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         mImageView = findViewById(R.id.imageView) as ImageView
         mImageView?.setOnClickListener { imagePresenter.glitchImage() }
 
-        glitchButton = findViewById(R.id.glitch_button) as Button
 
 
-        seekbar = findViewById(R.id.seekBar1) as SeekBar
 
-        seekbar!!.setOnSeekBarChangeListener(this )
 
         imagePresenter.restoreInstanceState(savedInstanceState)
 
@@ -133,11 +130,11 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     override fun openCamera() {
-        imagePresenter.openImageFromCamera(this)
+        imagePresenter.openImageFromCamera(this,mImageView!!.width,mImageView!!.height)
     }
 
     override fun openGallery() {
-        imagePresenter.openImageFromGallery(this)
+        imagePresenter.openImageFromGallery(this,mImageView!!.width,mImageView!!.height)
     }
 
     override fun onBackPressed() {
