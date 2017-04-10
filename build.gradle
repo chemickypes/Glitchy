@@ -5,6 +5,7 @@ buildscript {
     ext.kotlin_version = '1.1.1'
     ext.android_version = '25.3.1'
     ext.build_tools_version = '25.0.2'
+    ext.target_version = 25
     repositories {
         jcenter()
     }

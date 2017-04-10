@@ -1,13 +1,16 @@
 package me.bemind.glitchappcore
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import com.github.oliveiradev.lib.RxPhoto
-import com.github.oliveiradev.lib.shared.TypeRequest
-import rx.Observable
-import rx.Subscription
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Subscription
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -15,10 +18,13 @@ import rx.Subscription
 
 
 interface IImagePresenter {
-    fun openImage(typeRequest: TypeRequest = TypeRequest.GALLERY, w:Int = 1024, h:Int = 1024)
-    fun openImageFromGallery(w:Int = 1024, h:Int = 1024)
 
-    fun openImageFromCamera(w:Int = 1024, h:Int = 1024)
+
+    fun openImage()
+
+    fun openImageFromGallery(activity:Activity)
+
+    fun openImageFromCamera(activity:Activity)
 
     fun saveImage()
 
@@ -42,26 +48,52 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     var imageView: IImageView = NullImageView()
 
-    var subscriber : Subscription? = null
+    var disposable : Disposable? = null
 
 
-    override fun openImage(typeRequest: TypeRequest , w:Int , h:Int ) {
-        imageLogic.getImage(context,typeRequest,w,h)
-                .doOnNext {
-                    b -> imageView.setImagebitmap(b)
+    override fun openImage( ) {
+
+    }
+
+    override fun openImageFromGallery(activity: Activity) {
+        RxPaparazzo.single(activity)
+                .usingGallery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { response ->
+                    if (response.resultCode() != Activity.RESULT_OK) {
+                        //nothing
+                        Observable.empty<Bitmap>()
+                    }else {
+                        Observable.just(imageLogic.getImage(activity,response.data().file))
+                    }
                 }
-                .doOnError {
-                    t -> imageView.showGetImageError(t)
-                }
+                .doOnNext { b -> imageView.setImagebitmap(b) }
+                .doOnError { t -> imageView.showGetImageError(t) }
+                .doOnComplete { Log.i(TAG,"Load complete") }
                 .subscribe()
     }
 
-    override fun openImageFromGallery(w: Int, h: Int) {
-        openImage(TypeRequest.GALLERY,w,h)
-    }
+    private val TAG: String? = "IMAGE GLITCHER"
 
-    override fun openImageFromCamera(w: Int, h: Int) {
-        openImage(TypeRequest.CAMERA,w,h)
+    override fun openImageFromCamera(activity: Activity) {
+        RxPaparazzo.single(activity)
+                .usingCamera()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { response ->
+                    if (response.resultCode() != Activity.RESULT_OK) {
+                        //nothing
+                        Observable.empty<Bitmap>()
+                    }else {
+                        Observable.just(imageLogic.getImage(activity,response.data().file))
+                    }
+                }
+                .doOnNext { b -> imageView.setImagebitmap(b) }
+                .doOnError { t -> imageView.showGetImageError(t) }
+                .doOnComplete { Log.i(TAG,"Load complete") }
+                .subscribe()
+
     }
 
     override fun saveImage() {
@@ -69,13 +101,20 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun glitchImage() {
-       subscriber = imageLogic.glitchImage(
+       disposable = imageLogic.glitchImage(
                imageLogic.firstBitmap())
                 .filter { b -> b!=null }
                 .flatMap { b -> Observable.just(b)  }
-                .doOnNext { b -> imageView.setImagebitmap(b!!) }
-                .doOnError { t -> imageView.showGetImageError(t) }
-                .subscribe()
+                /*.doOnNext { b -> imageView.setImagebitmap(b!!) }
+                .doOnError { t -> imageView.showGetImageError(t) }*/
+                .subscribe(
+                        {
+                            b -> imageView.setImagebitmap(b!!)
+                         },
+                        {
+                            t -> imageView.showGetImageError(t)
+                        }
+                )
     }
 
     override fun subscribe(view: IImageView) {
@@ -86,7 +125,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun unsubscribe() {
         imageView = NullImageView()
-        subscriber?.unsubscribe()
+        disposable?.dispose()
     }
 
     override fun saveInstanceState(outState: Bundle?) {

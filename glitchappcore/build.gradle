@@ -6,8 +6,8 @@ android {
     buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 16
+        targetSdkVersion target_version
         versionCode 1
         versionName "1.0"
 
@@ -30,7 +30,13 @@ dependencies {
     compile "com.android.support:appcompat-v7:$android_version"
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.github.oliveiradev:RxPhoto:0.3.0'
+    //compile 'com.github.oliveiradev:RxPhoto:0.3.0' mi dispiace :(
+
+    compile "com.github.miguelbcr:RxPaparazzo:0.5.2-2.x"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile "io.reactivex.rxjava2:rxjava:2.0.7"
+    compile 'io.reactivex.rxjava2:rxkotlin:2.0.0'
+
     compile project(':glitch')
 }
 repositories {

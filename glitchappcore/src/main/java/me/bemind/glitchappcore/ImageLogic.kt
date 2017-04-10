@@ -2,12 +2,13 @@ package me.bemind.glitchappcore
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.github.oliveiradev.lib.RxPhoto
-import com.github.oliveiradev.lib.shared.TypeRequest
+import android.net.Uri
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.Observable
 import me.bemind.glitch.Glitcher
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import java.io.File
+import java.lang.RuntimeException
 import java.util.*
 
 /**
@@ -16,8 +17,7 @@ import java.util.*
 interface IImageLogic{
 
     fun getImage(context: Context,
-                 type:TypeRequest = TypeRequest.GALLERY,
-                 w:Int = 1024, h:Int = 1024) : Observable<Bitmap>
+                 file: File, w:Int = 1024,h:Int =  1024) : Bitmap
 
     fun glitchImage(bitmap: Bitmap?) : Observable<Bitmap?>
 
@@ -36,6 +36,7 @@ interface IImageLogic{
     fun sizeHistory() : Int
 
     fun hasHistory() : Boolean
+
 }
 
 class ImageLogic : IImageLogic{
@@ -43,24 +44,37 @@ class ImageLogic : IImageLogic{
 
     val stack =  LinkedStack<Bitmap>()
 
-    override fun getImage(context: Context, type: TypeRequest,
+   /* override fun getImage(context: Context, type: TypeRequest,
                           w:Int , h:Int ): Observable<Bitmap> {
         return RxPhoto.requestBitmap(context, type,w,h)
                 .flatMap {
                     b -> stack.push(b)
                     return@flatMap Observable.just(b)
                 }
+    }*/
+
+    override fun getImage(context: Context, file: File,w: Int,h: Int): Bitmap {
+        val uri = Uri.fromFile(file)
+
+        val b = Utils.getBitmap(context,uri,w,h)
+        stack.push(b)
+        return b
     }
 
     override fun glitchImage(bitmap: Bitmap?): Observable<Bitmap?> {
-        return Observable.defer {
-            return@defer Observable.just(Glitcher.getGlitcher().corruption(bitmap))
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .flatMap {
-                        b -> if(b!=null) stack.push(b)
-                        return@flatMap Observable.just(b)
-                    }
+        if(bitmap!=null) {
+            return Observable.defer {
+                return@defer Observable.just(Glitcher.getGlitcher().corruption(bitmap))
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .flatMap {
+                            b ->
+                            if (b != null) stack.push(b)
+                            return@flatMap Observable.just(b)
+                        }
+            }
+        }else{
+            return Observable.error( RuntimeException("Bitmap null"))
         }
     }
 

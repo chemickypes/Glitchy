@@ -16,6 +16,9 @@ import android.support.v7.app.AlertDialog
 
 
 
+
+
+
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
 
 
@@ -58,9 +61,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
         mImageView?.setOnClickListener { imagePresenter.glitchImage() }
 
         glitchButton = findViewById(R.id.glitch_button) as Button
-        glitchButton?.setOnClickListener {
-            imagePresenter.openImageFromCamera(mImageView!!.width,mImageView!!.height)
-        }
+
 
         seekbar = findViewById(R.id.seekBar1) as SeekBar
 
@@ -130,11 +131,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
     }
 
     override fun openCamera() {
-        imagePresenter.openImageFromCamera(mImageView!!.width,mImageView!!.height)
+        imagePresenter.openImageFromCamera(this)
     }
 
     override fun openGallery() {
-        imagePresenter.openImageFromGallery(mImageView!!.width,mImageView!!.height)
+        imagePresenter.openImageFromGallery(this)
     }
 
     override fun onBackPressed() {
