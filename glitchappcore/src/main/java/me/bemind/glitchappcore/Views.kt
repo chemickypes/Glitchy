@@ -14,6 +14,7 @@ interface IImageView {
     fun onSavedImage()
     fun onSaveImageError(t:Throwable)
 
+
 }
 
 class NullImageView : IImageView {

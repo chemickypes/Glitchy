@@ -12,14 +12,12 @@ import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
 import android.support.v7.app.AlertDialog
+import me.bemind.glitchappcore.GlitchyBaseActivity
+import me.bemind.glitchappcore.IImagePresenter
 
 
+class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
 
-
-
-
-
-class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
 
 
     override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
     private var toolbar : Toolbar? = null
 
-    private val imagePresenter = ImagePresenter(this)
+    val imagePresenter = ImagePresenter(this)
 
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
 
@@ -116,6 +114,10 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IImag
 
     override fun setImagebitmap(bitmap: Bitmap) {
         mImageView!!.setImageBitmap(bitmap)
+    }
+
+    override fun getImagePresenter(): IImagePresenter {
+        return imagePresenter
     }
 
     override fun showGetImageError(t: Throwable) {

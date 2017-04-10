@@ -6,11 +6,13 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo
+import com.miguelbcr.ui.rx_paparazzo2.entities.FileData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscription
+import java.io.File
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -20,11 +22,11 @@ import org.reactivestreams.Subscription
 interface IImagePresenter {
 
 
-    fun openImage()
+    fun openImage(activity: Activity, file:File) : Bitmap?
 
-    fun openImageFromGallery(activity:Activity)
+    fun openImageFromGallery(activity:GlitchyBaseActivity)
 
-    fun openImageFromCamera(activity:Activity)
+    fun openImageFromCamera(activity:GlitchyBaseActivity)
 
     fun saveImage()
 
@@ -39,10 +41,15 @@ interface IImagePresenter {
     fun unsubscribe()
 
     fun onBackPressed() :Boolean
+
+    fun getIImageLogic() :IImageLogic
 }
 
 class ImagePresenter (val context: Context) : IImagePresenter{
-    val BITMAP_K = "bitmap_k"
+
+    private val TAG: String? = "IMAGE GLITCHER"
+
+    private val BITMAP_K = "bitmap_k"
 
     val imageLogic : IImageLogic = ImageLogic()
 
@@ -51,49 +58,44 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     var disposable : Disposable? = null
 
 
-    override fun openImage( ) {
+    override fun getIImageLogic(): IImageLogic {
+        return imageLogic
+    }
+
+    override fun openImage( activity: Activity,file: File) : Bitmap? {
+
+        return imageLogic.getImage(activity,file)
+    }
+
+    override fun openImageFromGallery(activity: GlitchyBaseActivity) {
+       handleObservable( RxPaparazzo.single(activity)
+               .usingGallery())
+    }
+
+
+
+    override fun openImageFromCamera(activity: GlitchyBaseActivity) {
+        handleObservable(RxPaparazzo.single(activity)
+                .usingCamera())
 
     }
 
-    override fun openImageFromGallery(activity: Activity) {
-        RxPaparazzo.single(activity)
-                .usingGallery()
-                .subscribeOn(Schedulers.io())
+    private fun handleObservable(observable: Observable<com.miguelbcr.ui.rx_paparazzo2.entities.Response<GlitchyBaseActivity, FileData?>>) {
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap { response ->
                     if (response.resultCode() != Activity.RESULT_OK) {
                         //nothing
-                        Observable.empty<Bitmap>()
+                        Observable.empty<Response<GlitchyBaseActivity,Bitmap>>()
                     }else {
-                        Observable.just(imageLogic.getImage(activity,response.data().file))
+                        val b = (response.targetUI() as GlitchyBaseActivity).getImagePresenter().getIImageLogic().getImage(response.targetUI(),response.data()!!.file)
+                        Observable.just(Response((response.targetUI() as GlitchyBaseActivity),b))
                     }
                 }
-                .doOnNext { b -> imageView.setImagebitmap(b) }
-                .doOnError { t -> imageView.showGetImageError(t) }
+                .doOnNext { b -> b.activity.setImagebitmap(b.image) }
+                .doOnError { t -> t.printStackTrace() }
                 .doOnComplete { Log.i(TAG,"Load complete") }
                 .subscribe()
-    }
-
-    private val TAG: String? = "IMAGE GLITCHER"
-
-    override fun openImageFromCamera(activity: Activity) {
-        RxPaparazzo.single(activity)
-                .usingCamera()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { response ->
-                    if (response.resultCode() != Activity.RESULT_OK) {
-                        //nothing
-                        Observable.empty<Bitmap>()
-                    }else {
-                        Observable.just(imageLogic.getImage(activity,response.data().file))
-                    }
-                }
-                .doOnNext { b -> imageView.setImagebitmap(b) }
-                .doOnError { t -> imageView.showGetImageError(t) }
-                .doOnComplete { Log.i(TAG,"Load complete") }
-                .subscribe()
-
     }
 
     override fun saveImage() {
