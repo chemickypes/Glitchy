@@ -21,9 +21,9 @@ interface IImageLogic{
 
     fun glitchImage(bitmap: Bitmap?) : Observable<Bitmap?>
 
-    fun getStack():ArrayList<Bitmap>
+    fun getStack():ArrayList<Image>
 
-    fun setStack(list: List<Bitmap>?)
+    fun setStack(list: List<Image>?)
 
     fun back() : Bitmap?
 
@@ -44,7 +44,7 @@ interface IImageLogic{
 class ImageLogic : IImageLogic{
 
 
-    val stack =  LinkedStack<Bitmap>()
+    val stack =  LinkedStack<Image>()
 
    /* override fun getImage(context: Context, type: TypeRequest,
                           w:Int , h:Int ): Observable<Bitmap> {
@@ -60,7 +60,7 @@ class ImageLogic : IImageLogic{
 
         val b = Utils.getBitmap(context,uri,w,h)
         stack.clear()
-        stack.push(b)
+        stack.push(Image(b,Effect.BASE,true))
         return b
     }
 
@@ -72,7 +72,7 @@ class ImageLogic : IImageLogic{
                         .observeOn(AndroidSchedulers.mainThread())
                         .flatMap {
                             b ->
-                            if (b != null) addBitmap(b)
+                            if (b != null) addBitmap(b,Effect.GLITCH)
                             return@flatMap Observable.just(b)
                         }
             }
@@ -84,34 +84,34 @@ class ImageLogic : IImageLogic{
     override fun anaglyphImage( progress: Int, new:Boolean ):Bitmap? {
         val b : Bitmap?
         if(new) {
-            b = stack.peek()
+            b = stack.peek()?.bitmap
         }else{
             stack.pop()
-            b = stack.peek()
+            b = stack.peek()?.bitmap
         }
 
         val b1 = Glitcher.getGlitcher().anaglyph(b,progress)
 
-        stack.push(b1!!)
+        stack.push(Image(b1!!,Effect.ANAGLYPH,false))
 
         return b1
     }
 
-    private fun addBitmap(b: Bitmap) {
-        stack.push(b)
-        if(stack.size()>12) stack.removeOld()
+    private fun addBitmap(b: Bitmap, effect: Effect,saved:Boolean = true) {
+        stack.push(Image(b,effect,saved))
+        if(stack.size()>13) stack.removeOld()
     }
 
-    override fun setStack(list: List<Bitmap>?) {
-        stack.addAll(list?:LinkedList<Bitmap>())
+    override fun setStack(list: List<Image>?) {
+        stack.addAll(list?:LinkedList<Image>())
     }
 
     override fun back(): Bitmap? {
         stack.pop()
-        return stack.peek()
+        return stack.peek()?.bitmap
     }
 
-    override fun getStack(): ArrayList<Bitmap> {
+    override fun getStack(): ArrayList<Image> {
         return stack.getAllAsList()
     }
 
@@ -120,11 +120,11 @@ class ImageLogic : IImageLogic{
     }
 
     override fun lastBitmap(): Bitmap? {
-        return stack.peek()
+        return stack.peek()?.bitmap
     }
 
     override fun firstBitmap(): Bitmap? {
-        return stack.first()
+        return stack.first()?.bitmap
     }
 
     override fun sizeHistory(): Int {
