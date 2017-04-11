@@ -52,17 +52,19 @@ interface IImagePresenter {
 
 class ImagePresenter (val context: Context) : IImagePresenter{
 
-    override var modState: State
-        get() = modState
+    override var modState: State = State.BASE
+//        get() = modState
         set(value) {
-            value
-            imageView.updateState(value)
+            field = value
+            imageView.updateState(field)
         }
 
 
     private val TAG: String? = "IMAGE GLITCHER"
 
     private val BITMAP_K = "bitmap_k"
+    private val STATE_K = "state_k"
+
 
     val imageLogic : IImageLogic = ImageLogic()
 
@@ -149,22 +151,21 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     override fun saveInstanceState(outState: Bundle?) {
 
-        Log.d("APP","SaveInstance Method")
+        outState?.putSerializable(STATE_K,modState)
         if (imageLogic.hasHistory()){
             outState?.putParcelableArrayList(BITMAP_K,
                     imageLogic.getStack())
-
-            Log.d("APP","SaveInstance")
         }
 
     }
 
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
-        Log.d("APP","Restore Istance Method")
-        if(savedInstanceState!=null && savedInstanceState.containsKey(BITMAP_K)){
-            Log.d("APP","Restore Istance")
-             imageLogic.setStack(savedInstanceState.getParcelableArrayList(BITMAP_K))
+        if(savedInstanceState?.containsKey(BITMAP_K)?:false){
+             imageLogic.setStack(savedInstanceState?.getParcelableArrayList(BITMAP_K))
         }
+
+
+        if(savedInstanceState?.containsKey(STATE_K)?:false) modState = savedInstanceState?.getSerializable(STATE_K) as State
     }
 
     override fun onBackPressed(): Boolean {

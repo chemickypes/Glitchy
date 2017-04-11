@@ -109,16 +109,16 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     private fun closeCurrentEffect() {
-        animateAlpha(effectPanel,0f,350,false)
-        animateAlpha(toolbarEffect,0f,350,false)
+        if(effectPanel?.visibility== VISIBLE)animateAlpha(effectPanel,0f,350,false)
+        if(toolbar?.visibility == VISIBLE)animateAlpha(toolbarEffect,0f,350,false)
 
     }
 
     private fun openEffectPanel() {
 
         if(imagePresenter.getIImageLogic().hasHistory()) {
-            animateAlpha(effectPanel, 1f, 450, true)
-            animateAlpha(toolbarEffect, 1f, 450, true)
+            if(effectPanel?.visibility == GONE) animateAlpha(effectPanel, 1f, 450, true)
+            if(toolbarEffect?.visibility == GONE)animateAlpha(toolbarEffect, 1f, 450, true)
         }
 
     }
@@ -184,6 +184,11 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     override fun onSaveImageError(t: Throwable) {
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateState(imagePresenter.modState)
     }
 
     override fun updateState(state: State) {
