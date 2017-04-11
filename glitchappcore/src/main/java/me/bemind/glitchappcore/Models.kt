@@ -7,3 +7,13 @@ import android.graphics.Bitmap
  */
 
 data class Response<out T, out V>(val activity: T, val image: V)
+
+data class Image(val bitmap: Bitmap,val effect: Effect,val saved:Boolean)
+
+enum class State {
+    BASE,EFFECT
+}
+
+enum class Effect {
+    BASE,ANAGLYPH, GLITCH
+}

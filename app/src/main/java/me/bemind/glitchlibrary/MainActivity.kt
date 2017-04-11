@@ -12,8 +12,6 @@ import android.view.Menu
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
-import me.bemind.glitchappcore.IImageView
-import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -21,9 +19,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AccelerateDecelerateInterpolator
-import me.bemind.glitchappcore.GlitchyBaseActivity
-import me.bemind.glitchappcore.IImagePresenter
-import me.bemind.glitchappcore.State
+import me.bemind.glitchappcore.*
 
 
 class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
@@ -86,7 +82,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         mImageView = findViewById(R.id.imageView) as ImageView
         mImageView?.setOnClickListener {
             if(imagePresenter.getIImageLogic().hasHistory()) {
-                imagePresenter.glitchImage()
+                imagePresenter.glitchImage(Effect.GLITCH)
             }else{
                 pickPhotoBS.show()
             }}

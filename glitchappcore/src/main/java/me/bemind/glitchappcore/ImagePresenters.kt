@@ -17,9 +17,7 @@ import java.io.File
  * Created by angelomoroni on 04/04/17.
  */
 
-enum class State {
-    BASE,EFFECT
-}
+
 
 interface IImagePresenter {
 
@@ -33,7 +31,7 @@ interface IImagePresenter {
 
     fun saveImage()
 
-    fun glitchImage()
+    fun glitchImage(effect: Effect, progress: Int = 20)
 
     fun saveInstanceState(outState: Bundle?)
 
@@ -121,21 +119,12 @@ class ImagePresenter (val context: Context) : IImagePresenter{
        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun glitchImage() {
-       disposable = imageLogic.glitchImage(
-               imageLogic.firstBitmap())
-                .filter { b -> b!=null }
-                .flatMap { b -> Observable.just(b)  }
-                /*.doOnNext { b -> imageView.setImagebitmap(b!!) }
-                .doOnError { t -> imageView.showGetImageError(t) }*/
-                .subscribe(
-                        {
-                            b -> imageView.setImagebitmap(b!!)
-                         },
-                        {
-                            t -> imageView.showGetImageError(t)
-                        }
-                )
+    override fun glitchImage(effect: Effect,progress: Int) {
+
+       disposable = when(effect){
+           Effect.GLITCH -> glitchEffect()
+           else -> Observable.empty<Bitmap?>().subscribe()
+       }
     }
 
     override fun subscribe(view: IImageView) {
@@ -175,5 +164,20 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         }else{
             return true
         }
+    }
+
+    fun glitchEffect() : Disposable{
+        return imageLogic.glitchImage(
+                imageLogic.firstBitmap())
+                .filter { b -> b!=null }
+                .flatMap { b -> Observable.just(b)  }
+                .subscribe(
+                        {
+                            b -> imageView.setImagebitmap(b!!)
+                        },
+                        {
+                            t -> imageView.showGetImageError(t)
+                        }
+                )
     }
 }
