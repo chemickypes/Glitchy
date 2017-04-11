@@ -70,13 +70,18 @@ class ImageLogic : IImageLogic{
                         .observeOn(AndroidSchedulers.mainThread())
                         .flatMap {
                             b ->
-                            if (b != null) stack.push(b)
+                            if (b != null) addBitmap(b)
                             return@flatMap Observable.just(b)
                         }
             }
         }else{
             return Observable.error( RuntimeException("Bitmap null"))
         }
+    }
+
+    private fun addBitmap(b: Bitmap) {
+        stack.push(b)
+        if(stack.size()>12) stack.removeOld()
     }
 
     override fun setStack(list: List<Bitmap>?) {

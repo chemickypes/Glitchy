@@ -28,6 +28,9 @@ interface Stack<T> : Iterable<T> {
 class LinkedStack<T> :Stack<T>{
     val stack =  LinkedList<T>()
 
+
+
+
     override fun push(item: T) {
         stack.add(item)
     }
@@ -75,5 +78,9 @@ class LinkedStack<T> :Stack<T>{
     fun addAll(collection: Collection<T> = ArrayList<T>()) = stack.addAll(collection)
 
     fun getAllAsList() :ArrayList<T> = ArrayList(stack)
+
+    fun removeOld(){
+        stack.removeAt(1)
+    }
 
 }
