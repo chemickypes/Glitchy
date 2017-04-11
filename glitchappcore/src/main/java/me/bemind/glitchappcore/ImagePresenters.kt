@@ -166,6 +166,19 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         }
     }
 
+    fun anaglyphEffect(progress: Int = 20) : Disposable{
+        return imageLogic.anaglyphImage(progress)
+                .filter { b -> b!=null }
+                .flatMap { b -> Observable.just(b) }
+                .subscribe({
+                    b -> imageView.setImagebitmap(b!!)
+                        },
+                        {
+                            t -> imageView.showGetImageError(t)
+                        }
+                )
+    }
+
     fun glitchEffect() : Disposable{
         return imageLogic.glitchImage(
                 imageLogic.firstBitmap())

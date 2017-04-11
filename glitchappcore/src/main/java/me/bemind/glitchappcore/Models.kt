@@ -10,7 +10,7 @@ import android.os.Parcelable
 
 data class Response<out T, out V>(val activity: T, val image: V)
 
-data class Image(val bitmap: Bitmap,val effect: Effect,val saved:Boolean) : Parcelable{
+data class Image(val bitmap: Bitmap,val effect: Effect,var saved:Boolean) : Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<Image> = object : Parcelable.Creator<Image> {
             override fun createFromParcel(source: Parcel): Image = Image(source)

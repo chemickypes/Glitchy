@@ -25,6 +25,8 @@ interface IImageLogic{
 
     fun setStack(list: List<Image>?)
 
+    fun saveEffect()
+
     fun back() : Bitmap?
 
     fun canBack() : Boolean
@@ -37,7 +39,7 @@ interface IImageLogic{
 
     fun hasHistory() : Boolean
 
-    fun anaglyphImage(progress:Int = 20, new: Boolean = false) :Bitmap?
+    fun anaglyphImage(progress:Int = 20) :Observable<Bitmap?>
 
 }
 
@@ -81,23 +83,36 @@ class ImageLogic : IImageLogic{
         }
     }
 
-    override fun anaglyphImage( progress: Int, new:Boolean ):Bitmap? {
+    override fun anaglyphImage( progress: Int ):Observable<Bitmap?> {
         val b : Bitmap?
-        if(new) {
-            b = stack.peek()?.bitmap
+
+        val lastImage = stack.peek()
+
+        if(lastImage?.saved?:false){
+            b = lastImage?.bitmap
         }else{
             stack.pop()
             b = stack.peek()?.bitmap
         }
 
-        val b1 = Glitcher.getGlitcher().anaglyph(b,progress)
+        return Observable.defer {
+            return@defer Observable.just(Glitcher.getGlitcher().anaglyph(b,progress))
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap {
+                        b ->
+                        if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
+                        return@flatMap Observable.just(b)
+                    }
+        }
 
-        stack.push(Image(b1!!,Effect.ANAGLYPH,false))
-
-        return b1
     }
 
-    private fun addBitmap(b: Bitmap, effect: Effect,saved:Boolean = true) {
+    override fun saveEffect() {
+        stack.peek()?.saved = true
+    }
+
+    private fun addBitmap(b: Bitmap, effect: Effect, saved:Boolean = true) {
         stack.push(Image(b,effect,saved))
         if(stack.size()>13) stack.removeOld()
     }
