@@ -187,8 +187,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     fun glitchEffect() : Disposable{
-        return imageLogic.glitchImage(
-                imageLogic.firstBitmap())
+        return imageLogic.glitchImage()
                 .filter { b -> b!=null }
                 .flatMap { b -> Observable.just(b)  }
                 .subscribe(

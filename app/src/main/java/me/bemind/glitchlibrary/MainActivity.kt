@@ -35,6 +35,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
 
     private var mImageView :ImageView? = null
     private var anaglyphButton: Button? = null
+    private var glitchButton: Button? = null
     private var seekbar: SeekBar? = null
     private var effectPanel: ViewGroup? = null
 
@@ -94,6 +95,11 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         anaglyphButton = findViewById(R.id.anaglyph_button) as Button
         anaglyphButton?.setOnClickListener {
             makeAnaglyphEffect(true)
+        }
+
+        glitchButton = findViewById(R.id.glitch_button) as Button
+        glitchButton ?.setOnClickListener {
+            makeGlitchEffect(true)
         }
 
     }
@@ -272,6 +278,24 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         }
 
         imagePresenter.glitchImage(Effect.ANAGLYPH,progress)
+    }
+
+    private fun makeGlitchEffect(init: Boolean = false){
+        if(init){
+            imagePresenter.modState = State.EFFECT
+            //inflate layout
+
+            val view = LayoutInflater.from(this).inflate(R.layout.effect_glitch_layout,null,false)
+
+            effectPanel?.addView(view)
+
+            val b = view.findViewById(R.id.tap_to_glitch_button)
+            b.setOnClickListener {
+                makeGlitchEffect()
+            }
+        }
+
+        imagePresenter.glitchImage(Effect.GLITCH)
     }
 
 

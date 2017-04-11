@@ -19,7 +19,7 @@ interface IImageLogic{
     fun getImage(context: Context,
                  file: File, w:Int = 1024,h:Int =  1024) : Bitmap
 
-    fun glitchImage(bitmap: Bitmap?) : Observable<Bitmap?>
+    fun glitchImage() : Observable<Bitmap?>
 
     fun getStack():ArrayList<Image>
 
@@ -66,15 +66,27 @@ class ImageLogic : IImageLogic{
         return b
     }
 
-    override fun glitchImage(bitmap: Bitmap?): Observable<Bitmap?> {
-        if(bitmap!=null) {
+    override fun glitchImage(): Observable<Bitmap?> {
+
+        val b : Bitmap?
+
+        val lastImage = stack.peek()
+
+        if(lastImage?.saved?:false){
+            b = lastImage?.bitmap
+        }else{
+            stack.pop()
+            b = stack.peek()?.bitmap
+        }
+
+        if(b!=null) {
             return Observable.defer {
-                return@defer Observable.just(Glitcher.getGlitcher().corruption(bitmap))
+                return@defer Observable.just(Glitcher.getGlitcher().corruption(b))
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .flatMap {
                             b ->
-                            if (b != null) addBitmap(b,Effect.GLITCH)
+                            if (b != null) addBitmap(b,Effect.GLITCH,false)
                             return@flatMap Observable.just(b)
                         }
             }

@@ -11,4 +11,6 @@
     <string name="anaglyph">Anaglyph</string>
     <string name="tap_to_open_ad_image">Tap to open image</string>
     <string name="ok">OK</string>
+    <string name="glitch">Glitch</string>
+    <string name="tap_here_to_glitch">Tap here to glitch</string>
 </resources>
