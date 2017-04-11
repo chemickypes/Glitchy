@@ -23,6 +23,7 @@ import android.view.View.VISIBLE
 import android.view.animation.AccelerateDecelerateInterpolator
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.IImagePresenter
+import me.bemind.glitchappcore.State
 
 
 class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
@@ -66,7 +67,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
         toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
         toolbarEffect?.setNavigationOnClickListener {
-            closeCurrentEffect()
+            imagePresenter.modState = State.BASE
         }
 
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
@@ -96,7 +97,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
 
         anaglyphButton = findViewById(R.id.anaglyph_button) as Button
         anaglyphButton?.setOnClickListener {
-            openEffectPanel()
+            imagePresenter.modState = State.EFFECT
         }
 
     }
@@ -183,6 +184,14 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     override fun onSaveImageError(t: Throwable) {
+    }
+
+    override fun updateState(state: State) {
+        when (state){
+            State.BASE -> closeCurrentEffect()
+            State.EFFECT -> openEffectPanel()
+            else -> closeCurrentEffect()
+        }
     }
 
     override fun openCamera() {

@@ -14,6 +14,7 @@ interface IImageView {
     fun onSavedImage()
     fun onSaveImageError(t:Throwable)
 
+    fun updateState(state: State)
 
 }
 
@@ -31,5 +32,9 @@ class NullImageView : IImageView {
     }
 
     override fun showGetImageError(t: Throwable) {
+    }
+
+    override fun updateState(state: State) {
+
     }
 }

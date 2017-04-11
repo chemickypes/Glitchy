@@ -11,16 +11,19 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscription
 import java.io.File
 
 /**
  * Created by angelomoroni on 04/04/17.
  */
 
+enum class State {
+    BASE,EFFECT
+}
 
 interface IImagePresenter {
 
+    var modState : State
 
     fun openImage(activity: Activity, file:File) : Bitmap?
 
@@ -43,9 +46,19 @@ interface IImagePresenter {
     fun onBackPressed() :Boolean
 
     fun getIImageLogic() :IImageLogic
+
+
 }
 
 class ImagePresenter (val context: Context) : IImagePresenter{
+
+    override var modState: State
+        get() = modState
+        set(value) {
+            value
+            imageView.updateState(value)
+        }
+
 
     private val TAG: String? = "IMAGE GLITCHER"
 
@@ -56,6 +69,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     var imageView: IImageView = NullImageView()
 
     var disposable : Disposable? = null
+
+
 
 
     override fun getIImageLogic(): IImageLogic {
