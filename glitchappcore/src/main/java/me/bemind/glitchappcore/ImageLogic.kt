@@ -37,6 +37,8 @@ interface IImageLogic{
 
     fun hasHistory() : Boolean
 
+    fun anaglyphImage(progress:Int = 20, new: Boolean = false) :Bitmap?
+
 }
 
 class ImageLogic : IImageLogic{
@@ -77,6 +79,22 @@ class ImageLogic : IImageLogic{
         }else{
             return Observable.error( RuntimeException("Bitmap null"))
         }
+    }
+
+    override fun anaglyphImage( progress: Int, new:Boolean ):Bitmap? {
+        val b : Bitmap?
+        if(new) {
+            b = stack.peek()
+        }else{
+            stack.pop()
+            b = stack.peek()
+        }
+
+        val b1 = Glitcher.getGlitcher().anaglyph(b,progress)
+
+        stack.push(b1!!)
+
+        return b1
     }
 
     private fun addBitmap(b: Bitmap) {
