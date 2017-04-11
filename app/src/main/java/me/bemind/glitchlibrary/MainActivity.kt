@@ -64,6 +64,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
         toolbarEffect?.setNavigationOnClickListener {
             imagePresenter.modState = State.BASE
+            imagePresenter.onBackPressed()
         }
 
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
@@ -81,11 +82,14 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
 
         mImageView = findViewById(R.id.imageView) as ImageView
         mImageView?.setOnClickListener {
-            if(imagePresenter.getIImageLogic().hasHistory()) {
-                imagePresenter.glitchImage(Effect.GLITCH)
-            }else{
-                pickPhotoBS.show()
-            }}
+            if (imagePresenter.modState == State.BASE) {
+                if (imagePresenter.getIImageLogic().hasHistory()) {
+                    imagePresenter.glitchImage(Effect.GLITCH)
+                } else {
+                    pickPhotoBS.show()
+                }
+            }
+        }
 
         imagePresenter.restoreInstanceState(savedInstanceState)
 
@@ -94,14 +98,14 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         anaglyphButton = findViewById(R.id.anaglyph_button) as Button
         anaglyphButton?.setOnClickListener {
             imagePresenter.modState = State.EFFECT
+            imagePresenter.glitchImage(Effect.ANAGLYPH)
         }
 
     }
 
     private fun applyEffect() {
-        //TODO apply effect
-        closeCurrentEffect()
-
+        imagePresenter.modState = State.BASE
+        imagePresenter.saveEffect()
     }
 
     private fun closeCurrentEffect() {

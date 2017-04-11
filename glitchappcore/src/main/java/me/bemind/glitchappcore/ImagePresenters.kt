@@ -31,6 +31,8 @@ interface IImagePresenter {
 
     fun saveImage()
 
+    fun saveEffect()
+
     fun glitchImage(effect: Effect, progress: Int = 20)
 
     fun saveInstanceState(outState: Bundle?)
@@ -123,6 +125,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
        disposable = when(effect){
            Effect.GLITCH -> glitchEffect()
+           Effect.ANAGLYPH -> anaglyphEffect(progress)
            else -> Observable.empty<Bitmap?>().subscribe()
        }
     }
@@ -146,6 +149,10 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                     imageLogic.getStack())
         }
 
+    }
+
+    override fun saveEffect() {
+        imageLogic.saveEffect()
     }
 
     override fun restoreInstanceState(savedInstanceState: Bundle?) {
