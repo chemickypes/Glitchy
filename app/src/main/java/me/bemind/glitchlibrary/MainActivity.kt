@@ -16,6 +16,7 @@ import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -68,6 +69,17 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
             closeCurrentEffect()
         }
 
+        toolbarEffect?.inflateMenu(R.menu.ok_menu)
+        toolbarEffect?.setOnMenuItemClickListener {  item ->
+            when (item.itemId){
+                R.id.ok_action -> {
+                    applyEffect()
+                    true
+                }
+                else -> true //do nothing
+            }
+        }
+
         setSupportActionBar(toolbar)
 
         mImageView = findViewById(R.id.imageView) as ImageView
@@ -86,6 +98,12 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         anaglyphButton?.setOnClickListener {
             openEffectPanel()
         }
+
+    }
+
+    private fun applyEffect() {
+        //TODO apply effect
+        closeCurrentEffect()
 
     }
 
@@ -145,7 +163,10 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     override fun setImagebitmap(bitmap: Bitmap) {
-        mImageView!!.setImageBitmap(bitmap)
+        runOnUiThread {
+            mImageView!!.setImageBitmap(bitmap)
+        }
+
     }
 
     override fun getImagePresenter(): IImagePresenter {
