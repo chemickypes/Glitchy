@@ -10,7 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
  * Created by angelomoroni on 11/04/17.
  */
 
-fun animateAlpha(view: View?,value:Float = 1f,duration:Long = 350, visible:Boolean = true){
+fun animateAlpha(view: View?, runnable: Runnable, duration: Long = 350, visible: Boolean = true, value: Float = 1f){
 
     /*
     ViewCompat.animate(effectPanel)
@@ -29,18 +29,14 @@ fun animateAlpha(view: View?,value:Float = 1f,duration:Long = 350, visible:Boole
             .setInterpolator(AccelerateDecelerateInterpolator())
 
     if(visible){
-        animation.withStartAction {
-            view?.alpha = 0f
-            view?.visibility = VISIBLE
-        }
+        animation.withStartAction(runnable)
     }else{
-        animation.withEndAction {
-            view?.visibility = GONE
-            view?.alpha = 1f
-        }
+        animation.withEndAction(runnable)
     }
 
     animation.start()
+
+
 
 
 
