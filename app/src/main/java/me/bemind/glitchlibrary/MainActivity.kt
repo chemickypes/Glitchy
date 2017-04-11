@@ -1,7 +1,11 @@
 package me.bemind.glitchlibrary
 
+import android.animation.AnimatorListenerAdapter
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
+import android.support.v4.view.ViewPropertyAnimatorListener
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -12,6 +16,10 @@ import me.bemind.glitchappcore.IImageView
 import me.bemind.glitchappcore.ImagePresenter
 import android.view.MenuItem
 import android.support.v7.app.AlertDialog
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.animation.AccelerateDecelerateInterpolator
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.IImagePresenter
 
@@ -37,10 +45,12 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     }
 
     private var mImageView :ImageView? = null
-    private var glitchButton: Button? = null
+    private var anaglyphButton: Button? = null
     private var seekbar: SeekBar? = null
+    private var effectPanel: View? = null
 
     private var toolbar : Toolbar? = null
+    private var toolbarEffect : Toolbar? = null
 
     val imagePresenter = ImagePresenter(this)
 
@@ -52,6 +62,11 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
+        toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
+        toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        toolbarEffect?.setNavigationOnClickListener {
+            closeCurrentEffect()
+        }
 
         setSupportActionBar(toolbar)
 
@@ -64,6 +79,28 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
             }}
 
         imagePresenter.restoreInstanceState(savedInstanceState)
+
+        effectPanel = findViewById(R.id.effect_panel)
+
+        anaglyphButton = findViewById(R.id.anaglyph_button) as Button
+        anaglyphButton?.setOnClickListener {
+            openEffectPanel()
+        }
+
+    }
+
+    private fun closeCurrentEffect() {
+        animateAlpha(effectPanel,0f,350,false)
+        animateAlpha(toolbarEffect,0f,350,false)
+
+    }
+
+    private fun openEffectPanel() {
+
+        if(imagePresenter.getIImageLogic().hasHistory()) {
+            animateAlpha(effectPanel, 1f, 450, true)
+            animateAlpha(toolbarEffect, 1f, 450, true)
+        }
 
     }
 
