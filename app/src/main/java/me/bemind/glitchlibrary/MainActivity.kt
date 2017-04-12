@@ -223,21 +223,27 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
     override fun onBackPressed() {
 
-        if(imagePresenter.onBackPressed()) {
+        if(imagePresenter.modState == State.EFFECT){
+            imagePresenter.modState = State.BASE
+            imagePresenter.onBackPressed()
+        }else {
 
-            val appname = getString(R.string.app_name)
-            AlertDialog.Builder(this)
-                    //.setTitle("Delete entry")
-                    .setMessage(getString(R.string.want_close_app,appname))
-                    .setPositiveButton(android.R.string.yes, { dialog, which ->
-                        // continue with delete
-                        super.onBackPressed()
-                    })
-                    .setNegativeButton(android.R.string.no,  { dialog, which ->
-                        // do nothing
-                    })
-                    .show()
+            if (imagePresenter.onBackPressed()) {
 
+                val appname = getString(R.string.app_name)
+                AlertDialog.Builder(this)
+                        //.setTitle("Delete entry")
+                        .setMessage(getString(R.string.want_close_app, appname))
+                        .setPositiveButton(android.R.string.yes, { dialog, which ->
+                            // continue with delete
+                            super.onBackPressed()
+                        })
+                        .setNegativeButton(android.R.string.no, { dialog, which ->
+                            // do nothing
+                        })
+                        .show()
+
+            }
         }
     }
 
