@@ -6,13 +6,10 @@ import android.net.Uri
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
 import me.bemind.glitch.Glitcher
 import java.io.File
 import java.lang.RuntimeException
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -54,18 +51,8 @@ class ImageLogic : IImageLogic{
 
     val stack =  LinkedStack<Image>()
 
-    val effectSubject : PublishSubject<Int> = PublishSubject.create()
-
     private val glitcher: Glitcher = Glitcher.getGlitcher()
 
-   /* override fun getImage(context: Context, type: TypeRequest,
-                          w:Int , h:Int ): Observable<Bitmap> {
-        return RxPhoto.requestBitmap(context, type,w,h)
-                .flatMap {
-                    b -> stack.push(b)
-                    return@flatMap Observable.just(b)
-                }
-    }*/
 
     override fun getImage(context: Context, file: File,w: Int,h: Int): Bitmap {
         val uri = Uri.fromFile(file)
