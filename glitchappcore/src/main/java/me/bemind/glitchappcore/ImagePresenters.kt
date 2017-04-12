@@ -74,6 +74,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
 
     var disposable : Disposable? = null
 
+    var frameCount = 0
+
 
 
 
@@ -182,24 +184,13 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     fun anaglyphEffect(progress: Int = 20) : Disposable{
-/*
-        return if(progress%10 == 0) {
-            imageLogic.anaglyphImage(progress)
-                    .filter { b -> b != null }
-                    //.flatMap { b -> Observable.just(b) }
-                    .subscribe({
-                        b ->
-                        imageView.setImagebitmap(b!!)
-                    },
-                            {
-                                t ->
-                                imageView.showGetImageError(t)
-                            }
-                    )
-        }else{
 
-        }*/
-        imageView.setImagebitmap(imageLogic.anaglyphImage(progress)!!)
+
+        if(imageLogic.hasHistory()) {
+
+            val b = imageLogic.anaglyphImage(progress)!!
+            imageView.setImagebitmap(b)
+        }
         return Observable.empty<Bitmap>().subscribe()
     }
 

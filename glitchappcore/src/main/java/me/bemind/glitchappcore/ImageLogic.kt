@@ -102,24 +102,8 @@ class ImageLogic : IImageLogic{
 
 
 
-        //effectSubject.onNext(progress)
 
-       /*return effectSubject
-               //.debounce(50,TimeUnit.MILLISECONDS)
-                .flatMap {
-                    i -> Observable.just(i)
-                        .subscribeOn(Schedulers.io())
-                        //.observeOn(AndroidSchedulers.mainThread())
 
-                }
-               .flatMap {
-                   i ->
-                   val bo : Bitmap? = getImageToPutEffect()
-                   val b = glitcher.anaglyph(bo,i)
-                   if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
-                   return@flatMap Observable.just(b)
-
-               }*/
 
         val bo : Bitmap? = getImageToPutEffect()
         val b = glitcher.anaglyph(bo,progress)
@@ -127,32 +111,6 @@ class ImageLogic : IImageLogic{
 
         return b
 
-
-
-
-       /* val bo : Bitmap? = getImageToPutEffect()
-       return Observable.fromCallable { glitcher.anaglyph(bo,progress) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-               .flatMap {
-                   b ->
-                   if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
-                   return@flatMap Observable.just(b)
-               }*/
-
-
-
-
-        /*return Observable.defer {
-            return@defer Observable.just()
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .flatMap {
-                        b ->
-                        if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
-                        return@flatMap Observable.just(b)
-                    }
-        }*/
 
     }
 
