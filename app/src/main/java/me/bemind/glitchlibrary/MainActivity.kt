@@ -88,7 +88,7 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
             }*/
         }
 
-        imagePresenter.restoreInstanceState(savedInstanceState)
+        imagePresenter.restoreInstanceState(this,savedInstanceState)
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
 
@@ -184,13 +184,17 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
-        imagePresenter.saveInstanceState(outState)
+        imagePresenter.saveInstanceState(this,outState)
     }
 
     override fun setImagebitmap(bitmap: Bitmap) {
         runOnUiThread {
             mImageView!!.setImageBitmap(bitmap)
         }
+
+        //mImageView?.post {  }
+//        mImageView!!.setImageBitmap(bitmap)
+
 
     }
 

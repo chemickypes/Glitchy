@@ -35,9 +35,9 @@ interface IImagePresenter {
 
     fun glitchImage(effect: Effect, progress: Int = 20)
 
-    fun saveInstanceState(outState: Bundle?)
+    fun saveInstanceState(activity: GlitchyBaseActivity,outState: Bundle?)
 
-    fun restoreInstanceState(savedInstanceState: Bundle?)
+    fun restoreInstanceState(activity: GlitchyBaseActivity,savedInstanceState: Bundle?)
 
     fun subscribe(view: IImageView)
 
@@ -141,12 +141,12 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         disposable?.dispose()
     }
 
-    override fun saveInstanceState(outState: Bundle?) {
+    override fun saveInstanceState(activity: GlitchyBaseActivity,outState: Bundle?) {
 
         outState?.putSerializable(STATE_K,modState)
         if (imageLogic.hasHistory()){
-            outState?.putParcelableArrayList(BITMAP_K,
-                    imageLogic.getStack())
+            //outState?.putParcelableArrayList(BITMAP_K, )
+            activity.retainedFragment?.history = imageLogic.getStack()
         }
 
     }
@@ -155,9 +155,13 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         imageLogic.saveEffect()
     }
 
-    override fun restoreInstanceState(savedInstanceState: Bundle?) {
+    override fun restoreInstanceState(activity: GlitchyBaseActivity,savedInstanceState: Bundle?) {
+        imageLogic.setStack(activity.retainedFragment?.history)
+
         if(savedInstanceState?.containsKey(BITMAP_K)?:false){
-             imageLogic.setStack(savedInstanceState?.getParcelableArrayList(BITMAP_K))
+
+
+
         }
 
 
@@ -174,16 +178,25 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     fun anaglyphEffect(progress: Int = 20) : Disposable{
-        return imageLogic.anaglyphImage(progress)
-                .filter { b -> b!=null }
-                .flatMap { b -> Observable.just(b) }
-                .subscribe({
-                    b -> imageView.setImagebitmap(b!!)
-                        },
-                        {
-                            t -> imageView.showGetImageError(t)
-                        }
-                )
+/*
+        return if(progress%10 == 0) {
+            imageLogic.anaglyphImage(progress)
+                    .filter { b -> b != null }
+                    //.flatMap { b -> Observable.just(b) }
+                    .subscribe({
+                        b ->
+                        imageView.setImagebitmap(b!!)
+                    },
+                            {
+                                t ->
+                                imageView.showGetImageError(t)
+                            }
+                    )
+        }else{
+
+        }*/
+        imageView.setImagebitmap(imageLogic.anaglyphImage(progress)!!)
+        return Observable.empty<Bitmap>().subscribe()
     }
 
     fun glitchEffect() : Disposable{

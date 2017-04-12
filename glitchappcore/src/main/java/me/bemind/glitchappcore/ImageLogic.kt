@@ -6,10 +6,13 @@ import android.net.Uri
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import me.bemind.glitch.Glitcher
 import java.io.File
 import java.lang.RuntimeException
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by angelomoroni on 04/04/17.
@@ -39,7 +42,10 @@ interface IImageLogic{
 
     fun hasHistory() : Boolean
 
-    fun anaglyphImage(progress:Int = 20) :Observable<Bitmap?>
+    //fun anaglyphImage(progress:Int = 20) :Observable<Bitmap?>
+
+    fun anaglyphImage(progress:Int = 20) :Bitmap?
+
 
 }
 
@@ -47,6 +53,10 @@ class ImageLogic : IImageLogic{
 
 
     val stack =  LinkedStack<Image>()
+
+    val effectSubject : PublishSubject<Int> = PublishSubject.create()
+
+    private val glitcher: Glitcher = Glitcher.getGlitcher()
 
    /* override fun getImage(context: Context, type: TypeRequest,
                           w:Int , h:Int ): Observable<Bitmap> {
@@ -68,20 +78,11 @@ class ImageLogic : IImageLogic{
 
     override fun glitchImage(): Observable<Bitmap?> {
 
-        val b : Bitmap?
-
-        val lastImage = stack.peek()
-
-        if(lastImage?.saved?:false){
-            b = lastImage?.bitmap
-        }else{
-            stack.pop()
-            b = stack.peek()?.bitmap
-        }
+        val b : Bitmap? = getImageToPutEffect()
 
         if(b!=null) {
             return Observable.defer {
-                return@defer Observable.just(Glitcher.getGlitcher().corruption(b))
+                return@defer Observable.just(glitcher.corruption(b))
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .flatMap {
@@ -95,20 +96,55 @@ class ImageLogic : IImageLogic{
         }
     }
 
-    override fun anaglyphImage( progress: Int ):Observable<Bitmap?> {
-        val b : Bitmap?
 
-        val lastImage = stack.peek()
 
-        if(lastImage?.saved?:false){
-            b = lastImage?.bitmap
-        }else{
-            stack.pop()
-            b = stack.peek()?.bitmap
-        }
+    override fun anaglyphImage(progress: Int ):/*Observable<Bitmap?>*/Bitmap? {
 
-        return Observable.defer {
-            return@defer Observable.just(Glitcher.getGlitcher().anaglyph(b,progress))
+
+
+        //effectSubject.onNext(progress)
+
+       /*return effectSubject
+               //.debounce(50,TimeUnit.MILLISECONDS)
+                .flatMap {
+                    i -> Observable.just(i)
+                        .subscribeOn(Schedulers.io())
+                        //.observeOn(AndroidSchedulers.mainThread())
+
+                }
+               .flatMap {
+                   i ->
+                   val bo : Bitmap? = getImageToPutEffect()
+                   val b = glitcher.anaglyph(bo,i)
+                   if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
+                   return@flatMap Observable.just(b)
+
+               }*/
+
+        val bo : Bitmap? = getImageToPutEffect()
+        val b = glitcher.anaglyph(bo,progress)
+        if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
+
+        return b
+
+
+
+
+       /* val bo : Bitmap? = getImageToPutEffect()
+       return Observable.fromCallable { glitcher.anaglyph(bo,progress) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+               .flatMap {
+                   b ->
+                   if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
+                   return@flatMap Observable.just(b)
+               }*/
+
+
+
+
+        /*return Observable.defer {
+            return@defer Observable.just()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .flatMap {
@@ -116,7 +152,7 @@ class ImageLogic : IImageLogic{
                         if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
                         return@flatMap Observable.just(b)
                     }
-        }
+        }*/
 
     }
 
@@ -160,5 +196,20 @@ class ImageLogic : IImageLogic{
 
     override fun hasHistory(): Boolean {
         return sizeHistory() > 0
+    }
+
+    private fun getImageToPutEffect() : Bitmap?{
+        val b : Bitmap?
+
+        val lastImage = stack.peek()
+
+        if(lastImage?.saved?:false){
+            b = lastImage?.bitmap
+        }else{
+            stack.pop()
+            b = stack.peek()?.bitmap
+        }
+
+        return b
     }
 }
