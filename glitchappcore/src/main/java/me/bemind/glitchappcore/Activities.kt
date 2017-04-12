@@ -14,12 +14,12 @@ abstract class  GlitchyBaseActivity : AppCompatActivity(), IImageView {
 
     var  retainedFragment : RetainedFragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         val fm = fragmentManager
 
-        retainedFragment = fm.findFragmentByTag(RetainedFragment.TAG.TAG) as RetainedFragment
+        retainedFragment = fm.findFragmentByTag(RetainedFragment.TAG.TAG) as RetainedFragment?
 
         if(retainedFragment==null){
             retainedFragment = RetainedFragment()

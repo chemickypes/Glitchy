@@ -2,6 +2,7 @@ package me.bemind.glitchappcore
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -46,6 +47,7 @@ interface IImagePresenter {
     fun onBackPressed() :Boolean
 
     fun getIImageLogic() :IImageLogic
+    fun onConfigurationChanged(newConfig: Configuration?)
 
 
 }
@@ -141,12 +143,13 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         disposable?.dispose()
     }
 
-    override fun saveInstanceState(activity: GlitchyBaseActivity,outState: Bundle?) {
+    override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?) {
 
+        glitchyBaseActivity.retainedFragment?.history = imageLogic.getStack()
         outState?.putSerializable(STATE_K,modState)
         if (imageLogic.hasHistory()){
             //outState?.putParcelableArrayList(BITMAP_K, )
-            activity.retainedFragment?.history = imageLogic.getStack()
+
         }
 
     }
@@ -156,13 +159,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun restoreInstanceState(activity: GlitchyBaseActivity,savedInstanceState: Bundle?) {
+
         imageLogic.setStack(activity.retainedFragment?.history)
-
-        if(savedInstanceState?.containsKey(BITMAP_K)?:false){
-
-
-
-        }
 
 
         if(savedInstanceState?.containsKey(STATE_K)?:false) modState = savedInstanceState?.getSerializable(STATE_K) as State
@@ -174,6 +172,12 @@ class ImagePresenter (val context: Context) : IImagePresenter{
             return false
         }else{
             return true
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        if(imageLogic.hasHistory()){
+            imageView.setImagebitmap(imageLogic.lastBitmap()!!)
         }
     }
 

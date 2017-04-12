@@ -1,5 +1,6 @@
 package me.bemind.glitchlibrary
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -13,25 +14,10 @@ import android.view.View.VISIBLE
 import me.bemind.glitchappcore.*
 
 
-class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
+class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
 
 
 
-    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-        //glitcher.restore()
-       /* Observable.fromCallable { glitcher.anaglyph(p1).result }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{bitmap:Bitmap? -> mImageView?.setImageBitmap(bitmap)}*/
-    }
-
-    override fun onStartTrackingTouch(p0: SeekBar?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onStopTrackingTouch(p0: SeekBar?) {
-       // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private var mImageView :ImageView? = null
     private var anaglyphButton: Button? = null
@@ -253,6 +239,12 @@ class MainActivity : GlitchyBaseActivity(), SeekBar.OnSeekBarChangeListener, IIm
                     .show()
 
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+
+        imagePresenter.onConfigurationChanged(newConfig)
     }
 
     private fun makeAnaglyphEffect(init: Boolean,progress:Int = 20) {
