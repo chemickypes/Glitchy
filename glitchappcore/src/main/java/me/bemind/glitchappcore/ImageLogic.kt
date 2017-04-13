@@ -21,9 +21,9 @@ interface IImageLogic{
 
     fun glitchImage() : Observable<Bitmap?>
 
-    fun getStack():ArrayList<Image>
+    fun getStack():ArrayList<ImageDescriptor>
 
-    fun setStack(list: List<Image>?)
+    fun setStack(list: List<ImageDescriptor>?)
 
     fun saveEffect()
 
@@ -49,7 +49,8 @@ interface IImageLogic{
 class ImageLogic : IImageLogic{
 
 
-    val stack =  LinkedStack<Image>()
+
+    private val imageStorage = ImageStorage
 
     private val glitcher: Glitcher = Glitcher.getGlitcher()
 
@@ -58,8 +59,8 @@ class ImageLogic : IImageLogic{
         val uri = Uri.fromFile(file)
 
         val b = Utils.getBitmap(context,uri,w,h)
-        stack.clear()
-        stack.push(Image(b,Effect.BASE,true))
+        imageStorage.clear()
+        imageStorage.addBitmap(b,Effect.BASE,true)
         return b
     }
 
@@ -87,74 +88,40 @@ class ImageLogic : IImageLogic{
 
     override fun anaglyphImage(progress: Int ):/*Observable<Bitmap?>*/Bitmap? {
 
-
-
-
-
-
         val bo : Bitmap? = getImageToPutEffect()
         val b = glitcher.anaglyph(bo,progress)
         if (b != null) addBitmap(b,Effect.ANAGLYPH,false)
 
         return b
 
-
     }
 
     override fun saveEffect() {
-        stack.peek()?.saved = true
+        imageStorage.saveEffect()
     }
 
     private fun addBitmap(b: Bitmap, effect: Effect, saved:Boolean = true) {
-        stack.push(Image(b,effect,saved))
-        if(stack.size()>13) stack.removeOld()
+        imageStorage.addBitmap(b,effect,saved)
+        //if(stack.size()>13) stack.removeOld()
     }
 
-    override fun setStack(list: List<Image>?) {
-        stack.addAll(list?:LinkedList<Image>())
+    override fun setStack(list: List<ImageDescriptor>?) {
+        imageStorage.stack.addAll(list?:LinkedList<ImageDescriptor>())
     }
 
-    override fun back(): Bitmap? {
-        stack.pop()
-        return stack.peek()?.bitmap
-    }
+    override fun back(): Bitmap?  = imageStorage.back()
 
-    override fun getStack(): ArrayList<Image> {
-        return stack.getAllAsList()
-    }
+    override fun getStack(): ArrayList<ImageDescriptor> = imageStorage.stack.getAllAsList()
 
-    override fun canBack(): Boolean {
-        return !(stack.isEmpty()||stack.size() == 1)
-    }
+    override fun canBack(): Boolean  = imageStorage.canBack()
 
-    override fun lastBitmap(): Bitmap? {
-        return stack.peek()?.bitmap
-    }
+    override fun lastBitmap(): Bitmap? = imageStorage.getLastBitmap()
 
-    override fun firstBitmap(): Bitmap? {
-        return stack.first()?.bitmap
-    }
+    override fun firstBitmap(): Bitmap?  = imageStorage.firstBitmap()
 
-    override fun sizeHistory(): Int {
-        return stack.size()
-    }
+    override fun sizeHistory(): Int = imageStorage.size()
 
-    override fun hasHistory(): Boolean {
-        return sizeHistory() > 0
-    }
+    override fun hasHistory(): Boolean = imageStorage.size()>0
 
-    private fun getImageToPutEffect() : Bitmap?{
-        val b : Bitmap?
-
-        val lastImage = stack.peek()
-
-        if(lastImage?.saved?:false){
-            b = lastImage?.bitmap
-        }else{
-            stack.pop()
-            b = stack.peek()?.bitmap
-        }
-
-        return b
-    }
+    private fun getImageToPutEffect() : Bitmap? = imageStorage.getImageToPutEffect()
 }

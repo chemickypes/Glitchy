@@ -51,8 +51,7 @@ object ImageStorage  {
         if(lastImage?.saved?:false){
             return lruCache.get(lastImage?.imageName)
         }else{
-            val ls = stack.pop()
-            lruCache.remove(ls?.imageName)
+            removeLast()
             return lruCache.get(stack.peek()?.imageName)
 
         }
@@ -65,11 +64,25 @@ object ImageStorage  {
         stack.peek()?.saved = true
     }
 
+    fun back() : Bitmap? {
+        removeLast()
+        return lruCache.get(stack.peek()?.imageName)
+    }
+
     fun firstBitmap() :Bitmap?  = lruCache.get(stack.first()?.imageName)
 
     fun size() = stackLenght
 
     fun canBack() = !(stack.isEmpty()|| stackLenght == 1)
+
+    fun clear() {
+        stack.clear()
+    }
+
+    fun removeLast() {
+        val ls = stack.pop()
+        lruCache.remove(ls?.imageName)
+    }
 
 
 }

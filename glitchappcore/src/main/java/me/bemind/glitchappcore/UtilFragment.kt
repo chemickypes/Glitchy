@@ -17,7 +17,7 @@ class RetainedFragment : Fragment(){
         val TAG = "RetainedFragment"
     }
 
-    var history : ArrayList<Image>? = null
+    var history : ArrayList<ImageDescriptor>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
