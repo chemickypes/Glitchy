@@ -82,8 +82,14 @@ class LinkedStack<T> :Stack<T>{
 
     fun getAllAsList() :ArrayList<T> = ArrayList(stack)
 
-    fun removeOld(){
+    fun removeOld():T?{
+        val  t = getOld()
         stack.removeAt(1)
+        return t
+    }
+
+    fun getOld(): T? {
+        return stack[1]
     }
 
 }

@@ -3,6 +3,7 @@ package me.bemind.glitchappcore
 import android.app.Application
 import android.util.Log
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo
+import java.io.File
 
 /**
  * Created by angelomoroni on 10/04/17.
