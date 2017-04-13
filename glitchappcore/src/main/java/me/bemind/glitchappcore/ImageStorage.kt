@@ -84,5 +84,12 @@ object ImageStorage  {
         lruCache.remove(ls?.imageName)
     }
 
+    fun  removeLastNonSaved() {
+        val last = stack.peek()
+        if(!(last?.saved?:true)){
+            removeLast()
+        }
+    }
+
 
 }

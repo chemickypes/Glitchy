@@ -34,7 +34,7 @@ interface IImagePresenter {
 
     fun saveEffect()
 
-    fun glitchImage(effect: Effect, progress: Int = 20)
+    fun glitchImage(effect: Effect, progress: Int = 20,init: Boolean = false)
 
     fun saveInstanceState(activity: GlitchyBaseActivity,outState: Bundle?)
 
@@ -125,11 +125,11 @@ class ImagePresenter (val context: Context) : IImagePresenter{
        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun glitchImage(effect: Effect,progress: Int) {
+    override fun glitchImage(effect: Effect,progress: Int,init:Boolean) {
 
        disposable = when(effect){
            Effect.GLITCH -> glitchEffect()
-           Effect.ANAGLYPH -> anaglyphEffect(progress)
+           Effect.ANAGLYPH -> anaglyphEffect(progress,init)
            else -> Observable.empty<Bitmap?>().subscribe()
        }
     }
@@ -183,12 +183,12 @@ class ImagePresenter (val context: Context) : IImagePresenter{
         }
     }
 
-    fun anaglyphEffect(progress: Int = 20) : Disposable{
+    fun anaglyphEffect(progress: Int = 20, init: Boolean) : Disposable{
 
 
         if(imageLogic.hasHistory()) {
 
-            val b = imageLogic.anaglyphImage(progress)!!
+            val b = imageLogic.anaglyphImage(progress,init)!!
             imageView.setImagebitmap(b)
         }
         return Observable.empty<Bitmap>().subscribe()

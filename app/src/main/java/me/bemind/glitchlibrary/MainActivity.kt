@@ -279,7 +279,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             })
         }
 
-        imagePresenter.glitchImage(Effect.ANAGLYPH,progress)
+        imagePresenter.glitchImage(Effect.ANAGLYPH,progress,init)
     }
 
     private fun makeGlitchEffect(init: Boolean = false){

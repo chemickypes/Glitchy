@@ -21,22 +21,17 @@ object GlitcherUtil {
 }
 
 
-class Glitcher private constructor(){
+object Glitcher {
 
 
-    companion object Creator {
-        fun  getGlitcher():Glitcher{
-            val glitcher = Glitcher()
-           /* glitcher.original = bitmap
-            glitcher.result = glitcher.original!!.copy(glitcher.original?.config,true)*/
-
-            return glitcher
-        }
-    }
 
 
     val leftArray = floatArrayOf(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
     val rightArray = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
+
+    var anaglyphShader : BitmapShader? = null
+    var result : Bitmap? = null
+    var anaglyphPaint = Paint();
 
 
     fun corruptBitmap(result:Bitmap?) : Bitmap{
@@ -144,10 +139,16 @@ class Glitcher private constructor(){
         return generateBitmap(result){sortRow(it)}
     }
 
-    fun anaglyph (result: Bitmap?,percentage:Int = 20) : Bitmap?{
+    fun initAnaglyph ( result: Bitmap?){
+        this.result = result
+        anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
 
+        anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
+        anaglyphPaint.shader = anaglyphShader
 
+    }
 
+    fun anaglyph (percentage:Int = 20) : Bitmap?{
 
         val w = result?.width?:0
         val h = result?.height?:0
@@ -155,10 +156,7 @@ class Glitcher private constructor(){
         val transX = ((w/2) * percentage).div(100)
         val transY = 0
 
-        val anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        val anaglyphPaint = Paint()
-        anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
-        anaglyphPaint.shader = anaglyphShader
+
 
         val colorMatrix = ColorMatrix()
 
@@ -169,7 +167,7 @@ class Glitcher private constructor(){
         //left
         val matrix = Matrix()
         matrix.setTranslate((-transX).toFloat(), (transY).toFloat())
-        anaglyphShader.setLocalMatrix(matrix)
+        anaglyphShader?.setLocalMatrix(matrix)
         colorMatrix.set(leftArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
         c.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
@@ -177,7 +175,7 @@ class Glitcher private constructor(){
         //right
         val matrix2 = Matrix()
         matrix2.setTranslate((transX).toFloat(), transY.toFloat())
-        anaglyphShader.setLocalMatrix(matrix2)
+        anaglyphShader?.setLocalMatrix(matrix2)
         colorMatrix.set(rightArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
         c.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
