@@ -1,5 +1,7 @@
 package me.bemind.glitchappcore
 
+import android.graphics.Bitmap
+import android.util.LruCache
 import java.util.*
 
 /**
@@ -24,6 +26,7 @@ interface Stack<T> : Iterable<T> {
 
     fun clearKeepingFirst()
 }
+
 
 class LinkedStack<T> :Stack<T>{
     val stack =  LinkedList<T>()
@@ -84,3 +87,4 @@ class LinkedStack<T> :Stack<T>{
     }
 
 }
+
