@@ -153,7 +153,8 @@ object Glitcher {
         val w = result?.width?:0
         val h = result?.height?:0
 
-        val transX = ((w/2) * percentage).div(100)
+        //val transX = (w * percentage).div(200)
+        val transX = ( percentage)
         val transY = 0
 
 

@@ -186,7 +186,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     fun anaglyphEffect(progress: Int = 20, init: Boolean) : Disposable{
 
 
-        if(imageLogic.hasHistory()) {
+        if(imageLogic.hasHistory() && (progress%2 == 0)) {
 
             val b = imageLogic.anaglyphImage(progress,init)!!
             imageView.setImagebitmap(b)

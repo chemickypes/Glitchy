@@ -89,6 +89,7 @@ class ImageLogic : IImageLogic{
 
     override fun anaglyphImage(progress: Int ,init: Boolean):/*Observable<Bitmap?>*/Bitmap? {
 
+
         if(init){
             val bo : Bitmap? = getImageToPutEffect()
             glitcher.initAnaglyph(bo)
