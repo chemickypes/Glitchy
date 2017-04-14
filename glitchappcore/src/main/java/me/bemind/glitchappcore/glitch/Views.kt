@@ -17,72 +17,68 @@ import me.bemind.glitch.Glitcher
 
 interface IGlitchView {
 
-    var effect : Effect
 
     fun getImageBitmap() : Bitmap?
-
-    fun redrawView()
 
     fun updateProgress(progress: Int)
 
     fun initEffect(effect: Effect)
 
+    fun invalidateGlitchView()
 }
 
 
 /**
  * extension of ImageView in order to implement IGlitchView
  */
-class ExtendedImageView : ImageView {
+class ExtendedImageView : ImageView, IGlitchView {
 
-    val glithce =  Glitcher
 
-    var effectProgress = 0
 
-    var effectON = false
 
-    var effect  = Effect.BASE
-    set(value) {
-        field = value
-        invalidate()
+
+    val glitcPresenter = GlitchPresenter()
+
+    constructor(context: Context) : super(context){
+        initView()
     }
 
-    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs){
+        initView()
+    }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr){
+        initView()
+    }
 
-    fun initEffect(effect: Effect){
-        effectON = true
-        glithce.initEffect((drawable as BitmapDrawable).bitmap)
-        when (effect){
-            Effect.ANAGLYPH -> effectProgress = 20
-            else -> effectProgress = 0
-        }
-        this.effect = effect
+    override fun initEffect(effect: Effect){
+
+        glitcPresenter.initEffect(getImageBitmap(),effect)
+
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        when (effect){
-            Effect.GLITCH -> Log.v("ImageView","glitch")
-            Effect.ANAGLYPH -> glithce.anaglyphCanvas(canvas,effectProgress)
-            else -> Log.v("ImageView","BASE")
-        }
+        glitcPresenter.onDraw(canvas)
 
     }
 
-    fun save(){
-        effectON = false
+
+    override fun updateProgress (progress:Int){
+        glitcPresenter.effectProgress = progress
+        invalidateGlitchView()
     }
 
-    fun updateProgress (progress:Int){
-        effectProgress = progress
+    override fun getImageBitmap(): Bitmap? = (drawable as BitmapDrawable).bitmap
+
+    override fun invalidateGlitchView() {
         invalidate()
     }
 
+    private fun initView() {
+        glitcPresenter.glitchView = this
 
-
+    }
 }
