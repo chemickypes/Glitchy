@@ -31,7 +31,10 @@ object Glitcher {
 
     var anaglyphShader : BitmapShader? = null
     var result : Bitmap? = null
-    var anaglyphPaint = Paint();
+    var anaglyphPaint = Paint()
+
+    var w = 0
+    var h = 0
 
 
     fun corruptBitmap(result:Bitmap?) : Bitmap{
@@ -189,6 +192,33 @@ object Glitcher {
 
     }
 
+    fun anaglyphCanvas(c:Canvas?,process: Int = 20){
+
+        val colorMatrix = ColorMatrix()
+        val transX = ( process)
+        val transY = 0
+        c?.drawColor(0, PorterDuff.Mode.CLEAR)
+
+        //left
+        val matrix = Matrix()
+        matrix.setTranslate((-transX).toFloat(), (transY).toFloat())
+        anaglyphShader?.setLocalMatrix(matrix)
+        colorMatrix.set(leftArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+
+        //right
+        val matrix2 = Matrix()
+        matrix2.setTranslate((transX).toFloat(), transY.toFloat())
+        anaglyphShader?.setLocalMatrix(matrix2)
+        colorMatrix.set(rightArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+
+
+        //c?.drawBitmap(result,0f,0f,anaglyphPaint)
+    }
+
 
     private fun shuffleRow(row: List<Int>) : List<Int> {
         val RANDOM = Random()
@@ -219,6 +249,15 @@ object Glitcher {
         return rr
     }
 
+    fun initEffect(bitmap: Bitmap?) {
+        result = bitmap
+        w = bitmap?.width?:0
+        h = bitmap?.height?:0
+
+        anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
+        anaglyphPaint.shader = anaglyphShader
+    }
 
 
 }

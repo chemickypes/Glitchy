@@ -6,6 +6,7 @@ import android.net.Uri
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observable
+import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import java.io.File
 import java.lang.RuntimeException
@@ -60,7 +61,7 @@ class ImageLogic : IImageLogic{
 
         val b = Utils.getBitmap(context,uri,w,h)
         imageStorage.clear()
-        imageStorage.addBitmap(b,Effect.BASE,true)
+        imageStorage.addBitmap(b, Effect.BASE,true)
         return b
     }
 

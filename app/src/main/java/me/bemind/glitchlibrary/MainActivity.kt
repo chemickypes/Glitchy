@@ -11,6 +11,8 @@ import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import me.bemind.glitch.Effect
+import me.bemind.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
 
 
@@ -19,7 +21,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
 
 
-    private var mImageView :ImageView? = null
+    private var mImageView :ExtendedImageView? = null
     private var anaglyphButton: Button? = null
     private var glitchButton: Button? = null
     private var seekbar: SeekBar? = null
@@ -58,7 +60,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
         setSupportActionBar(toolbar)
 
-        mImageView = findViewById(R.id.imageView) as ImageView
+        mImageView = findViewById(R.id.imageView) as ExtendedImageView
         mImageView?.setOnClickListener {
 
             if(!imagePresenter.getIImageLogic().hasHistory()){
@@ -253,7 +255,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
         imagePresenter.onConfigurationChanged(newConfig)
     }
 
-    private fun makeAnaglyphEffect(init: Boolean,progress:Int = 20) {
+    private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
         if(init) {
             imagePresenter.modState = State.EFFECT
             //inflate layout
@@ -261,6 +263,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             val view = LayoutInflater.from(this).inflate(R.layout.effect_anaglyph_layout,null,false)
 
             effectPanel?.addView(view)
+
+            mImageView?.initEffect(Effect.ANAGLYPH)
 
             val seekbar = view.findViewById(R.id.seekbar) as SeekBar
 
@@ -277,9 +281,11 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
                 }
             })
-        }
+        }else {
 
-        imagePresenter.glitchImage(Effect.ANAGLYPH,progress,init)
+            mImageView?.updateProgress(progress)
+        // imagePresenter.glitchImage(Effect.ANAGLYPH, progress, init)
+        }
     }
 
     private fun makeGlitchEffect(init: Boolean = false){

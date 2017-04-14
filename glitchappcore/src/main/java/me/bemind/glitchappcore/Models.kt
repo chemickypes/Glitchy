@@ -3,6 +3,7 @@ package me.bemind.glitchappcore
 import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
+import me.bemind.glitch.Effect
 
 /**
  * Created by angelomoroni on 10/04/17.
@@ -53,6 +54,3 @@ enum class State {
     BASE,EFFECT
 }
 
-enum class Effect {
-    BASE,ANAGLYPH, GLITCH
-}

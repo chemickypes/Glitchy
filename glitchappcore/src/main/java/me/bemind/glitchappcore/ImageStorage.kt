@@ -3,6 +3,7 @@ package me.bemind.glitchappcore
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
+import me.bemind.glitch.Effect
 
 /**
  * Created by angelomoroni on 13/04/17.

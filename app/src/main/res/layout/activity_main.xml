@@ -61,7 +61,7 @@
             android:text="@string/tap_to_open_ad_image"/>
 
 
-        <ImageView
+        <me.bemind.glitch.ExtendedImageView
             android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
