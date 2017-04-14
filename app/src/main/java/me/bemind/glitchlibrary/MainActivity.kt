@@ -82,7 +82,10 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
         anaglyphButton = findViewById(R.id.anaglyph_button) as Button
         anaglyphButton?.setOnClickListener {
-            makeAnaglyphEffect(true)
+
+            if(mImageView?.getImageBitmap()!=null) {
+                makeAnaglyphEffect(true)
+            }
         }
 
         glitchButton = findViewById(R.id.glitch_button) as Button

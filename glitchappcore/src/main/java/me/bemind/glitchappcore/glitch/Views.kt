@@ -71,7 +71,16 @@ class ExtendedImageView : ImageView, IGlitchView {
         invalidateGlitchView()
     }
 
-    override fun getImageBitmap(): Bitmap? = (drawable as BitmapDrawable).bitmap
+    override fun getImageBitmap(): Bitmap? {
+
+        if(drawable!=null) {
+           return (drawable as BitmapDrawable).bitmap
+        }else{
+            return null
+        }
+
+
+    }
 
     override fun invalidateGlitchView() {
         invalidate()
