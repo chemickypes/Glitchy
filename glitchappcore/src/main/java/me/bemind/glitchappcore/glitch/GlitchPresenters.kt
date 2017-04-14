@@ -5,6 +5,10 @@ import android.graphics.Canvas
 import android.util.Log
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
+import android.R.attr.scaleY
+import android.R.attr.scaleX
+
+
 
 /**
  * Created by angelomoroni on 14/04/17.
@@ -83,10 +87,18 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     override fun onDraw(canvas: Canvas?){
+        canvas?.save()
+
+        canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
+        canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
+                glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
+
         when (effect) {
             Effect.GLITCH -> Log.v("ImageView", "glitch")
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
+
+        canvas?.restore()
     }
 }

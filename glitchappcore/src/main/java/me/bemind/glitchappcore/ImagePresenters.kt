@@ -116,10 +116,15 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                         Observable.just(Response((response.targetUI() as GlitchyBaseActivity),b))
                     }
                 }
-                .doOnNext { b -> b.activity.setImagebitmap(b.image); }
-                .doOnError { t -> t.printStackTrace() }
+                /*.doOnNext { b -> b.activity.setImagebitmap(b.image); }
+                .doOnError { t -> t.printStackTrace() }*/
                 .doOnComplete { Log.i(TAG,"Load complete") }
-                .subscribe()
+                .subscribe({
+                    b -> b.activity.setImagebitmap(b.image)
+                },
+                        {
+                          t -> t.printStackTrace()
+                        })
     }
 
     override fun saveImage() {

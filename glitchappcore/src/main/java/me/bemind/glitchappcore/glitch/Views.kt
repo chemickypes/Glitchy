@@ -9,6 +9,11 @@ import android.util.Log
 import android.widget.ImageView
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
+import android.graphics.drawable.Drawable
+import android.R.attr.scaleY
+import android.R.attr.scaleX
+import android.graphics.Rect
+
 
 /**
  * Created by angelomoroni on 13/04/17.
@@ -25,6 +30,14 @@ interface IGlitchView {
     fun initEffect(effect: Effect)
 
     fun invalidateGlitchView()
+
+    var dispTop: Int
+
+    var dispLeft: Int
+
+    var scaleXG: Float
+    var scaleYG: Float
+
 }
 
 
@@ -33,9 +46,15 @@ interface IGlitchView {
  */
 class ExtendedImageView : ImageView, IGlitchView {
 
+    override var scaleXG: Float = 0f
 
+    override var scaleYG: Float = 0f
 
+    override var dispTop: Int = 0
 
+    override var dispLeft: Int = 0
+
+    var newPhoto = false
 
     val glitcPresenter = GlitchPresenter()
 
@@ -61,8 +80,9 @@ class ExtendedImageView : ImageView, IGlitchView {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        glitcPresenter.onDraw(canvas)
+        if(!newPhoto)glitcPresenter.onDraw(canvas)
 
+        newPhoto = false
     }
 
 
@@ -84,6 +104,35 @@ class ExtendedImageView : ImageView, IGlitchView {
 
     override fun invalidateGlitchView() {
         invalidate()
+    }
+
+    override fun setImageBitmap(bm: Bitmap?) {
+        super.setImageBitmap(bm)
+        newPhoto = true
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        loadMesure()
+    }
+
+
+
+
+
+    private fun loadMesure() {
+        val fArr = FloatArray(9)
+        imageMatrix.getValues(fArr)
+        getWindowVisibleDisplayFrame(Rect())
+        this.scaleXG = fArr[0]
+        this.scaleYG = fArr[4]
+        this.dispTop = fArr[5].toInt()
+        this.dispLeft = fArr[2].toInt()
+        /*val drawable = drawable
+        if (drawable != null) {
+            val intrinsicWidth = drawable.intrinsicWidth
+            this.effects.SetlRect(Math.max(drawable.intrinsicHeight, intrinsicWidth) / 100 * 3)
+        }*/
     }
 
     private fun initView() {
