@@ -12,7 +12,7 @@ import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import me.bemind.glitch.Effect
-import me.bemind.glitch.ExtendedImageView
+import me.bemind.glitchappcore.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
 
 
@@ -21,7 +21,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
 
 
-    private var mImageView :ExtendedImageView? = null
+    private var mImageView : ExtendedImageView? = null
     private var anaglyphButton: Button? = null
     private var glitchButton: Button? = null
     private var seekbar: SeekBar? = null

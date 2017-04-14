@@ -251,8 +251,12 @@ object Glitcher {
 
     fun initEffect(bitmap: Bitmap?) {
         result = bitmap
-        w = bitmap?.width?:0
-        h = bitmap?.height?:0
+        initEffect(bitmap?.width?:0,bitmap?.height?:0)
+    }
+
+    fun initEffect(w:Int,h:Int){
+        Glitcher.w = w
+        Glitcher.h = h
 
         anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)

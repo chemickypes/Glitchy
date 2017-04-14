@@ -1,16 +1,38 @@
-package me.bemind.glitch
+package me.bemind.glitchappcore.glitch
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.ImageView
+import me.bemind.glitch.Effect
+import me.bemind.glitch.Glitcher
 
 /**
  * Created by angelomoroni on 13/04/17.
  */
 
+
+interface IGlitchView {
+
+    var effect : Effect
+
+    fun getImageBitmap() : Bitmap?
+
+    fun redrawView()
+
+    fun updateProgress(progress: Int)
+
+    fun initEffect(effect: Effect)
+
+}
+
+
+/**
+ * extension of ImageView in order to implement IGlitchView
+ */
 class ExtendedImageView : ImageView {
 
     val glithce =  Glitcher
@@ -46,7 +68,7 @@ class ExtendedImageView : ImageView {
 
         when (effect){
             Effect.GLITCH -> Log.v("ImageView","glitch")
-            Effect.ANAGLYPH  -> glithce.anaglyphCanvas(canvas,effectProgress)
+            Effect.ANAGLYPH -> glithce.anaglyphCanvas(canvas,effectProgress)
             else -> Log.v("ImageView","BASE")
         }
 
