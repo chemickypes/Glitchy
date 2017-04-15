@@ -20,7 +20,7 @@ interface IImageLogic{
     fun getImage(context: Context,
                  file: File, w:Int = 1024,h:Int =  1024) : Bitmap
 
-    fun glitchImage() : Observable<Bitmap?>
+    /*fun glitchImage() : Observable<Bitmap?>
 
     fun getStack():ArrayList<ImageDescriptor>
 
@@ -42,7 +42,7 @@ interface IImageLogic{
 
     //fun anaglyphImage(progress:Int = 20) :Observable<Bitmap?>
 
-    fun anaglyphImage(progress:Int = 20, init:Boolean = false) :Bitmap?
+    fun anaglyphImage(progress:Int = 20, init:Boolean = false) :Bitmap?*/
 
 
 }
@@ -51,21 +51,21 @@ class ImageLogic : IImageLogic{
 
 
 
-    private val imageStorage = ImageStorage
+   /* private val imageStorage = ImageStorage
 
-    private val glitcher =  Glitcher
+    private val glitcher =  Glitcher*/
 
 
     override fun getImage(context: Context, file: File,w: Int,h: Int): Bitmap {
         val uri = Uri.fromFile(file)
 
         val b = Utils.getBitmap(context,uri,w,h)
-        imageStorage.clear()
-        imageStorage.addBitmap(b, Effect.BASE,true)
+        /*imageStorage.clear()
+        imageStorage.addBitmap(b, Effect.BASE,true)*/
         return b
     }
 
-    override fun glitchImage(): Observable<Bitmap?> {
+   /* override fun glitchImage(): Observable<Bitmap?> {
 
         val b : Bitmap? = getImageToPutEffect()
 
@@ -88,7 +88,7 @@ class ImageLogic : IImageLogic{
 
 
 
-    override fun anaglyphImage(progress: Int ,init: Boolean):/*Observable<Bitmap?>*/Bitmap? {
+    override fun anaglyphImage(progress: Int ,init: Boolean):*//*Observable<Bitmap?>*//*Bitmap? {
 
 
         if(init){
@@ -133,5 +133,5 @@ class ImageLogic : IImageLogic{
 
     override fun hasHistory(): Boolean = imageStorage.size()>0
 
-    private fun getImageToPutEffect() : Bitmap? = imageStorage.getImageToPutEffect()
+    private fun getImageToPutEffect() : Bitmap? = imageStorage.getImageToPutEffect()*/
 }
