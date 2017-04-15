@@ -13,6 +13,8 @@ import android.graphics.drawable.Drawable
 import android.R.attr.scaleY
 import android.R.attr.scaleX
 import android.graphics.Rect
+import me.bemind.glitchappcore.history.HistoryPresenter
+import me.bemind.glitchappcore.history.IHistoryView
 
 
 /**
@@ -41,6 +43,7 @@ interface IGlitchView {
 
     var scaleXG: Float
     var scaleYG: Float
+    fun clearEffect()
 
 }
 
@@ -48,7 +51,8 @@ interface IGlitchView {
 /**
  * extension of ImageView in order to implement IGlitchView
  */
-class ExtendedImageView : ImageView, IGlitchView {
+class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
+
 
     override var scaleXG: Float = 0f
 
@@ -61,6 +65,11 @@ class ExtendedImageView : ImageView, IGlitchView {
     var newPhoto = false
 
     val glitcPresenter = GlitchPresenter()
+    val historyPresenter = HistoryPresenter()
+
+    override var hasHistory: Boolean
+        get() = historyPresenter.hasHistory
+        set(value) {/*nothing*/}
 
 
 
@@ -91,6 +100,9 @@ class ExtendedImageView : ImageView, IGlitchView {
         newPhoto = false
     }
 
+    override fun clearEffect() {
+        setImageBitmap(getImageBitmap(),false,false)
+    }
 
     override fun updateProgress (progress:Int){
         glitcPresenter.effectProgress = progress
@@ -118,8 +130,15 @@ class ExtendedImageView : ImageView, IGlitchView {
     }
 
     override fun setImageBitmap(bm: Bitmap?) {
+        //super.setImageBitmap(bm)
+        //newPhoto = true
+        setImageBitmap(bm,false,true)
+    }
+
+    fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
         super.setImageBitmap(bm)
         newPhoto = true
+        if(toAdd) historyPresenter.addImage(bm!!,newphoto)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -127,8 +146,18 @@ class ExtendedImageView : ImageView, IGlitchView {
         loadMesure()
     }
 
+    override fun back(): Boolean {
+        if(historyPresenter.canBack){
+            historyPresenter.back()
+            return true
+        }else{
+            return false
+        }
+    }
 
-
+    override fun setPreviousImage(back: Bitmap?) {
+        setImageBitmap(back,false,false)
+    }
 
 
     private fun loadMesure() {
@@ -148,6 +177,7 @@ class ExtendedImageView : ImageView, IGlitchView {
 
     private fun initView() {
         glitcPresenter.glitchView = this
+        historyPresenter.historyView = this
 
     }
 }

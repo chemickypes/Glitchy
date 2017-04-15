@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.SeekBar
 import android.support.v7.app.AlertDialog
 import android.view.*
@@ -63,7 +62,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
         mImageView = findViewById(R.id.imageView) as ExtendedImageView
         mImageView?.setOnClickListener {
 
-            if(!imagePresenter.getIImageLogic().hasHistory()){
+            if(!(mImageView?.hasHistory?:false)){
                 pickPhotoBS.show()
             }
 
@@ -132,7 +131,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             toolbarEffect?.visibility = VISIBLE
         }
 
-        if(imagePresenter.getIImageLogic().hasHistory()) {
+        if(mImageView?.hasHistory?:false) {
             if(effectPanel?.visibility == GONE) animateAlpha(effectPanel,runnable, 450, true, 1f)
             if(toolbarEffect?.visibility == GONE)animateAlpha(toolbarEffect,runnable2, 450, true, 1f)
         }
@@ -181,7 +180,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
     override fun setImagebitmap(bitmap: Bitmap) {
         runOnUiThread {
-            mImageView!!.setImageBitmap(bitmap)
+            mImageView!!.setImageBitmap(bitmap,true,true)
         }
 
         //mImageView?.post {  }
@@ -231,10 +230,11 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
         if(imagePresenter.modState == State.EFFECT){
             imagePresenter.modState = State.BASE
-            imagePresenter.onBackPressed()
+            //imagePresenter.onBackPressed()
+            mImageView?.clearEffect()
         }else {
 
-            if (imagePresenter.onBackPressed()) {
+            if (!(mImageView?.back()?:true)) {
 
                 val appname = getString(R.string.app_name)
                 AlertDialog.Builder(this)

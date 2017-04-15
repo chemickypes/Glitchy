@@ -8,6 +8,8 @@ import android.graphics.Bitmap
 
 interface IHistoryView {
 
+    var hasHistory : Boolean
     fun back() : Boolean
+    fun setPreviousImage(back: Bitmap?)
 
 }

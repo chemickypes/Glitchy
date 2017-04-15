@@ -143,7 +143,7 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     override fun subscribe(view: IImageView) {
         imageView = view
 
-        if (imageLogic.hasHistory()) imageView.setImagebitmap(imageLogic.lastBitmap()!!)
+       // if (imageLogic.hasHistory()) imageView.setImagebitmap(imageLogic.lastBitmap()!!)
     }
 
     override fun unsubscribe() {
@@ -152,56 +152,57 @@ class ImagePresenter (val context: Context) : IImagePresenter{
     }
 
     override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?) {
-
+/*
         glitchyBaseActivity.retainedFragment?.history = imageLogic.getStack()
         outState?.putSerializable(STATE_K,modState)
         if (imageLogic.hasHistory()){
             //outState?.putParcelableArrayList(BITMAP_K, )
 
-        }
+        }*/
 
     }
 
     override fun saveEffect() {
-        imageLogic.saveEffect()
+       // imageLogic.saveEffect()
     }
 
     override fun restoreInstanceState(activity: GlitchyBaseActivity,savedInstanceState: Bundle?) {
 
-        imageLogic.setStack(activity.retainedFragment?.history)
+       // imageLogic.setStack(activity.retainedFragment?.history)
 
 
         if(savedInstanceState?.containsKey(STATE_K)?:false) modState = savedInstanceState?.getSerializable(STATE_K) as State
     }
 
     override fun onBackPressed(): Boolean {
-        if(imageLogic.canBack()){
+       /* if(imageLogic.canBack()){
             imageView.setImagebitmap(imageLogic.back()!!)
             return false
         }else{
             return true
-        }
+        }*/
+        return true
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
-        if(imageLogic.hasHistory()){
+       /* if(imageLogic.hasHistory()){
             imageView.setImagebitmap(imageLogic.lastBitmap()!!)
-        }
+        }*/
     }
 
     fun anaglyphEffect(progress: Int = 20, init: Boolean) : Disposable{
 
-
+/*
         if(imageLogic.hasHistory() && (progress%2 == 0)) {
 
             val b = imageLogic.anaglyphImage(progress,init)!!
             imageView.setImagebitmap(b)
-        }
+        }*/
         return Observable.empty<Bitmap>().subscribe()
     }
 
     fun glitchEffect() : Disposable{
-        return imageLogic.glitchImage()
+       /* return imageLogic.glitchImage()
                 .filter { b -> b!=null }
                 .flatMap { b -> Observable.just(b)  }
                 .subscribe(
@@ -211,6 +212,8 @@ class ImagePresenter (val context: Context) : IImagePresenter{
                         {
                             t -> imageView.showGetImageError(t)
                         }
-                )
+                )*/
+
+        return Observable.empty<Bitmap>().subscribe()
     }
 }
