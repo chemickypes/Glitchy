@@ -25,11 +25,15 @@ interface IGlitchView {
 
     fun getImageBitmap() : Bitmap?
 
+    fun setImageBitmap(bitmap: Bitmap?)
+
     fun updateProgress(progress: Int)
 
     fun initEffect(effect: Effect)
 
     fun invalidateGlitchView()
+
+    fun save()
 
     var dispTop: Int
 
@@ -57,6 +61,8 @@ class ExtendedImageView : ImageView, IGlitchView {
     var newPhoto = false
 
     val glitcPresenter = GlitchPresenter()
+
+
 
     constructor(context: Context) : super(context){
         initView()
@@ -104,6 +110,11 @@ class ExtendedImageView : ImageView, IGlitchView {
 
     override fun invalidateGlitchView() {
         invalidate()
+    }
+
+    override fun save() {
+        glitcPresenter.saveEffect()
+        //save to history
     }
 
     override fun setImageBitmap(bm: Bitmap?) {

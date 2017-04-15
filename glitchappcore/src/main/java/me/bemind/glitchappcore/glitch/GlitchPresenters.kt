@@ -7,7 +7,9 @@ import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.R.attr.scaleY
 import android.R.attr.scaleX
-
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 /**
@@ -69,7 +71,33 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     override fun saveEffect() {
-        effectON = false
+
+        Observable.fromCallable {
+            val b = Bitmap.createBitmap(glitchView?.getImageBitmap()?.width?:1,
+                glitchView?.getImageBitmap()?.height?:1,
+                Bitmap.Config.ARGB_8888)
+
+            val canvas = Canvas(b)
+
+            onDraw(canvas)
+            return@fromCallable b
+        }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            b -> glitchView?.setImageBitmap(b)
+                            effectON = false
+                            effectProgress = 0
+                            effect = Effect.BASE
+                        },
+                        { t ->  t.printStackTrace()}
+                )
+
+
+
+
+
+
     }
 
     override fun initEffect(bitmap: Bitmap?,effect: Effect) {

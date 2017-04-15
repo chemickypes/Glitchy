@@ -37,6 +37,7 @@ object Glitcher {
     var h = 0
 
 
+
     fun corruptBitmap(result:Bitmap?) : Bitmap{
 
 
@@ -216,8 +217,12 @@ object Glitcher {
         c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
 
 
+
+
         //c?.drawBitmap(result,0f,0f,anaglyphPaint)
     }
+
+
 
 
     private fun shuffleRow(row: List<Int>) : List<Int> {
@@ -250,13 +255,17 @@ object Glitcher {
     }
 
     fun initEffect(bitmap: Bitmap?) {
+
         result = bitmap
         initEffect(bitmap?.width?:0,bitmap?.height?:0)
     }
 
-    fun initEffect(w:Int,h:Int){
+
+
+    fun initEffect(w:Int, h:Int){
         Glitcher.w = w
         Glitcher.h = h
+
 
         anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)

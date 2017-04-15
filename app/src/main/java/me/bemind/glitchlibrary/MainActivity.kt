@@ -99,7 +99,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
 
     private fun applyEffect() {
         imagePresenter.modState = State.BASE
-        imagePresenter.saveEffect()
+        //imagePresenter.saveEffect()
+        mImageView?.save()
     }
 
     private fun closeCurrentEffect() {
