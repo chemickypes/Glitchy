@@ -18,4 +18,5 @@
     <string name="image_saving_error">Image Saving error!</string>
     <string name="share">Share</string>
     <string name="error_share">Error in sharing image!</string>
+    <string name="save">Save</string>
 </resources>

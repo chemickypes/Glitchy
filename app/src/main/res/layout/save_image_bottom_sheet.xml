@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/camera_text_view"
+        android:id="@+id/save_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="15dp"
@@ -14,17 +12,17 @@
         android:padding="15dp"
         android:textAllCaps="true"
         android:textColor="@color/colorAccent"
-        android:text="@string/fotocamera" />
+        android:text="@string/save" />
 
     <TextView
-        android:id="@+id/gallery_text_view"
+        android:id="@+id/share_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
         android:drawablePadding="15dp"
-    android:textAllCaps="true"
+        android:textAllCaps="true"
         android:gravity="center_vertical"
         android:padding="15dp"
-        android:text="@string/galleria" />
+        android:text="@string/share" />
 
 </LinearLayout>

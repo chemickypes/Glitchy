@@ -44,14 +44,51 @@ class PickPhotoBottomSheet private constructor(){
        view.findViewById(R.id.gallery_text_view).setOnClickListener { listener?.openGallery() }
    }
 
-
-
-
     interface OnPickPhotoListener{
         fun openCamera()
         fun openGallery()
     }
 
+}
+
+class SaveImageBottomSheet private constructor(){
+
+    private var listener : OnSaveImageListener? = null
+    private var context: Context? = null
+    private var mBottomSheet :BottomSheetDialog? = null
+
+    companion object Creator {
+        fun getSaveImageBottomSheet(context:Context,listener: SaveImageBottomSheet.OnSaveImageListener) : SaveImageBottomSheet{
+            val saveImagebottomSheet = SaveImageBottomSheet()
+
+            saveImagebottomSheet.context = context
+            saveImagebottomSheet.listener = listener
+
+            return saveImagebottomSheet
+        }
+    }
+
+    fun dismiss() {
+        mBottomSheet?.dismiss()
+    }
+
+    fun show() {
+        mBottomSheet = BottomSheetDialog(context!!)
+
+        val view = LayoutInflater.from(context)
+                .inflate(R.layout.save_image_bottom_sheet,null, false)
+
+        mBottomSheet?.setContentView(view)
+        mBottomSheet?.setOnDismissListener { mBottomSheet = null }
+        mBottomSheet?.show()
+
+        view.findViewById(R.id.share_text_view).setOnClickListener { listener?.shareImage() }
+        view.findViewById(R.id.save_text_view).setOnClickListener { listener?.saveImage() }
+    }
 
 
+    interface OnSaveImageListener{
+        fun saveImage()
+        fun shareImage()
+    }
 }

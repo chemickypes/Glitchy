@@ -22,7 +22,8 @@ import android.content.Intent
 
 
 
-class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
+class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener,
+SaveImageBottomSheet.OnSaveImageListener{
 
 
 
@@ -39,6 +40,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     private var ioPresenter: IIOPresenter = IOPresenter()
 
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
+
+    private val saveImageBS = SaveImageBottomSheet.Creator.getSaveImageBottomSheet(this,this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -168,7 +171,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
                 //imagePresenter.saveImage()
                 //open bottom sheet
 //                ioPresenter.saveImage(mImageView?.getImageBitmap())
-                ioPresenter.shareImage(mImageView?.getImageBitmap())
+                saveImageBS.show()
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -177,6 +181,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun onPause() {
         super.onPause()
         pickPhotoBS.dismiss()
+        saveImageBS.dismiss()
     }
 
     override fun onStart() {
@@ -268,6 +273,16 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun openGallery() {
         //imagePresenter.openImageFromGallery(this,mImageView!!.width,mImageView!!.height)
         ioPresenter.openImage(this,IIOPresenter.TypePick.GALLERY,mImageView!!.width,mImageView!!.height)
+    }
+
+    override fun saveImage() {
+        ioPresenter.saveImage(mImageView?.getImageBitmap())
+        saveImageBS.dismiss()
+    }
+
+    override fun shareImage() {
+        ioPresenter.shareImage(mImageView?.getImageBitmap())
+        saveImageBS.dismiss()
     }
 
     override fun onBackPressed() {
