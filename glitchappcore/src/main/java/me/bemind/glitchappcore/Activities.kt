@@ -3,7 +3,6 @@ package me.bemind.glitchappcore
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import me.bemind.glitchappcore.app.IAppView
-import me.bemind.glitchappcore.app.IImageView
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IIOView
 

@@ -18,6 +18,7 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import android.util.Log
 import me.bemind.glitchappcore.app.*
 
 
@@ -303,28 +304,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(init) {
             appPresenter.modState = State.EFFECT
             //inflate layout
-
-            val view = LayoutInflater.from(this).inflate(R.layout.effect_anaglyph_layout,null,false)
-
-            effectPanel?.addView(view)
-
             mImageView?.initEffect(Effect.ANAGLYPH)
 
-            val seekbar = view.findViewById(R.id.seekbar) as SeekBar
 
-            seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                    if(arg2) makeAnaglyphEffect(false,arg1)
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                }
-            })
+            inflateEffectLayout(R.layout.effect_anaglyph_layout)
         }else {
 
             mImageView?.updateProgress(progress)
@@ -337,19 +320,54 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.modState = State.EFFECT
             //inflate layout
 
-            val view = LayoutInflater.from(this).inflate(R.layout.effect_glitch_layout,null,false)
+            /*val view = LayoutInflater.from(this).inflate(,null,false)
 
             effectPanel?.addView(view)
 
             val b = view.findViewById(R.id.tap_to_glitch_button)
             b.setOnClickListener {
                 makeGlitchEffect()
-            }
+            }*/
+
+            inflateEffectLayout(R.layout.effect_glitch_layout)
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
     }
 
+
+    private fun inflateEffectLayout(layout:Int){
+        val view = LayoutInflater.from(this).inflate(layout,null,false)
+        when (layout){
+            R.layout.effect_glitch_layout -> {
+                val b = view.findViewById(R.id.tap_to_glitch_button)
+                b.setOnClickListener {
+                    makeGlitchEffect()
+                }
+            }
+            R.layout.effect_anaglyph_layout -> {
+                val seekbar = view.findViewById(R.id.seekbar) as SeekBar
+
+                seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
+                        if(arg2) makeAnaglyphEffect(false,arg1)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                    }
+                })
+            }
+            else -> /*nothing*/ Log.i("Glitchy","base layout")
+        }
+
+
+        effectPanel?.addView(view)
+    }
 
 
 }
