@@ -18,11 +18,10 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import me.bemind.glitchappcore.app.*
 
 
-
-
-class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener,
+class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
 SaveImageBottomSheet.OnSaveImageListener{
 
 
@@ -35,8 +34,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     private var toolbar : Toolbar? = null
     private var toolbarEffect : Toolbar? = null
 
-    val imagePresenter = ImagePresenter(this)
 
+    private var appPresenter : IAppPresenter = AppPresenter()
     private var ioPresenter: IIOPresenter = IOPresenter()
 
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
@@ -52,11 +51,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
         toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
         toolbarEffect?.setNavigationOnClickListener {
-           /* imagePresenter.modState = State.BASE
-            imagePresenter.onBackPressed()*/
-            if(imagePresenter.modState == State.EFFECT){
-                imagePresenter.modState = State.BASE
-                //imagePresenter.onBackPressed()
+            if(appPresenter.modState == State.EFFECT){
+                appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
         }
@@ -81,18 +77,11 @@ SaveImageBottomSheet.OnSaveImageListener{
                 pickPhotoBS.show()
             }
 
-            /*if (imagePresenter.modState == State.BASE) {
-                if (imagePresenter.getIImageLogic().hasHistory()) {
-                    imagePresenter.glitchImage(Effect.GLITCH)
-                } else {
-                    pickPhotoBS.show()
-                }
-            }*/
         }
 
         mImageView?.restoreSavedInstanceState(this,savedInstanceState)
 
-        imagePresenter.restoreInstanceState(this,savedInstanceState)
+        appPresenter.restoreInstanceState(this,savedInstanceState)
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
 
@@ -114,7 +103,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
     private fun applyEffect() {
-        imagePresenter.modState = State.BASE
+        appPresenter.modState = State.BASE
         //imagePresenter.saveEffect()
         mImageView?.save()
     }
@@ -186,13 +175,13 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onStart() {
         super.onStart()
-        imagePresenter.subscribe(this)
+        appPresenter.appView = this
         ioPresenter.ioView = this
     }
 
     override fun onStop() {
         super.onStop()
-        imagePresenter.unsubscribe()
+        appPresenter.appView = null
         ioPresenter.ioView = null
     }
 
@@ -201,23 +190,17 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         mImageView?.saveInstanceState(this,outState)
 
-        imagePresenter.saveInstanceState(this,outState)
+        appPresenter.saveInstanceState(this,outState)
     }
 
-    override fun setImagebitmap(bitmap: Bitmap) {
+    /*fun setImagebitmap(bitmap: Bitmap) {
         runOnUiThread {
             mImageView!!.setImageBitmap(bitmap,true,true)
-            /*mImageView?.layoutParams?.width = bitmap.width
+            *//*mImageView?.layoutParams?.width = bitmap.width
             mImageView?.layoutParams?.height = bitmap.height
-            mImageView?.requestLayout()*/
+            mImageView?.requestLayout()*//*
         }
-    }
-
-    override fun getImagePresenter(): IImagePresenter {
-        return imagePresenter
-    }
-
-
+    }*/
 
     override fun getIOPresenter(): IIOPresenter  = ioPresenter
 
@@ -254,7 +237,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onResume() {
         super.onResume()
-        updateState(imagePresenter.modState)
+        updateState(appPresenter.modState)
     }
 
     override fun updateState(state: State) {
@@ -287,9 +270,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onBackPressed() {
 
-        if(imagePresenter.modState == State.EFFECT){
-            imagePresenter.modState = State.BASE
-            //imagePresenter.onBackPressed()
+        if(appPresenter.onBackPressed()){
             mImageView?.clearEffect()
         }else {
 
@@ -315,12 +296,12 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
 
-        imagePresenter.onConfigurationChanged(newConfig)
+        appPresenter.onConfigurationChanged(newConfig)
     }
 
     private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
         if(init) {
-            imagePresenter.modState = State.EFFECT
+            appPresenter.modState = State.EFFECT
             //inflate layout
 
             val view = LayoutInflater.from(this).inflate(R.layout.effect_anaglyph_layout,null,false)
@@ -353,7 +334,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private fun makeGlitchEffect(init: Boolean = false){
         if(init){
-            imagePresenter.modState = State.EFFECT
+            appPresenter.modState = State.EFFECT
             //inflate layout
 
             val view = LayoutInflater.from(this).inflate(R.layout.effect_glitch_layout,null,false)
@@ -366,7 +347,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
         }
 
-        imagePresenter.glitchImage(Effect.GLITCH)
+        //imagePresenter.glitchImage(Effect.GLITCH)
     }
 
 
