@@ -32,6 +32,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     private var glitchButton: Button? = null
     private var effectPanel: ViewGroup? = null
 
+
     private var toolbar : Toolbar? = null
     private var toolbarEffect : Toolbar? = null
 
@@ -98,6 +99,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         glitchButton ?.setOnClickListener {
             makeGlitchEffect(true)
         }
+
+
 
     }
 
@@ -192,6 +195,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         mImageView?.saveInstanceState(this,outState)
 
         appPresenter.saveInstanceState(this,outState)
+
     }
 
     /*fun setImagebitmap(bitmap: Bitmap) {
@@ -238,7 +242,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onResume() {
         super.onResume()
-        updateState(appPresenter.modState)
+        appPresenter.onResume()
     }
 
     override fun updateState(state: State) {
@@ -267,6 +271,14 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun shareImage() {
         ioPresenter.shareImage(mImageView?.getImageBitmap())
         saveImageBS.dismiss()
+    }
+
+    override fun restoreView(effectState: EffectState?) {
+        /*updateState(appPresenter.modState)
+        if(appPresenter.effectLayout!=0)inflateEffectLayout(appPresenter.effectLayout)*/
+        if(effectState!=null){
+            inflateEffectLayout(effectState)
+        }
     }
 
     override fun onBackPressed() {
@@ -301,15 +313,17 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
+        val effect = AnaglyphEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init) {
             appPresenter.modState = State.EFFECT
             //inflate layout
             mImageView?.initEffect(Effect.ANAGLYPH)
 
 
-            inflateEffectLayout(R.layout.effect_anaglyph_layout)
+            inflateEffectLayout(effect)
         }else {
 
+            appPresenter.effectState = effect
             mImageView?.updateProgress(progress)
         // imagePresenter.glitchImage(Effect.ANAGLYPH, progress, init)
         }
@@ -318,37 +332,29 @@ SaveImageBottomSheet.OnSaveImageListener{
     private fun makeGlitchEffect(init: Boolean = false){
         if(init){
             appPresenter.modState = State.EFFECT
-            //inflate layout
 
-            /*val view = LayoutInflater.from(this).inflate(,null,false)
-
-            effectPanel?.addView(view)
-
-            val b = view.findViewById(R.id.tap_to_glitch_button)
-            b.setOnClickListener {
-                makeGlitchEffect()
-            }*/
-
-            inflateEffectLayout(R.layout.effect_glitch_layout)
+            inflateEffectLayout(GlitchEffectState(R.layout.effect_glitch_layout))
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
     }
 
 
-    private fun inflateEffectLayout(layout:Int){
-        val view = LayoutInflater.from(this).inflate(layout,null,false)
-        when (layout){
-            R.layout.effect_glitch_layout -> {
+    private fun inflateEffectLayout(effectState: EffectState){
+        appPresenter.effectState = effectState
+        val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
+        when (effectState){
+            is GlitchEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button)
                 b.setOnClickListener {
                     makeGlitchEffect()
                 }
             }
-            R.layout.effect_anaglyph_layout -> {
-                val seekbar = view.findViewById(R.id.seekbar) as SeekBar
+            is AnaglyphEffectState -> {
+               val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+                seekbar?.progress = effectState.progress
 
-                seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
                         if(arg2) makeAnaglyphEffect(false,arg1)
                     }

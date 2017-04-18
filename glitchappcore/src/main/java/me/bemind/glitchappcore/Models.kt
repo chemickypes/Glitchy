@@ -54,3 +54,39 @@ enum class State {
     BASE,EFFECT
 }
 
+abstract class EffectState(open val layout:Int) :Parcelable
+
+data class GlitchEffectState(override val layout: Int) : EffectState(layout), Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<GlitchEffectState> = object : Parcelable.Creator<GlitchEffectState> {
+            override fun createFromParcel(source: Parcel): GlitchEffectState = GlitchEffectState(source)
+            override fun newArray(size: Int): Array<GlitchEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+    }
+}
+
+data class AnaglyphEffectState(override val layout:Int,val progress:Int) : EffectState(layout), Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<AnaglyphEffectState> = object : Parcelable.Creator<AnaglyphEffectState> {
+            override fun createFromParcel(source: Parcel): AnaglyphEffectState = AnaglyphEffectState(source)
+            override fun newArray(size: Int): Array<AnaglyphEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt(), source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+        dest?.writeInt(progress)
+    }
+}
