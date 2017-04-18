@@ -118,8 +118,8 @@ class GlitchPresenter : IGlitchPresenter{
         canvas?.save()
 
         canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
-        canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
-                glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
+        /*canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
+                glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)*/
 
         when (effect) {
             Effect.GLITCH -> Log.v("ImageView", "glitch")

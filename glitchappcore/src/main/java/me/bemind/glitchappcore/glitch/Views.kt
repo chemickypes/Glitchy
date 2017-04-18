@@ -54,9 +54,12 @@ interface IGlitchView {
 class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
 
 
-    override var scaleXG: Float = 0f
+    override var scaleXG: Float = 0.0f
+        get()  = this.scaleX
 
     override var scaleYG: Float = 0f
+        get() = this.scaleY
+
 
     override var dispTop: Int = 0
 
@@ -164,8 +167,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         val fArr = FloatArray(9)
         imageMatrix.getValues(fArr)
         getWindowVisibleDisplayFrame(Rect())
-        this.scaleXG = fArr[0]
-        this.scaleYG = fArr[4]
+        this.scaleX = fArr[0]
+        this.scaleY = fArr[4]
         this.dispTop = fArr[5].toInt()
         this.dispLeft = fArr[2].toInt()
         /*val drawable = drawable

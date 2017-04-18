@@ -23,7 +23,6 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     private var mImageView : ExtendedImageView? = null
     private var anaglyphButton: Button? = null
     private var glitchButton: Button? = null
-    private var seekbar: SeekBar? = null
     private var effectPanel: ViewGroup? = null
 
     private var toolbar : Toolbar? = null
@@ -42,8 +41,13 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
         toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
         toolbarEffect?.setNavigationOnClickListener {
-            imagePresenter.modState = State.BASE
-            imagePresenter.onBackPressed()
+           /* imagePresenter.modState = State.BASE
+            imagePresenter.onBackPressed()*/
+            if(imagePresenter.modState == State.EFFECT){
+                imagePresenter.modState = State.BASE
+                //imagePresenter.onBackPressed()
+                mImageView?.clearEffect()
+            }
         }
 
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
@@ -181,6 +185,9 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun setImagebitmap(bitmap: Bitmap) {
         runOnUiThread {
             mImageView!!.setImageBitmap(bitmap,true,true)
+            /*mImageView?.layoutParams?.width = bitmap.width
+            mImageView?.layoutParams?.height = bitmap.height
+            mImageView?.requestLayout()*/
         }
 
         //mImageView?.post {  }
