@@ -1,6 +1,8 @@
 package me.bemind.glitchappcore.history
 
 import android.graphics.Bitmap
+import me.bemind.glitchappcore.ImageDescriptor
+import java.util.ArrayList
 
 /**
  * Created by angelomoroni on 14/04/17.
@@ -17,6 +19,10 @@ interface IHistoryPresenter {
     fun addImage(bitmap: Bitmap,newPhoto:Boolean = false)
 
     fun back()
+
+    fun getHistoryToSave(): ArrayList<ImageDescriptor>?
+
+    fun restoreHistory(list: ArrayList<ImageDescriptor>?)
 
 
 }
@@ -45,4 +51,12 @@ class HistoryPresenter : IHistoryPresenter {
         historyView?.setPreviousImage(historyLogic.back())
     }
 
+    override fun getHistoryToSave(): ArrayList<ImageDescriptor>? {
+        return historyLogic.getStack()
+    }
+
+    override fun restoreHistory(list: ArrayList<ImageDescriptor>?) {
+        historyLogic.setStack(list)
+        historyView?.setPreviousImage(historyLogic.lastBitmap)
+    }
 }

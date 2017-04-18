@@ -13,6 +13,8 @@ import android.graphics.drawable.Drawable
 import android.R.attr.scaleY
 import android.R.attr.scaleX
 import android.graphics.Rect
+import android.os.Bundle
+import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
 
@@ -44,6 +46,9 @@ interface IGlitchView {
     var scaleXG: Float
     var scaleYG: Float
     fun clearEffect()
+
+    fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
+    fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?)
 
 }
 
@@ -162,6 +167,13 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         setImageBitmap(back,false,false)
     }
 
+    override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity, outState: Bundle?) {
+        glitchyBaseActivity.retainedFragment?.history = historyPresenter.getHistoryToSave()
+    }
+
+    override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState: Bundle?) {
+        historyPresenter.restoreHistory(glitchyBaseActivity.retainedFragment?.history)
+    }
 
     private fun loadMesure() {
         val fArr = FloatArray(9)

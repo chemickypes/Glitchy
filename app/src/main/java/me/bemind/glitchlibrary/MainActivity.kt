@@ -79,6 +79,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             }*/
         }
 
+        mImageView?.restoreSavedInstanceState(this,savedInstanceState)
+
         imagePresenter.restoreInstanceState(this,savedInstanceState)
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
@@ -179,6 +181,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
+        mImageView?.saveInstanceState(this,outState)
+
         imagePresenter.saveInstanceState(this,outState)
     }
 
@@ -190,8 +194,6 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             mImageView?.requestLayout()*/
         }
 
-        //mImageView?.post {  }
-//        mImageView!!.setImageBitmap(bitmap)
 
 
     }
