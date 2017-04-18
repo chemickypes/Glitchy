@@ -50,6 +50,8 @@ interface IGlitchView {
     fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
     fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?)
 
+    fun onResume()
+
 }
 
 
@@ -103,9 +105,9 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if(!newPhoto)glitcPresenter.onDraw(canvas)
+        glitcPresenter.onDraw(canvas)
 
-        newPhoto = false
+        //newPhoto = false
     }
 
     override fun clearEffect() {
@@ -146,7 +148,6 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
 
     fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
         super.setImageBitmap(bm)
-        newPhoto = true
         if(toAdd) historyPresenter.addImage(bm!!,newphoto)
     }
 
@@ -164,16 +165,26 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         }
     }
 
-    override fun setPreviousImage(back: Bitmap?) {
+    override fun setPreviousImage(back: Bitmap?,restore:Boolean ) {
         setImageBitmap(back,false,false)
     }
 
     override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity, outState: Bundle?) {
         glitchyBaseActivity.retainedFragment?.history = historyPresenter.getHistoryToSave()
+        glitcPresenter.saveInstanceState(outState)
     }
 
     override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState: Bundle?) {
+        glitcPresenter.restoreSavedInstanceState(savedInstanceState)
         historyPresenter.restoreHistory(glitchyBaseActivity.retainedFragment?.history)
+
+    }
+
+    override fun onResume() {
+        if(glitcPresenter.restore ){
+            glitcPresenter.initEffect(getImageBitmap(),glitcPresenter.restore)
+            invalidateGlitchView()
+        }
     }
 
     private fun loadMesure() {

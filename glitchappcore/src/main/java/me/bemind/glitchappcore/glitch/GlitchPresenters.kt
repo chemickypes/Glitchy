@@ -7,6 +7,7 @@ import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.R.attr.scaleY
 import android.R.attr.scaleX
+import android.os.Bundle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -26,6 +27,8 @@ interface IGlitchPresenter{
 
     var glitchView : IGlitchView?
 
+    var restore: Boolean
+
     fun onDraw(canvas: Canvas?)
 
     fun anaglyph(canvas: Canvas?,progress:Int = 20)
@@ -36,9 +39,21 @@ interface IGlitchPresenter{
 
     fun initEffect(bitmap: Bitmap?,effect:Effect)
 
+    fun saveInstanceState(outState: Bundle?)
+
+    fun restoreSavedInstanceState(savedInstanceState:Bundle?)
+    fun initEffect(bitmap: Bitmap?, restore: Boolean)
+
+
 }
 
 class GlitchPresenter : IGlitchPresenter{
+
+    private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
+
+    private val EFFECT_K: String? = "effect_k"
+
+    private val EFFECT_ON_K: String? = "eef_on_k"
 
     override var glitchView: IGlitchView? = null
         set(value) {
@@ -46,6 +61,8 @@ class GlitchPresenter : IGlitchPresenter{
         }
 
     override var effectON: Boolean = false
+
+    override var restore: Boolean = false
 
     val glitchLogic = GlitchLogic()
 
@@ -68,6 +85,22 @@ class GlitchPresenter : IGlitchPresenter{
 
     override fun glitch(canvas: Canvas?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+    override fun saveInstanceState(outState: Bundle?) {
+        outState?.putInt(EFFECT_PROGRESS_K,effectProgress)
+        outState?.putSerializable(EFFECT_K,effect)
+        outState?.putBoolean(EFFECT_ON_K,effectON)
+    }
+
+    override fun restoreSavedInstanceState(savedInstanceState: Bundle?) {
+        effectProgress = savedInstanceState?.getInt(EFFECT_PROGRESS_K,0)?:0
+        effectON = savedInstanceState?.getBoolean(EFFECT_ON_K,false)?:false
+        if(effectON){
+            restore = true
+            effect = savedInstanceState?.getSerializable(EFFECT_K) as Effect
+        }
     }
 
     override fun saveEffect() {
@@ -114,10 +147,15 @@ class GlitchPresenter : IGlitchPresenter{
         }
     }
 
+    override fun initEffect(bitmap: Bitmap?, restore: Boolean) {
+        glithce.initEffect(bitmap)
+        this.restore = false
+    }
+
     override fun onDraw(canvas: Canvas?){
         canvas?.save()
 
-        canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
+        //canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
         /*canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
                 glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)*/
 

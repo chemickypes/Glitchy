@@ -22,7 +22,7 @@ interface IHistoryPresenter {
 
     fun getHistoryToSave(): ArrayList<ImageDescriptor>?
 
-    fun restoreHistory(list: ArrayList<ImageDescriptor>?)
+    fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage:Boolean = true)
 
 
 }
@@ -55,8 +55,8 @@ class HistoryPresenter : IHistoryPresenter {
         return historyLogic.getStack()
     }
 
-    override fun restoreHistory(list: ArrayList<ImageDescriptor>?) {
+    override fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage: Boolean) {
         historyLogic.setStack(list)
-        historyView?.setPreviousImage(historyLogic.lastBitmap)
+        if(setImage) historyView?.setPreviousImage(historyLogic.lastBitmap,true)
     }
 }

@@ -12,7 +12,7 @@ interface IHistoryView {
 
     var hasHistory : Boolean
     fun back() : Boolean
-    fun setPreviousImage(back: Bitmap?)
+    fun setPreviousImage(back: Bitmap?,restore:Boolean = false)
 
     fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity, outState: Bundle?)
     fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState: Bundle?)
