@@ -218,15 +218,15 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     }
 
     override fun showErrorGetImage(t: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this,R.string.get_image_error,Toast.LENGTH_SHORT).show()
     }
 
     override fun showSuccessSaveImage(fileName: String) {
-        Toast.makeText(this,"Immagine Salvata",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,R.string.image_saved,Toast.LENGTH_SHORT).show()
     }
 
     override fun showErrorSaveImage(t: Throwable) {
-       Toast.makeText(this,"Errore Salbataggio",Toast.LENGTH_SHORT).show()
+       Toast.makeText(this,R.string.image_saving_error,Toast.LENGTH_SHORT).show()
         t.printStackTrace()
     }
 
