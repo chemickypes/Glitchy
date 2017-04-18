@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import java.lang.RuntimeException
 
 /**
  * Created by angelomoroni on 18/04/17.
@@ -28,11 +29,13 @@ interface IIOPresenter {
 
     var ioLogic : IIOLogic
 
+    var ioView : IIOView?
+
     enum class TypePick {
         CAMERA,GALLERY
     }
     fun openImage(activity: GlitchyBaseActivity,typePick: TypePick,w:Int = BASE_DIM,h:Int = BASE_DIM)
-    fun saveImage()
+    fun saveImage(bitmap: Bitmap?)
 }
 
 class IOPresenter : IIOPresenter {
@@ -48,7 +51,7 @@ class IOPresenter : IIOPresenter {
 
     private val TAG = "IOPResenter"
 
-    var ioView : IIOView? = null
+    override var ioView : IIOView? = null
 
 
     override fun openImage(activity: GlitchyBaseActivity,typePick: IIOPresenter.TypePick,w:Int,h:Int) {
@@ -58,8 +61,26 @@ class IOPresenter : IIOPresenter {
         }
     }
 
-    override fun saveImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun saveImage(bitmap: Bitmap?) {
+        if(bitmap!=null) {
+            Observable.fromCallable { ioLogic.saveImage(bitmap) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        b ->
+                        if (b) {
+                            ioView?.showSuccessSaveImage("creato file")
+                        } else {
+                            ioView?.showErrorSaveImage(RuntimeException("Errore salvataggio"))
+                        }
+                    },
+                            {
+                                t ->
+                                ioView?.showErrorSaveImage(t)
+                            })
+        }else{
+            ioView?.showErrorSaveImage(RuntimeException("Immagine null"))
+        }
     }
 
 

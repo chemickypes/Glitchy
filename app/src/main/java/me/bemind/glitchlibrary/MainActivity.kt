@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import me.bemind.glitch.Effect
 import me.bemind.glitchappcore.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
@@ -160,7 +161,9 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             }
 
             R.id.save_action -> {
-                imagePresenter.saveImage()
+                //imagePresenter.saveImage()
+                //open bottom sheet
+                ioPresenter.saveImage(mImageView?.getImageBitmap())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -174,11 +177,13 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun onStart() {
         super.onStart()
         imagePresenter.subscribe(this)
+        ioPresenter.ioView = this
     }
 
     override fun onStop() {
         super.onStop()
         imagePresenter.unsubscribe()
+        ioPresenter.ioView = null
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -217,11 +222,12 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     }
 
     override fun showSuccessSaveImage(fileName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this,"Immagine Salvata",Toast.LENGTH_SHORT).show()
     }
 
     override fun showErrorSaveImage(t: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       Toast.makeText(this,"Errore Salbataggio",Toast.LENGTH_SHORT).show()
+        t.printStackTrace()
     }
 
     override fun onResume() {
