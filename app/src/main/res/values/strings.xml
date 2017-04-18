@@ -14,6 +14,6 @@
     <string name="glitch">Glitch</string>
     <string name="tap_here_to_glitch">Tap here to glitch</string>
     <string name="get_image_error">Error pick of image</string>
-    <string name="image_saved">Image saved!</string>
+    <string name="image_saved">Image %1$s saved!</string>
     <string name="image_saving_error">Image Saving error!</string>
 </resources>

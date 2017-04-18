@@ -20,7 +20,7 @@ interface IIOLogic {
     fun openImage(context: Context,
                   file: File, w:Int = 1024, h:Int =  1024) : Bitmap
 
-    fun saveImage(bitmap: Bitmap):Boolean
+    fun saveImage(bitmap: Bitmap):String?
 
     fun uriFromFileName(fileName:String?) : Uri?
 }
@@ -29,15 +29,21 @@ class IOLogic : IIOLogic{
 
     private val DIR_NAME: String? = "Glitchy"
 
-    override fun saveImage(bitmap: Bitmap) :Boolean{
+    override fun saveImage(bitmap: Bitmap) :String?{
 
         if(SimpleStorage.isExternalStorageWritable()){
             val storage = SimpleStorage.getExternalStorage()
             createImageDir(storage)
             val byte = compressBitmap(bitmap)
-           return storage.createFile(DIR_NAME,getCustomFileName(),byte)
+            val fileName = getCustomFileName()
+           val b = storage.createFile(DIR_NAME,fileName,byte)
+            if(b){
+                return fileName
+            }else{
+                return null
+            }
         }else{
-            return false
+            return null
         }
     }
 

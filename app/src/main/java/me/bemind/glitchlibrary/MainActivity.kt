@@ -222,7 +222,7 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     }
 
     override fun showSuccessSaveImage(fileName: String) {
-        Toast.makeText(this,R.string.image_saved,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,getString(R.string.image_saved,fileName),Toast.LENGTH_SHORT).show()
     }
 
     override fun showErrorSaveImage(t: Throwable) {

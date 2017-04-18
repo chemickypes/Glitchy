@@ -68,8 +68,8 @@ class IOPresenter : IIOPresenter {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         b ->
-                        if (b) {
-                            ioView?.showSuccessSaveImage("creato file")
+                        if (b!=null) {
+                            ioView?.showSuccessSaveImage(b)
                         } else {
                             ioView?.showErrorSaveImage(RuntimeException("Errore salvataggio"))
                         }
