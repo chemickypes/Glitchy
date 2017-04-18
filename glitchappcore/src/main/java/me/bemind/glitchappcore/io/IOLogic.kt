@@ -21,6 +21,8 @@ interface IIOLogic {
                   file: File, w:Int = 1024, h:Int =  1024) : Bitmap
 
     fun saveImage(bitmap: Bitmap):Boolean
+
+    fun uriFromFileName(fileName:String?) : Uri?
 }
 
 class IOLogic : IIOLogic{
@@ -46,6 +48,19 @@ class IOLogic : IIOLogic{
         val uri = Uri.fromFile(file)
         val b = Utils.getBitmap(context,uri,w,h)
         return b
+    }
+
+    override fun uriFromFileName(fileName: String?): Uri? {
+        if(SimpleStorage.isExternalStorageWritable()){
+            val storage = SimpleStorage.getExternalStorage()
+            if(storage.isFileExist(DIR_NAME,fileName)){
+                return Uri.fromFile(File(DIR_NAME,fileName))
+            }else{
+                return null
+            }
+        }else{
+            return null
+        }
     }
 
     private fun getCustomFileName(): String? {
