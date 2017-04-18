@@ -13,10 +13,11 @@ import android.view.View.VISIBLE
 import me.bemind.glitch.Effect
 import me.bemind.glitchappcore.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
+import me.bemind.glitchappcore.io.IIOPresenter
+import me.bemind.glitchappcore.io.IOPresenter
 
 
 class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
-
 
 
 
@@ -29,6 +30,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     private var toolbarEffect : Toolbar? = null
 
     val imagePresenter = ImagePresenter(this)
+
+    private var ioPresenter: IIOPresenter = IOPresenter()
 
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
 
@@ -193,25 +196,32 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             mImageView?.layoutParams?.height = bitmap.height
             mImageView?.requestLayout()*/
         }
-
-
-
     }
 
     override fun getImagePresenter(): IImagePresenter {
         return imagePresenter
     }
 
-    override fun showGetImageError(t: Throwable) {
+
+
+    override fun getIOPresenter(): IIOPresenter  = ioPresenter
+
+    override fun setImage(bitmap: Bitmap) {
+        runOnUiThread {
+            mImageView!!.setImageBitmap(bitmap,true,true)
+        }
     }
 
-    override fun showSaveLoader() {
+    override fun showErrorGetImage(t: Throwable) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onSavedImage() {
+    override fun showSuccessSaveImage(fileName: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onSaveImageError(t: Throwable) {
+    override fun showErrorSaveImage(t: Throwable) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onResume() {
@@ -228,11 +238,13 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     }
 
     override fun openCamera() {
-        imagePresenter.openImageFromCamera(this,mImageView!!.width,mImageView!!.height)
+        //imagePresenter.openImageFromCamera(this,mImageView!!.width,mImageView!!.height)
+        ioPresenter.openImage(this,IIOPresenter.TypePick.CAMERA,mImageView!!.width,mImageView!!.height)
     }
 
     override fun openGallery() {
-        imagePresenter.openImageFromGallery(this,mImageView!!.width,mImageView!!.height)
+        //imagePresenter.openImageFromGallery(this,mImageView!!.width,mImageView!!.height)
+        ioPresenter.openImage(this,IIOPresenter.TypePick.GALLERY,mImageView!!.width,mImageView!!.height)
     }
 
     override fun onBackPressed() {
