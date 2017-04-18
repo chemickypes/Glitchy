@@ -2,12 +2,14 @@ package me.bemind.glitchappcore.io
 
 import android.app.Activity
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData
 import com.miguelbcr.ui.rx_paparazzo2.entities.Response
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import java.lang.RuntimeException
@@ -21,6 +23,8 @@ interface IIOView{
     fun showErrorGetImage(t:Throwable)
     fun showSuccessSaveImage(fileName:String)
     fun showErrorSaveImage(t: Throwable)
+    fun showErrorImageShare(t:Throwable)
+    fun canShareImage(uri: Uri)
 }
 
 interface IIOPresenter {
@@ -36,6 +40,7 @@ interface IIOPresenter {
     }
     fun openImage(activity: GlitchyBaseActivity,typePick: TypePick,w:Int = BASE_DIM,h:Int = BASE_DIM)
     fun saveImage(bitmap: Bitmap?)
+    fun shareImage(bitmap: Bitmap?)
 }
 
 class IOPresenter : IIOPresenter {
@@ -45,6 +50,7 @@ class IOPresenter : IIOPresenter {
     set(value) {
         /*nothing*/
     }
+    private var disposable: Disposable? = null
 
     override var ioLogic: IIOLogic = IOLogic()
     set(value) {/*nothing to assign */}
@@ -52,6 +58,10 @@ class IOPresenter : IIOPresenter {
     private val TAG = "IOPResenter"
 
     override var ioView : IIOView? = null
+    set(value) {
+        if(value == null ) disposable?.dispose()
+        field = value
+    }
 
 
     override fun openImage(activity: GlitchyBaseActivity,typePick: IIOPresenter.TypePick,w:Int,h:Int) {
@@ -61,25 +71,52 @@ class IOPresenter : IIOPresenter {
         }
     }
 
+
+
     override fun saveImage(bitmap: Bitmap?) {
         if(bitmap!=null) {
-            Observable.fromCallable { ioLogic.saveImage(bitmap) }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        b ->
-                        if (b!=null) {
-                            ioView?.showSuccessSaveImage(b)
-                        } else {
-                            ioView?.showErrorSaveImage(RuntimeException("Errore salvataggio"))
-                        }
-                    },
+            disposable = handleSaveImageObservable(bitmap)
+                    .subscribe(
+                            {
+                                b ->
+                                if (b!=null) {
+                                    ioView?.showSuccessSaveImage(b)
+                                } else {
+                                    ioView?.showErrorSaveImage(RuntimeException("Errore salvataggio"))
+                                }
+                            },
                             {
                                 t ->
                                 ioView?.showErrorSaveImage(t)
                             })
         }else{
             ioView?.showErrorSaveImage(RuntimeException("Immagine null"))
+        }
+    }
+
+    override fun shareImage(bitmap: Bitmap?) {
+        if(bitmap!=null){
+            disposable = handleSaveImageObservable(bitmap)
+                    .subscribe(
+                            {
+                                fileName ->
+                                if (fileName!=null){
+                                    val uri = ioLogic.uriFromFileName(fileName)
+                                    if(uri!=null) {
+                                        ioView?.canShareImage(uri)
+                                    }else{
+                                        ioView?.showErrorImageShare(RuntimeException("UriNull"))
+                                    }
+                                }else{
+                                    ioView?.showErrorImageShare(RuntimeException("FileNAmeNull"))
+                                }
+                            },
+                            {
+                                t -> ioView?.showErrorImageShare(t)
+                            }
+                    )
+        }else{
+            ioView?.showErrorImageShare(RuntimeException("Image null"))
         }
     }
 
@@ -94,6 +131,12 @@ class IOPresenter : IIOPresenter {
         handleObservable(RxPaparazzo.single(activity)
                 .usingCamera(),w,h)
 
+    }
+
+    fun handleSaveImageObservable(bitmap:Bitmap) : Observable<String?>{
+        return Observable.fromCallable { ioLogic.saveImage(bitmap) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
 

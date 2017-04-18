@@ -2,6 +2,7 @@ package me.bemind.glitchlibrary
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Button
@@ -16,6 +17,9 @@ import me.bemind.glitchappcore.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
+import android.content.Intent
+
+
 
 
 class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnPickPhotoListener {
@@ -163,7 +167,8 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
             R.id.save_action -> {
                 //imagePresenter.saveImage()
                 //open bottom sheet
-                ioPresenter.saveImage(mImageView?.getImageBitmap())
+//                ioPresenter.saveImage(mImageView?.getImageBitmap())
+                ioPresenter.shareImage(mImageView?.getImageBitmap())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -228,6 +233,18 @@ class MainActivity : GlitchyBaseActivity(), IImageView, PickPhotoBottomSheet.OnP
     override fun showErrorSaveImage(t: Throwable) {
        Toast.makeText(this,R.string.image_saving_error,Toast.LENGTH_SHORT).show()
         t.printStackTrace()
+    }
+
+    override fun showErrorImageShare(t: Throwable) {
+        Toast.makeText(this,R.string.error_share,Toast.LENGTH_SHORT).show()
+        t.printStackTrace()
+    }
+
+    override fun canShareImage(uri: Uri) {
+        val share = Intent(Intent.ACTION_SEND)
+        share.setType("image/jpg");
+        share.putExtra(Intent.EXTRA_STREAM, uri)
+        startActivity(Intent.createChooser(share, getString(R.string.share)))
     }
 
     override fun onResume() {

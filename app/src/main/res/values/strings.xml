@@ -16,4 +16,6 @@
     <string name="get_image_error">Error pick of image</string>
     <string name="image_saved">Image %1$s saved!</string>
     <string name="image_saving_error">Image Saving error!</string>
+    <string name="share">Share</string>
+    <string name="error_share">Error in sharing image!</string>
 </resources>

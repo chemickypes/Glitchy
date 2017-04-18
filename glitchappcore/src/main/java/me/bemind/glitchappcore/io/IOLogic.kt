@@ -3,6 +3,7 @@ package me.bemind.glitchappcore.io
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
 import me.bemind.glitchappcore.Utils
@@ -60,7 +61,8 @@ class IOLogic : IIOLogic{
         if(SimpleStorage.isExternalStorageWritable()){
             val storage = SimpleStorage.getExternalStorage()
             if(storage.isFileExist(DIR_NAME,fileName)){
-                return Uri.fromFile(File(DIR_NAME,fileName))
+                val uri = Uri.fromFile(storage.getFile(DIR_NAME,fileName))
+                return uri
             }else{
                 return null
             }

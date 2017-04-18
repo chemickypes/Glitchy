@@ -120,7 +120,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     override fun getImageBitmap(): Bitmap? {
 
         if(drawable!=null) {
-           return (drawable as BitmapDrawable).bitmap
+            val b = (drawable as BitmapDrawable).bitmap
+           return b
         }else{
             return null
         }
