@@ -141,10 +141,10 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         //save to history
     }
 
-    override fun setImageBitmap(bm: Bitmap?) {
+    override fun setImageBitmap(bitmap: Bitmap?) {
         //super.setImageBitmap(bm)
         //newPhoto = true
-        setImageBitmap(bm,false,true)
+        setImageBitmap(bitmap,false,true)
     }
 
     fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
