@@ -29,7 +29,7 @@ interface IGlitchPresenter{
 
     var restore: Boolean
 
-    fun onDraw(canvas: Canvas?)
+    fun onDraw(canvas: Canvas?,scale:Boolean = false)
 
     fun anaglyph(canvas: Canvas?,progress:Int = 20)
 
@@ -72,6 +72,8 @@ class GlitchPresenter : IGlitchPresenter{
     val glithce =  Glitcher
 
     override var effectProgress = 0
+
+    private var scaledFactory: Float = 1f
 
     override var effect  = Effect.BASE
         set(value) {
@@ -144,6 +146,8 @@ class GlitchPresenter : IGlitchPresenter{
 
         this.effect = effect
 
+        calculateScaleFactory(bitmap)
+
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
             else -> effectProgress = 0
@@ -153,6 +157,7 @@ class GlitchPresenter : IGlitchPresenter{
     override fun initEffect(bitmap: Bitmap?, restore: Boolean) {
         glithce.initEffect(bitmap)
         this.restore = false
+        calculateScaleFactory(bitmap)
     }
 
     override fun clearEffect() {
@@ -161,12 +166,16 @@ class GlitchPresenter : IGlitchPresenter{
         effectProgress = 0
     }
 
-    override fun onDraw(canvas: Canvas?){
+    override fun onDraw(canvas: Canvas?,scale: Boolean){
 
 
 
 
 //       canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
+        if(scale){
+            canvas?.scale(scaledFactory,scaledFactory)
+        }
+
         canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
                 glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
 
@@ -177,5 +186,19 @@ class GlitchPresenter : IGlitchPresenter{
         }
 
 
+    }
+
+
+
+    fun calculateScaleFactory(bitmap: Bitmap?){
+        if(bitmap!=null){
+            if(bitmap.width > bitmap.height){
+                scaledFactory = (glitchView?.glitchWidth?:0f).div(bitmap.width)
+            }else{
+                scaledFactory = (glitchView?.glitchHeight?:0f).div(bitmap.height)
+            }
+        }else{
+            scaledFactory = 1f
+3        }
     }
 }

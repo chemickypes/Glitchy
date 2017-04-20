@@ -47,8 +47,8 @@ interface IGlitchView {
     var scaleXG: Float
     var scaleYG: Float
 
-    val glitchWidth : Int
-    val glitchHeight : Int
+    val glitchWidth : Float
+    val glitchHeight : Float
 
     fun clearEffect()
 
@@ -73,16 +73,15 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     override var scaleYG: Float = 0f
         get() = this.scaleY
 
-    override val glitchWidth: Int
-        get() = this.width
-    override val glitchHeight: Int
-        get() = this.height
+    override val glitchWidth: Float
+        get() = this.width.toFloat()
+    override val glitchHeight: Float
+        get() = this.height.toFloat()
 
     override var dispTop: Int = 0
 
     override var dispLeft: Int = 0
 
-    var newPhoto = false
 
     val glitcPresenter = GlitchPresenter()
     val historyPresenter = HistoryPresenter()
@@ -92,7 +91,6 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         set(value) {/*nothing*/}
 
 
-    var scaledFactory = 0f
 
     constructor(context: Context) : super(context){
         initView()
@@ -117,9 +115,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         super.onDraw(canvas)
 
         canvas?.save()
-        canvas?.scale(scaledFactory, scaledFactory)
 
-        glitcPresenter.onDraw(canvas)
+        glitcPresenter.onDraw(canvas,true)
 
         canvas?.restore()
 
@@ -222,15 +219,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         this.dispTop = fArr[5].toInt()
         this.dispLeft = fArr[2].toInt()
 
-        if(getImageBitmap()!=null){
-            if(getImageBitmap()?.width?:0 > getImageBitmap()?.height?:0){
-                scaledFactory = width.toFloat()/(getImageBitmap()?.width?:0).toFloat()
-            }else{
-                scaledFactory = height.toFloat()/(getImageBitmap()?.height?:0).toFloat()
-            }
-        }else{
-            scaledFactory = 1f
-        }
+
 
         /*val drawable = drawable
         if (drawable != null) {
