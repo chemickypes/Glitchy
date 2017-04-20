@@ -92,6 +92,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         set(value) {/*nothing*/}
 
 
+    var scaledFactory = 0f
 
     constructor(context: Context) : super(context){
         initView()
@@ -114,7 +115,13 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+
+        canvas?.save()
+        canvas?.scale(scaledFactory, scaledFactory)
+
         glitcPresenter.onDraw(canvas)
+
+        canvas?.restore()
 
 
         //newPhoto = false
@@ -160,6 +167,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
         super.setImageBitmap(bm)
         if(toAdd) historyPresenter.addImage(bm!!,newphoto)
+
+        loadMesure()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -203,6 +212,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         loadMesure()
     }
 
+
     private fun loadMesure() {
         val fArr = FloatArray(9)
         imageMatrix.getValues(fArr)
@@ -211,6 +221,17 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         this.scaleY = fArr[4]
         this.dispTop = fArr[5].toInt()
         this.dispLeft = fArr[2].toInt()
+
+        if(getImageBitmap()!=null){
+            if(getImageBitmap()?.width?:0 > getImageBitmap()?.height?:0){
+                scaledFactory = width.toFloat()/(getImageBitmap()?.width?:0).toFloat()
+            }else{
+                scaledFactory = height.toFloat()/(getImageBitmap()?.height?:0).toFloat()
+            }
+        }else{
+            scaledFactory = 1f
+        }
+
         /*val drawable = drawable
         if (drawable != null) {
             val intrinsicWidth = drawable.intrinsicWidth
