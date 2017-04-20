@@ -63,8 +63,10 @@
 
         <me.bemind.glitchappcore.glitch.ExtendedImageView
             android:id="@+id/imageView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"

@@ -261,7 +261,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun openGallery() {
         //imagePresenter.openImageFromGallery(this,mImageView!!.width,mImageView!!.height)
-        ioPresenter.openImage(this,IIOPresenter.TypePick.GALLERY,mImageView!!.width,mImageView!!.height)
+        ioPresenter.openImage(this,IIOPresenter.TypePick.GALLERY)
     }
 
     override fun saveImage() {
