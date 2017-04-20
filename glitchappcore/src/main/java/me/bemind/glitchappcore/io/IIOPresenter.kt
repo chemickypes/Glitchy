@@ -46,7 +46,7 @@ interface IIOPresenter {
 class IOPresenter : IIOPresenter {
 
 
-    override var BASE_DIM: Int = 2048
+    override var BASE_DIM: Int = 1024
     set(value) {
         /*nothing*/
     }

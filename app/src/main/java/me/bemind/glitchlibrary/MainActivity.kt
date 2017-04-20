@@ -256,7 +256,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun openCamera() {
         //imagePresenter.openImageFromCamera(this,mImageView!!.width,mImageView!!.height)
-        ioPresenter.openImage(this,IIOPresenter.TypePick.CAMERA,mImageView!!.width,mImageView!!.height)
+        ioPresenter.openImage(this,IIOPresenter.TypePick.CAMERA)
     }
 
     override fun openGallery() {

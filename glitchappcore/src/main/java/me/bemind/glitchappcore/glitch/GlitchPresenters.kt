@@ -164,11 +164,14 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     override fun onDraw(canvas: Canvas?){
+
+
+        val saveCount = canvas?.saveCount
         canvas?.save()
 
-        //canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
-        /*canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
-                glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)*/
+        canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
+        canvas?.translate(glitchView?.dispLeft?.toFloat()?.div(glitchView?.scaleXG?:1f)?:0f,
+                glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
 
         when (effect) {
             Effect.GLITCH -> Log.v("ImageView", "glitch")
@@ -176,6 +179,6 @@ class GlitchPresenter : IGlitchPresenter{
             else -> Log.v("ImageView", "BASE")
         }
 
-        canvas?.restore()
+        canvas?.restoreToCount(saveCount!!)
     }
 }

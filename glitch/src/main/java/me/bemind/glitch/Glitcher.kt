@@ -254,10 +254,24 @@ object Glitcher {
         return rr
     }
 
-    fun initEffect(bitmap: Bitmap?) {
+    fun initEffect(bitmap: Bitmap?,w: Int = -1,h: Int = -1) {
 
         result = bitmap
-        initEffect(bitmap?.width?:0,bitmap?.height?:0)
+
+        val we = if((w == -1) || (w > bitmap?.width?: Int.MAX_VALUE)){
+            bitmap?.width?:0
+        }else{
+            w
+        }
+
+        val he = if((h == -1) || (h > bitmap?.height?: Int.MAX_VALUE)){
+            bitmap?.height?:0
+        }else{
+            h
+        }
+
+        initEffect(we,he)
+
     }
 
 

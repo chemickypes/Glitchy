@@ -46,12 +46,17 @@ interface IGlitchView {
 
     var scaleXG: Float
     var scaleYG: Float
+
+    val glitchWidth : Int
+    val glitchHeight : Int
+
     fun clearEffect()
 
     fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
     fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?)
 
     fun onResume()
+
 
 }
 
@@ -68,6 +73,10 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     override var scaleYG: Float = 0f
         get() = this.scaleY
 
+    override val glitchWidth: Int
+        get() = this.width
+    override val glitchHeight: Int
+        get() = this.height
 
     override var dispTop: Int = 0
 
@@ -105,8 +114,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
         glitcPresenter.onDraw(canvas)
+
 
         //newPhoto = false
     }
