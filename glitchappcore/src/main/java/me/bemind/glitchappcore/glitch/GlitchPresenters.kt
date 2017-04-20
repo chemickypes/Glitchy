@@ -124,9 +124,7 @@ class GlitchPresenter : IGlitchPresenter{
                 .subscribe(
                         {
                             b -> glitchView?.setImageBitmap(b)
-                            effectON = false
-                            effectProgress = 0
-                            effect = Effect.BASE
+                            clearEffect()
                         },
                         { t ->  t.printStackTrace()}
                 )
