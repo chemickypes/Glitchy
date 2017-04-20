@@ -95,6 +95,8 @@ class GlitchPresenter : IGlitchPresenter{
         outState?.putInt(EFFECT_PROGRESS_K,effectProgress)
         outState?.putSerializable(EFFECT_K,effect)
         outState?.putBoolean(EFFECT_ON_K,effectON)
+
+        clearEffect()
     }
 
     override fun restoreSavedInstanceState(savedInstanceState: Bundle?) {

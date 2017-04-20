@@ -12,6 +12,7 @@ import me.bemind.glitch.Glitcher
 import android.graphics.drawable.Drawable
 import android.R.attr.scaleY
 import android.R.attr.scaleX
+import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
 import me.bemind.glitchappcore.GlitchyBaseActivity
@@ -186,6 +187,11 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
             glitcPresenter.initEffect(getImageBitmap(),glitcPresenter.restore)
             invalidateGlitchView()
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        loadMesure()
     }
 
     private fun loadMesure() {
