@@ -111,6 +111,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     }
 
     override fun clearEffect() {
+        glitcPresenter.clearEffect()
         setImageBitmap(getImageBitmap(),false,false)
     }
 

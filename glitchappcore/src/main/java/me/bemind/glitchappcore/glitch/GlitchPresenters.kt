@@ -42,7 +42,10 @@ interface IGlitchPresenter{
     fun saveInstanceState(outState: Bundle?)
 
     fun restoreSavedInstanceState(savedInstanceState:Bundle?)
+
     fun initEffect(bitmap: Bitmap?, restore: Boolean)
+
+    fun clearEffect()
 
 
 }
@@ -150,6 +153,12 @@ class GlitchPresenter : IGlitchPresenter{
     override fun initEffect(bitmap: Bitmap?, restore: Boolean) {
         glithce.initEffect(bitmap)
         this.restore = false
+    }
+
+    override fun clearEffect() {
+        effectON = false
+        effect = Effect.BASE
+        effectProgress = 0
     }
 
     override fun onDraw(canvas: Canvas?){
