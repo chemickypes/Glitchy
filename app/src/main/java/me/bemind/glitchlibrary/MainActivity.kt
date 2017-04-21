@@ -243,7 +243,12 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun onResume() {
         super.onResume()
         appPresenter.onResume()
-        mImageView?.onResume()
+
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+       // mImageView?.onResume()
     }
 
     override fun updateState(state: State) {

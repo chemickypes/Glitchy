@@ -15,6 +15,7 @@ import android.R.attr.scaleX
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
@@ -64,7 +65,7 @@ interface IGlitchView {
 /**
  * extension of ImageView in order to implement IGlitchView
  */
-class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
+class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChangeListener {
 
 
     override var scaleXG: Float = 0.0f
@@ -209,6 +210,15 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
         loadMesure()
     }
 
+    override fun onLayoutChange(p0: View?, p1: Int, p2: Int, p3: Int, p4: Int, p5: Int, p6: Int, p7: Int, p8: Int) {
+        if(p1 == 0 && p2 == 0 && p3 == 0 && p4 == 0) return
+
+        if(p0?.width?:0 > 0 ){
+            onResume()
+        }
+    }
+
+
 
     private fun loadMesure() {
         val fArr = FloatArray(9)
@@ -231,6 +241,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView {
     private fun initView() {
         glitcPresenter.glitchView = this
         historyPresenter.historyView = this
+
+        addOnLayoutChangeListener(this)
 
     }
 }
