@@ -49,6 +49,7 @@ interface IGlitchPresenter{
     fun initEffect(bitmap: Bitmap?, restore: Boolean)
 
     fun clearEffect()
+    fun makeEffect(progress: Int)
 
 
 }
@@ -99,6 +100,18 @@ class GlitchPresenter : IGlitchPresenter{
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun makeEffect(progress: Int) {
+        when (typeEffect){
+            TypeEffect.CANVAS -> {
+                this.effectProgress = progress
+                glitchView?.invalidateGlitchView()
+            }
+            TypeEffect.JPEG -> {
+                drawJPEGEffect()
+            }
+            else -> {/*nothing*/}
+        }
+    }
 
     override fun saveInstanceState(outState: Bundle?) {
         outState?.putInt(EFFECT_PROGRESS_K,effectProgress)
@@ -196,6 +209,13 @@ class GlitchPresenter : IGlitchPresenter{
         canvas?.restore()
 
 
+    }
+
+    private fun drawJPEGEffect(){
+        when (effect){
+            Effect.GLITCH -> glitch(null)
+            else -> {}
+        }
     }
 
 

@@ -330,7 +330,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         }else {
 
             appPresenter.effectState = effect
-            mImageView?.updateProgress(progress)
+            mImageView?.makeEffect(progress)
         // imagePresenter.glitchImage(Effect.ANAGLYPH, progress, init)
         }
     }

@@ -33,7 +33,7 @@ interface IGlitchView {
 
     fun setImageBitmap(bitmap: Bitmap?)
 
-    fun updateProgress(progress: Int)
+    fun makeEffect(progress: Int = -1)
 
     fun initEffect(effect: Effect)
 
@@ -124,9 +124,13 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         setImageBitmap(getImageBitmap(),false,false)
     }
 
-    override fun updateProgress (progress:Int){
+    fun updateProgress (progress:Int){
         glitcPresenter.effectProgress = progress
         invalidateGlitchView()
+    }
+
+    override fun makeEffect(progress: Int) {
+        glitcPresenter.makeEffect(progress)
     }
 
     override fun getImageBitmap(): Bitmap? {
