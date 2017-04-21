@@ -87,7 +87,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
 
     val glitcPresenter = GlitchPresenter()
-    val historyPresenter = HistoryPresenter()
+    val historyPresenter = HistoryPresenter(context)
 
     override var hasHistory: Boolean
         get() = historyPresenter.hasHistory

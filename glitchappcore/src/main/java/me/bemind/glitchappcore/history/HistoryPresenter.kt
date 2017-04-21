@@ -1,5 +1,6 @@
 package me.bemind.glitchappcore.history
 
+import android.content.Context
 import android.graphics.Bitmap
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -33,9 +34,9 @@ interface IHistoryPresenter {
 
 }
 
-class HistoryPresenter : IHistoryPresenter {
+class HistoryPresenter(val context:Context) : IHistoryPresenter {
 
-    val historyLogic  = HistoryLogic()
+    val historyLogic  = HistoryLogic(context)
     var historyView : IHistoryView? = null
 
     private var disposable: Disposable? = null

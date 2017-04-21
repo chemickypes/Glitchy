@@ -1,5 +1,6 @@
 package me.bemind.glitchappcore.history
 
+import android.content.Context
 import android.graphics.Bitmap
 import me.bemind.glitch.Effect
 import me.bemind.glitchappcore.ImageDescriptor
@@ -31,7 +32,7 @@ interface IHistoryLogic {
     var hasHistory : Boolean
 }
 
-class HistoryLogic : IHistoryLogic {
+class HistoryLogic(val context:Context) : IHistoryLogic {
 
     private val imageStorage = ImageStorage
 
