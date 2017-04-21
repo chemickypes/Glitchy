@@ -97,31 +97,6 @@ object Glitcher {
 
 
 
-    fun corruption(res : ByteArray = baseArray) : Bitmap? {
-
-        val resByte = if(res.isEmpty()){
-            baseArray = GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
-            baseArray.clone()
-        }else{
-            res
-        }
-
-        val JPEG_CORRUPTION_COUNT = 5
-        //val JPEG_HEADER_SIZE = 100
-        val RANDOM = Random()
-
-
-        if(resByte.isNotEmpty()) {
-            for (i in 0..JPEG_CORRUPTION_COUNT - 1) {
-                val idx = RANDOM.nextInt(resByte.size )
-                resByte[idx] = (resByte[idx] + RANDOM.nextInt(3)).toByte()
-            }
-
-            return GlitcherUtil.bitmapFromByteArray(resByte)
-        }
-
-        return null
-    }
 
     fun negative(result: Bitmap?) : Bitmap?{
 
@@ -293,6 +268,8 @@ object Glitcher {
 
         result = bitmap
         baseBitmap = result
+        baseArray = kotlin.ByteArray(0)
+
 
         val we = if((w == -1) || (w > bitmap?.width?: Int.MAX_VALUE)){
             bitmap?.width?:0
