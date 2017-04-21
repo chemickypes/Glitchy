@@ -16,7 +16,7 @@ object ImageStorage  {
     private val dimCache = 8 * 1024 * 1024
     private val MAX_SIZE_STACK: Int = 12
     val stack : LinkedStack<ImageDescriptor> = LinkedStack()
-    private val lruCache = LruCache<String,Bitmap>(dimCache)
+    private var lruCache = LruCache<String,Bitmap>(dimCache)
 
     private val stackLenght: Int
     get() = stack.size()
@@ -78,6 +78,7 @@ object ImageStorage  {
 
     fun clear() {
         stack.clear()
+        lruCache = LruCache<String,Bitmap>(dimCache)
     }
 
     fun removeLast() {
