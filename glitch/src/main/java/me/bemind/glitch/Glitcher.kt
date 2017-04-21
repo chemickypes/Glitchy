@@ -88,6 +88,24 @@ object Glitcher {
         return null
     }
 
+    fun corruption(resByte : ByteArray) : Bitmap? {
+        val JPEG_CORRUPTION_COUNT = 5
+        //val JPEG_HEADER_SIZE = 100
+        val RANDOM = Random()
+
+
+        if(resByte.isNotEmpty()) {
+            for (i in 0..JPEG_CORRUPTION_COUNT - 1) {
+                val idx = RANDOM.nextInt(resByte.size )
+                resByte[idx] = (resByte[idx] + RANDOM.nextInt(3)).toByte()
+            }
+
+            return GlitcherUtil.bitmapFromByteArray(resByte)
+        }
+
+        return null
+    }
+
     fun negative(result: Bitmap?) : Bitmap?{
 
 
