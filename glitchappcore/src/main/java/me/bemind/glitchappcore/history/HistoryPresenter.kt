@@ -1,8 +1,14 @@
 package me.bemind.glitchappcore.history
 
 import android.graphics.Bitmap
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import me.bemind.glitchappcore.ImageDescriptor
 import java.util.ArrayList
+import java.util.concurrent.Callable
 
 /**
  * Created by angelomoroni on 14/04/17.
@@ -32,6 +38,8 @@ class HistoryPresenter : IHistoryPresenter {
     val historyLogic  = HistoryLogic()
     var historyView : IHistoryView? = null
 
+    private var disposable: Disposable? = null
+
     override var hasHistory: Boolean
         get() = historyLogic.hasHistory
         set(value) {/*nothing*/}
@@ -48,15 +56,49 @@ class HistoryPresenter : IHistoryPresenter {
     }
 
     override fun back() {
-        historyView?.setPreviousImage(historyLogic.back())
+
+        observableImage(
+                {
+                    historyLogic.back()
+                },
+                {
+                    b -> historyView?.setPreviousImage(b)
+                }
+        )
+
+
     }
 
     override fun getHistoryToSave(): ArrayList<ImageDescriptor>? {
+        disposable?.dispose()
         return historyLogic.getStack()
     }
 
     override fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage: Boolean) {
         historyLogic.setStack(list)
-        if(setImage) historyView?.setPreviousImage(historyLogic.lastBitmap,true)
+        if(setImage){
+            observableImage(
+                    {
+                        historyLogic.lastBitmap
+                    },
+                    {
+                        b -> historyView?.setPreviousImage(b,true)
+                    }
+            )
+        }
+    }
+
+
+
+    fun observableImage(callableFunction: () -> Bitmap?, nextAction: (t: Bitmap?) -> Unit) {
+       disposable =  Observable.fromCallable(callableFunction)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        nextAction,
+                        {
+                            t -> t.printStackTrace()
+                        }
+                )
     }
 }
