@@ -28,6 +28,8 @@ interface IHistoryPresenter {
 
     fun back()
 
+    fun lastImage()
+
     fun getHistoryToSave(): ArrayList<ImageDescriptor>?
 
     fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage:Boolean = true)
@@ -49,6 +51,8 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
         get() = historyLogic.canBack()
         set(value) {}
 
+
+
     override fun clearHistory() {
        historyLogic.clearHistory()
     }
@@ -61,6 +65,17 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
                         { Log.i("Save","save")},
                         {t->t.printStackTrace()}
                 )
+    }
+
+    override fun lastImage() {
+        observableImage(
+                {
+                    historyLogic.lastBitmap
+                },
+                {
+                    b -> historyView?.setPreviousImage(b)
+                }
+        )
     }
 
     override fun back() {

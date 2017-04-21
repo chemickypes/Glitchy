@@ -122,8 +122,13 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     }
 
     override fun clearEffect() {
-        glitcPresenter.clearEffect()
-        setImageBitmap(getImageBitmap(),false,false)
+        if(glitcPresenter.typeEffect == TypeEffect.CANVAS) {
+            glitcPresenter.clearEffect()
+            setImageBitmap(getImageBitmap(), false, false)
+        }else{
+            glitcPresenter.clearEffect()
+            historyPresenter.lastImage()
+        }
     }
 
     fun updateProgress (progress:Int){
@@ -161,8 +166,6 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     }
 
     override fun setImageBitmap(bitmap: Bitmap?) {
-        //super.setImageBitmap(bm)
-        //newPhoto = true
         setImageBitmap(bitmap,false,true)
     }
 

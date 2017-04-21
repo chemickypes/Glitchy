@@ -60,7 +60,6 @@ class GlitchPresenter : IGlitchPresenter{
     private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
     private val EFFECT_K: String? = "effect_k"
     private val EFFECT_ON_K: String? = "eef_on_k"
-    private val  VOLATILE_BITMAP_K: String? = "volatile_bitm_k"
 
     var volatileBitmap: Bitmap? = null
 
