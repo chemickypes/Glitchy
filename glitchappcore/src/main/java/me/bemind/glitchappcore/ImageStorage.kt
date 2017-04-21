@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
 import me.bemind.glitch.Effect
+import me.bemind.glitch.GlitcherUtil
+import java.io.*
 
 /**
  * Created by angelomoroni on 13/04/17.
@@ -17,6 +19,8 @@ object ImageStorage  {
     private val MAX_SIZE_STACK: Int = 12
     val stack : LinkedStack<ImageDescriptor> = LinkedStack()
     private var lruCache = LruCache<String,Bitmap>(dimCache)
+
+    var context : Context? = null
 
     private val stackLenght: Int
     get() = stack.size()
@@ -40,20 +44,22 @@ object ImageStorage  {
 
         stack.push(ImageDescriptor(index,imageName,effect,base))
         lruCache.put(imageName,bitmap)
+
+        createTemporaryFile(imageName,bitmap)
     }
 
     fun getLastBitmap(): Bitmap?{
-        return lruCache.get(stack.peek()?.imageName?:"")
+        return getBitmap(stack.peek()?.imageName?:"")
     }
 
     fun getImageToPutEffect(): Bitmap?{
         val lastImage = stack.peek()
 
         if(lastImage?.saved?:false){
-            return lruCache.get(lastImage?.imageName)
+            return getBitmap(lastImage?.imageName?:"")
         }else{
             removeLast()
-            return lruCache.get(stack.peek()?.imageName)
+            return getBitmap(stack.peek()?.imageName?:"")
 
         }
     }
@@ -67,10 +73,10 @@ object ImageStorage  {
 
     fun back() : Bitmap? {
         removeLast()
-        return lruCache.get(stack.peek()?.imageName)
+        return getBitmap(stack.peek()?.imageName?:"")
     }
 
-    fun firstBitmap() :Bitmap?  = lruCache.get(stack.first()?.imageName)
+    fun firstBitmap() :Bitmap?  = getBitmap(stack.first()?.imageName?:"")
 
     fun size() = stackLenght
 
@@ -79,6 +85,7 @@ object ImageStorage  {
     fun clear() {
         stack.clear()
         lruCache = LruCache<String,Bitmap>(dimCache)
+        Utils.deleteCache(context?.cacheDir?: File("void"))
     }
 
     fun removeLast() {
@@ -93,5 +100,25 @@ object ImageStorage  {
         }
     }
 
+    private fun getBitmap(imageName:String) : Bitmap?{
+        var b = lruCache.get(imageName)
+
+        if(b == null){
+            val f = File(context?.cacheDir,imageName)
+            b = Utils.getBitmapFromFile(f)
+            lruCache.put(imageName,b)
+        }
+
+        return b
+    }
+
+    private fun createTemporaryFile(fileName:String,bitmap: Bitmap){
+        val s = fileName.split(".")
+        val f = createTempFile(s[0],s[1], context?.cacheDir)
+
+        val b = BufferedOutputStream(f.outputStream())
+        b.write(GlitcherUtil.byteArrayFromBitmap(bitmap))
+        b.close()
+    }
 
 }

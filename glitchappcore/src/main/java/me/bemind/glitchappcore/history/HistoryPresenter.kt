@@ -2,6 +2,7 @@ package me.bemind.glitchappcore.history
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,7 +54,13 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
     }
 
     override fun addImage(bitmap: Bitmap,newPhoto: Boolean) {
-        historyLogic.addBitmap(bitmap,newPhoto)
+        disposable = Observable.fromCallable { historyLogic.addBitmap(bitmap,newPhoto);1}
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { Log.i("Save","save")},
+                        {t->t.printStackTrace()}
+                )
     }
 
     override fun back() {
@@ -102,4 +109,6 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
                         }
                 )
     }
+
+
 }

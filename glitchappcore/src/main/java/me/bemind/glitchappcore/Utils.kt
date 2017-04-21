@@ -8,8 +8,11 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
+import java.io.File
 
 import java.io.IOException
+
+
 
 /**
  * Created by angelomoroni on 05/04/17.
@@ -114,5 +117,26 @@ object Utils {
         val s = cursor.getString(column_index)
         cursor.close()
         return s
+    }
+
+    fun getBitmapFromFile(image:File) :Bitmap?{
+        val bmOptions = BitmapFactory.Options()
+        val bitmap = BitmapFactory.decodeFile(image.absolutePath, bmOptions)
+
+        return bitmap
+    }
+    fun deleteCache(dir:File):Boolean{
+        if ( dir.isDirectory()) {
+        val children = dir.list()
+            children.forEach { fi ->
+                val success = deleteCache(File(dir,fi))
+                if(!success) return false
+            }
+            return dir.delete()
+        } else if( dir.isFile()) {
+            return dir.delete()
+        } else {
+            return false
+        }
     }
 }

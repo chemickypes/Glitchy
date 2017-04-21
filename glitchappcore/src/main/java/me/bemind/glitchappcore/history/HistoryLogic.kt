@@ -33,8 +33,11 @@ interface IHistoryLogic {
 }
 
 class HistoryLogic(val context:Context) : IHistoryLogic {
-
     private val imageStorage = ImageStorage
+
+    init {
+        imageStorage.context = context
+    }
 
     override var lastBitmap: Bitmap?
         get() = imageStorage.getLastBitmap()
