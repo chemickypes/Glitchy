@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import me.bemind.glitch.Effect
 import me.bemind.glitchappcore.ImageDescriptor
 import me.bemind.glitchappcore.ImageStorage
+import me.bemind.glitchappcore.LinkedStack
 import java.util.*
 
 /**
@@ -65,6 +66,7 @@ class HistoryLogic(val context:Context) : IHistoryLogic {
     }
 
     override fun setStack(list: List<ImageDescriptor>?) {
+        imageStorage.stack.clear()
         imageStorage.stack.addAll(list?: LinkedList<ImageDescriptor>())
     }
 
