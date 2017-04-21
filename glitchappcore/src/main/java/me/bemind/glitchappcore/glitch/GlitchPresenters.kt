@@ -170,6 +170,7 @@ class GlitchPresenter : IGlitchPresenter{
 
 
 
+        canvas?.save()
 
 //       canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
         if(scale){
@@ -184,6 +185,8 @@ class GlitchPresenter : IGlitchPresenter{
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
+
+        canvas?.restore()
 
 
     }

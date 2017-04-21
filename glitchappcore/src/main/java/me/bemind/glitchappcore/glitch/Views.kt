@@ -115,14 +115,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas?.save()
-
         glitcPresenter.onDraw(canvas,true)
 
-        canvas?.restore()
-
-
-        //newPhoto = false
     }
 
     override fun clearEffect() {
@@ -228,14 +222,6 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         this.scaleY = fArr[4]
         this.dispTop = fArr[5].toInt()
         this.dispLeft = fArr[2].toInt()
-
-
-
-        /*val drawable = drawable
-        if (drawable != null) {
-            val intrinsicWidth = drawable.intrinsicWidth
-            this.effects.SetlRect(Math.max(drawable.intrinsicHeight, intrinsicWidth) / 100 * 3)
-        }*/
     }
 
     private fun initView() {
