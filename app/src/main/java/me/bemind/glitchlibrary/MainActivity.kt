@@ -339,10 +339,13 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(init){
             appPresenter.modState = State.EFFECT
 
+            mImageView?.initEffect(Effect.GLITCH)
             inflateEffectLayout(GlitchEffectState(R.layout.effect_glitch_layout))
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
+
     }
 
 

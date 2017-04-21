@@ -26,11 +26,14 @@ object Glitcher {
 
 
 
+    private var baseArray: ByteArray = kotlin.ByteArray(0)
+
     val leftArray = floatArrayOf(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
     val rightArray = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
 
     var anaglyphShader : BitmapShader? = null
     var result : Bitmap? = null
+    var baseBitmap : Bitmap? = null
     var anaglyphPaint = Paint()
 
     var w = 0
@@ -70,11 +73,15 @@ object Glitcher {
 
     fun corruption(result: Bitmap?) : Bitmap?{
 
-        val JPEG_CORRUPTION_COUNT = 5
+        if(baseBitmap == null) baseBitmap = result
+
+        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+
+        val JPEG_CORRUPTION_COUNT = 35
         //val JPEG_HEADER_SIZE = 100
         val RANDOM = Random()
 
-        val res = GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+        val res = baseArray.copyOf()
 
         if(res.isNotEmpty()) {
             for (i in 0..JPEG_CORRUPTION_COUNT - 1) {
@@ -88,7 +95,17 @@ object Glitcher {
         return null
     }
 
-    fun corruption(resByte : ByteArray) : Bitmap? {
+
+
+    fun corruption(res : ByteArray = baseArray) : Bitmap? {
+
+        val resByte = if(res.isEmpty()){
+            baseArray = GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+            baseArray.clone()
+        }else{
+            res
+        }
+
         val JPEG_CORRUPTION_COUNT = 5
         //val JPEG_HEADER_SIZE = 100
         val RANDOM = Random()
@@ -272,9 +289,10 @@ object Glitcher {
         return rr
     }
 
-    fun initEffect(bitmap: Bitmap?,w: Int = -1,h: Int = -1) {
+    fun initEffect(effect: Effect,bitmap: Bitmap?,w: Int = -1,h: Int = -1) {
 
         result = bitmap
+        baseBitmap = result
 
         val we = if((w == -1) || (w > bitmap?.width?: Int.MAX_VALUE)){
             bitmap?.width?:0

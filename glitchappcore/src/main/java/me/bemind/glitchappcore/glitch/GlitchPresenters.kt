@@ -97,7 +97,18 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     override fun glitch(canvas: Canvas?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Observable.fromCallable { glithce.corruption(glithce.baseBitmap) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            b : Bitmap? -> glitchView?.setImageBitmap(b)
+                        },
+                        {
+                            t : Throwable -> t.printStackTrace()
+                        }
+                )
+
     }
 
     override fun makeEffect(progress: Int) {
@@ -162,7 +173,7 @@ class GlitchPresenter : IGlitchPresenter{
        // glitchLogic.initEffect(bitmap?.width?:0,bitmap?.height?:0,effect)
 
         effectON = true
-        glithce.initEffect(bitmap)
+        glithce.initEffect(effect,bitmap)
 
         this.effect = effect
 
@@ -175,7 +186,7 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     override fun initEffect(bitmap: Bitmap?, restore: Boolean) {
-        glithce.initEffect(bitmap)
+        glithce.initEffect(effect,bitmap)
         this.restore = false
         calculateScaleFactory(bitmap)
     }

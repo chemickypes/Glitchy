@@ -54,6 +54,7 @@ interface IGlitchView {
     fun clearEffect()
 
     fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
+
     fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?)
 
     fun onResume()
