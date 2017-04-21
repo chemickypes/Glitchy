@@ -199,6 +199,6 @@ class GlitchPresenter : IGlitchPresenter{
             }
         }else{
             scaledFactory = 1f
-3        }
+        }
     }
 }
