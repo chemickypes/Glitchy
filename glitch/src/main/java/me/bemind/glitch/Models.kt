@@ -7,3 +7,7 @@ package me.bemind.glitch
 enum class Effect {
     BASE,ANAGLYPH, GLITCH
 }
+
+enum class TypeEffect {
+    JPEG,CANVAS,NONE
+}

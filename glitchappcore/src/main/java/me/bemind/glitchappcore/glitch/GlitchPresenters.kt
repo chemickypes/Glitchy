@@ -11,6 +11,7 @@ import android.os.Bundle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.bemind.glitch.TypeEffect
 
 
 /**
@@ -24,6 +25,8 @@ interface IGlitchPresenter{
     var effectProgress : Int
 
     var effect : Effect
+
+    val typeEffect : TypeEffect
 
     var glitchView : IGlitchView?
 
@@ -53,9 +56,7 @@ interface IGlitchPresenter{
 class GlitchPresenter : IGlitchPresenter{
 
     private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
-
     private val EFFECT_K: String? = "effect_k"
-
     private val EFFECT_ON_K: String? = "eef_on_k"
 
     override var glitchView: IGlitchView? = null
@@ -81,8 +82,14 @@ class GlitchPresenter : IGlitchPresenter{
             glitchView?.invalidateGlitchView()
         }
 
+    override val typeEffect: TypeEffect
+        get() = when (effect){
+            Effect.GLITCH -> TypeEffect.JPEG
+            Effect.ANAGLYPH -> TypeEffect.CANVAS
+            else -> TypeEffect.NONE
+        }
 
-    override fun anaglyph(canvas: Canvas?,progress: Int) {
+    override fun anaglyph(canvas: Canvas?, progress: Int) {
         //glitchLogic.anaglyph(canvas, progress)
 
         glithce.anaglyphCanvas(canvas,progress)
