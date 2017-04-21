@@ -197,11 +197,11 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity, outState: Bundle?) {
         glitchyBaseActivity.retainedFragment?.history = historyPresenter.getHistoryToSave()
-        glitcPresenter.saveInstanceState(outState)
+        glitcPresenter.saveInstanceState(glitchyBaseActivity,outState)
     }
 
     override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState: Bundle?) {
-        glitcPresenter.restoreSavedInstanceState(savedInstanceState)
+        glitcPresenter.restoreSavedInstanceState(glitchyBaseActivity, savedInstanceState)
         historyPresenter.restoreHistory(glitchyBaseActivity.retainedFragment?.history)
 
     }

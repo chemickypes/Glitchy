@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bemind.glitch.TypeEffect
+import me.bemind.glitchappcore.GlitchyBaseActivity
 
 
 /**
@@ -42,9 +43,9 @@ interface IGlitchPresenter{
 
     fun initEffect(bitmap: Bitmap?,effect:Effect)
 
-    fun saveInstanceState(outState: Bundle?)
+    fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
 
-    fun restoreSavedInstanceState(savedInstanceState:Bundle?)
+    fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState:Bundle?)
 
     fun initEffect(bitmap: Bitmap?, restore: Boolean)
 
@@ -132,23 +133,24 @@ class GlitchPresenter : IGlitchPresenter{
 
 
 
-    override fun saveInstanceState(outState: Bundle?) {
+    override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?) {
         outState?.putInt(EFFECT_PROGRESS_K,effectProgress)
         outState?.putSerializable(EFFECT_K,effect)
         outState?.putBoolean(EFFECT_ON_K,effectON)
 
-        outState?.putParcelable(VOLATILE_BITMAP_K,volatileBitmap)
+
+        glitchyBaseActivity.retainedFragment?.volatileBitmap = volatileBitmap
 
         clearEffect()
     }
 
-    override fun restoreSavedInstanceState(savedInstanceState: Bundle?) {
+    override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?) {
         effectProgress = savedInstanceState?.getInt(EFFECT_PROGRESS_K,0)?:0
         effectON = savedInstanceState?.getBoolean(EFFECT_ON_K,false)?:false
         if(effectON){
             restore = true
             effect = savedInstanceState?.getSerializable(EFFECT_K) as Effect
-            volatileBitmap = savedInstanceState.getParcelable(VOLATILE_BITMAP_K)
+            volatileBitmap = glitchyBaseActivity.retainedFragment?.volatileBitmap
         }
     }
 

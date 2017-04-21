@@ -1,6 +1,7 @@
 package me.bemind.glitchappcore
 
 import android.app.Fragment
+import android.graphics.Bitmap
 import android.os.Bundle
 import me.bemind.glitchappcore.Image
 import java.util.ArrayList
@@ -24,4 +25,6 @@ class RetainedFragment : Fragment(){
 
         retainInstance = true
     }
+
+    var volatileBitmap: Bitmap? = null
 }
