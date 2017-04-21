@@ -16,6 +16,7 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
@@ -31,7 +32,7 @@ interface IGlitchView {
 
     fun getImageBitmap() : Bitmap?
 
-    fun setImageBitmap(bitmap: Bitmap?)
+    fun setImageBitmap(bitmap: Bitmap?,volatile:Boolean = false)
 
     fun makeEffect(progress: Int = -1)
 
@@ -155,6 +156,10 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         //save to history
     }
 
+    override fun setImageBitmap(bitmap: Bitmap?, volatile: Boolean) {
+        setImageBitmap(bitmap,false,!volatile)
+    }
+
     override fun setImageBitmap(bitmap: Bitmap?) {
         //super.setImageBitmap(bm)
         //newPhoto = true
@@ -183,7 +188,11 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     }
 
     override fun setPreviousImage(back: Bitmap?,restore:Boolean ) {
-        setImageBitmap(back,false,false)
+        if(glitcPresenter.typeEffect == TypeEffect.JPEG){
+           setImageBitmap(glitcPresenter.volatileBitmap,false,false)
+        }else {
+            setImageBitmap(back, false, false)
+        }
     }
 
     override fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity, outState: Bundle?) {

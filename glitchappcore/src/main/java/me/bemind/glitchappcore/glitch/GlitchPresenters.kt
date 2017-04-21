@@ -59,6 +59,9 @@ class GlitchPresenter : IGlitchPresenter{
     private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
     private val EFFECT_K: String? = "effect_k"
     private val EFFECT_ON_K: String? = "eef_on_k"
+    private val  VOLATILE_BITMAP_K: String? = "volatile_bitm_k"
+
+    var volatileBitmap: Bitmap? = null
 
     override var glitchView: IGlitchView? = null
         set(value) {
@@ -96,13 +99,16 @@ class GlitchPresenter : IGlitchPresenter{
         glithce.anaglyphCanvas(canvas,progress)
     }
 
+
+
     override fun glitch(canvas: Canvas?) {
         Observable.fromCallable { glithce.corruption(glithce.baseBitmap) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            b : Bitmap? -> glitchView?.setImageBitmap(b)
+                            b : Bitmap? -> glitchView?.setImageBitmap(b,true) //volatile
+                            volatileBitmap = b
                         },
                         {
                             t : Throwable -> t.printStackTrace()
@@ -124,10 +130,14 @@ class GlitchPresenter : IGlitchPresenter{
         }
     }
 
+
+
     override fun saveInstanceState(outState: Bundle?) {
         outState?.putInt(EFFECT_PROGRESS_K,effectProgress)
         outState?.putSerializable(EFFECT_K,effect)
         outState?.putBoolean(EFFECT_ON_K,effectON)
+
+        outState?.putParcelable(VOLATILE_BITMAP_K,volatileBitmap)
 
         clearEffect()
     }
@@ -138,26 +148,32 @@ class GlitchPresenter : IGlitchPresenter{
         if(effectON){
             restore = true
             effect = savedInstanceState?.getSerializable(EFFECT_K) as Effect
+            volatileBitmap = savedInstanceState.getParcelable(VOLATILE_BITMAP_K)
         }
     }
 
     override fun saveEffect() {
 
         Observable.fromCallable {
-            val b = Bitmap.createBitmap(glitchView?.getImageBitmap()?.width?:1,
-                glitchView?.getImageBitmap()?.height?:1,
-                Bitmap.Config.ARGB_8888)
+            if(typeEffect == TypeEffect.CANVAS) {
+                val b = Bitmap.createBitmap(glitchView?.getImageBitmap()?.width ?: 1,
+                        glitchView?.getImageBitmap()?.height ?: 1,
+                        Bitmap.Config.ARGB_8888)
 
-            val canvas = Canvas(b)
+                val canvas = Canvas(b)
 
-            onDraw(canvas)
-            return@fromCallable b
+                onDraw(canvas)
+                return@fromCallable b
+            }else{
+                return@fromCallable volatileBitmap
+            }
         }.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
                             b -> glitchView?.setImageBitmap(b)
                             clearEffect()
+
                         },
                         { t ->  t.printStackTrace()}
                 )
@@ -195,6 +211,7 @@ class GlitchPresenter : IGlitchPresenter{
         effectON = false
         effect = Effect.BASE
         effectProgress = 0
+        volatileBitmap = null
     }
 
     override fun onDraw(canvas: Canvas?,scale: Boolean){
