@@ -33,6 +33,8 @@ interface IGlitchPresenter{
 
     var restore: Boolean
 
+    var canvas: Canvas?
+
     fun onDraw(canvas: Canvas?,scale:Boolean = false)
 
 
@@ -84,8 +86,13 @@ class GlitchPresenter : IGlitchPresenter{
 
     private var scaledFactory: Float = 1f
 
+    override var canvas: Canvas? = null
+
     val setImageAction = {
         b : Bitmap? -> glitchView?.setImageBitmap(b,true) //volatile
+        /*canvas?.drawBitmap(b,0f,0f,null)
+        b?.recycle()
+        glitchView?.invalidateGlitchView()*/
         volatileBitmap = b
     }
 
@@ -98,6 +105,7 @@ class GlitchPresenter : IGlitchPresenter{
     override val typeEffect: TypeEffect
         get() = when (effect){
             Effect.GLITCH -> TypeEffect.JPEG
+            Effect.WEBP -> TypeEffect.JPEG
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
@@ -111,7 +119,10 @@ class GlitchPresenter : IGlitchPresenter{
 
 
     override fun glitch(canvas: Canvas?) {
-        Observable.fromCallable { glithce.corruption(glithce.baseBitmap) }
+        observeImage({
+            glithce.corruption(glithce.baseBitmap)
+        },setImageAction)
+        /*Observable.fromCallable {  }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -122,7 +133,7 @@ class GlitchPresenter : IGlitchPresenter{
                         {
                             t : Throwable -> t.printStackTrace()
                         }
-                )
+                )*/
 
     }
 
@@ -230,6 +241,7 @@ class GlitchPresenter : IGlitchPresenter{
     override fun onDraw(canvas: Canvas?,scale: Boolean){
 
 
+        if(this.canvas == null) this.canvas = canvas
 
         canvas?.save()
 

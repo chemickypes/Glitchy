@@ -30,6 +30,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     private var mImageView : ExtendedImageView? = null
     private var anaglyphButton: Button? = null
     private var glitchButton: Button? = null
+    private var webpButton: Button? = null
     private var effectPanel: ViewGroup? = null
 
 
@@ -98,6 +99,11 @@ SaveImageBottomSheet.OnSaveImageListener{
         glitchButton = findViewById(R.id.glitch_button) as Button
         glitchButton ?.setOnClickListener {
             makeGlitchEffect(true)
+        }
+
+        webpButton = findViewById(R.id.webp_button) as Button
+        webpButton?.setOnClickListener {
+            makeWebpEffect(true)
         }
 
 

@@ -10,9 +10,10 @@ import java.util.*
 
 
 object GlitcherUtil {
-    fun byteArrayFromBitmap(bitmap: Bitmap?): ByteArray?{
+    fun byteArrayFromBitmap(bitmap: Bitmap?,
+                            compression:Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG): ByteArray?{
         val byteOutputStream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.JPEG,100,byteOutputStream)
+        bitmap?.compress(compression,100,byteOutputStream)
         return byteOutputStream.toByteArray()
     }
 
@@ -94,30 +95,32 @@ object Glitcher {
         return null
     }
 
-    private fun setBitmap(result: Bitmap?) {
+    private fun setBitmap(result: Bitmap?, compression: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG) {
         if(baseBitmap == null) baseBitmap = result
-        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result,compression)?.clone()?:kotlin.ByteArray(0)
     }
 
 
     fun webp(result: Bitmap?): Bitmap? {
-        setBitmap(result)
+        setBitmap(result,Bitmap.CompressFormat.WEBP)
 
 
         val res = baseArray.copyOf()
 
         val perc = (RANDOM.nextFloat()%2)
-        var i = 1
-        if(res.size >100){
-            var ii : Int = 0
-            var power = (res.size * perc).toInt()
-            var rnd = RANDOM.nextInt(255)
+        for (f in 0..165) {
 
-            ii = if(perc < 1f) 1 else 0
-            i = if(power <=100) 0 else 1
+        }
 
-            if( (i and ii) != 0 ){
-                Arrays.fill(res,power,power+1,rnd.toByte())
+        if (res.size > 100) {
+            val power = (res.size * perc).toInt()
+            val rnd = RANDOM.nextInt(255)
+
+            val ii = if (perc < 1f) 1 else 0
+            val i = if (power <= 100) 0 else 1
+
+            if ((i and ii) != 0) {
+                Arrays.fill(res, power, power + 1, rnd.toByte())
             }
         }
 
