@@ -113,24 +113,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         appPresenter.restoreInstanceState(this,savedInstanceState)
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
-/*
-        anaglyphButton = findViewById(R.id.anaglyph_button) as Button
-        anaglyphButton?.setOnClickListener {
 
-            if(mImageView?.getImageBitmap()!=null) {
-                makeAnaglyphEffect(true)
-            }
-        }
-
-        glitchButton = findViewById(R.id.glitch_button) as Button
-        glitchButton ?.setOnClickListener {
-            makeGlitchEffect(true)
-        }
-
-        webpButton = findViewById(R.id.webp_button) as Button
-        webpButton?.setOnClickListener {
-            makeWebpEffect(true)
-        }*/
 
 
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
