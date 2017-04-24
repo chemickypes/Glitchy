@@ -19,6 +19,7 @@ import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
 import android.util.Log
+import android.widget.TextView
 import me.bemind.glitchappcore.app.*
 
 
@@ -372,7 +373,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
             is WebpEffectState -> {
-                val b = view.findViewById(R.id.tap_to_glitch_button)
+                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                b.setText(R.string.tap_here_to_glitch_webp)
                 b.setOnClickListener {
                     makeWebpEffect()
                 }
