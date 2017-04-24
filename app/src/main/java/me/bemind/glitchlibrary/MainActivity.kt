@@ -348,11 +348,29 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
+    private fun makeWebpEffect(init: Boolean = false){
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.WEBP)
+            inflateEffectLayout(WebpEffectState(R.layout.effect_glitch_layout))
+        }
+
+        //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
+    }
+
 
     private fun inflateEffectLayout(effectState: EffectState){
         appPresenter.effectState = effectState
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
+            is WebpEffectState -> {
+                val b = view.findViewById(R.id.tap_to_glitch_button)
+                b.setOnClickListener {
+                    makeWebpEffect()
+                }
+            }
             is GlitchEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button)
                 b.setOnClickListener {
