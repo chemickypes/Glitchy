@@ -18,6 +18,8 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.TextView
 import me.bemind.glitchappcore.app.*
@@ -29,10 +31,16 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
     private var mImageView : ExtendedImageView? = null
-    private var anaglyphButton: Button? = null
+    /*private var anaglyphButton: Button? = null
     private var glitchButton: Button? = null
-    private var webpButton: Button? = null
+    private var webpButton: Button? = null*/
     private var effectPanel: ViewGroup? = null
+
+    private val effectList by lazy<RecyclerView> {
+        (findViewById(R.id.effect_list) as RecyclerView).apply {
+            layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
+        }
+    }
 
 
     private var toolbar : Toolbar? = null
@@ -88,7 +96,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         appPresenter.restoreInstanceState(this,savedInstanceState)
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
-
+/*
         anaglyphButton = findViewById(R.id.anaglyph_button) as Button
         anaglyphButton?.setOnClickListener {
 
@@ -105,7 +113,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         webpButton = findViewById(R.id.webp_button) as Button
         webpButton?.setOnClickListener {
             makeWebpEffect(true)
-        }
+        }*/
 
 
 
