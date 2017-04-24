@@ -121,7 +121,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline">
 
-            <Button
+            <!--<Button
                 android:id="@+id/glitch_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +143,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/webp"
                 android:background="@android:color/transparent"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"/>-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/effect_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 
