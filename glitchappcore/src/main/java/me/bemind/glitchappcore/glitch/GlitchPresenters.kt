@@ -35,9 +35,7 @@ interface IGlitchPresenter{
 
     fun onDraw(canvas: Canvas?,scale:Boolean = false)
 
-    fun anaglyph(canvas: Canvas?,progress:Int = 20)
 
-    fun glitch(canvas: Canvas?)
 
     fun saveEffect()
 
@@ -51,6 +49,12 @@ interface IGlitchPresenter{
 
     fun clearEffect()
     fun makeEffect(progress: Int)
+
+
+    //effects
+    fun anaglyph(canvas: Canvas?,progress:Int = 20)
+    fun glitch(canvas: Canvas?)
+    fun webp(canvas: Canvas?)
 
 
 }
@@ -79,6 +83,11 @@ class GlitchPresenter : IGlitchPresenter{
     override var effectProgress = 0
 
     private var scaledFactory: Float = 1f
+
+    val setImageAction = {
+        b : Bitmap? -> glitchView?.setImageBitmap(b,true) //volatile
+        volatileBitmap = b
+    }
 
     override var effect  = Effect.BASE
         set(value) {
@@ -116,6 +125,14 @@ class GlitchPresenter : IGlitchPresenter{
                 )
 
     }
+
+
+    override fun webp(canvas: Canvas?) {
+        observeImage(
+                {glithce.webp(glithce.baseBitmap)},
+                setImageAction)
+    }
+
 
     override fun makeEffect(progress: Int) {
         when (typeEffect){
@@ -179,11 +196,6 @@ class GlitchPresenter : IGlitchPresenter{
                         { t ->  t.printStackTrace()}
                 )
 
-
-
-
-
-
     }
 
     override fun initEffect(bitmap: Bitmap?,effect: Effect) {
@@ -243,6 +255,7 @@ class GlitchPresenter : IGlitchPresenter{
     private fun drawJPEGEffect(){
         when (effect){
             Effect.GLITCH -> glitch(null)
+            Effect.WEBP -> webp(null)
             else -> {}
         }
     }
@@ -259,5 +272,17 @@ class GlitchPresenter : IGlitchPresenter{
         }else{
             scaledFactory = 1f
         }
+    }
+
+    private fun observeImage(action : () ->Bitmap?, nextAction : (Bitmap?) -> Unit){
+        Observable.fromCallable(action)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        nextAction,
+                        {
+                            t : Throwable -> t.printStackTrace()
+                        }
+                )
     }
 }
