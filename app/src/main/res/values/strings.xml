@@ -19,4 +19,5 @@
     <string name="share">Share</string>
     <string name="error_share">Error in sharing image!</string>
     <string name="save">Save</string>
+    <string name="webp">WEBP</string>
 </resources>
