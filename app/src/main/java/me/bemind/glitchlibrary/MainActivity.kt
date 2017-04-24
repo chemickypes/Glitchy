@@ -18,6 +18,7 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -131,6 +132,16 @@ SaveImageBottomSheet.OnSaveImageListener{
             makeWebpEffect(true)
         }*/
 
+
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+            effectList.apply {
+                layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
+            }
+        }else{
+            effectList.apply {
+                layoutManager = GridLayoutManager(this@MainActivity,3)
+            }
+        }
         effectAdapter.updateData(EffectList.data).notifyDataSetChanged()
 
 
