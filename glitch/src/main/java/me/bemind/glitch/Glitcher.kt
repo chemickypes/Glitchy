@@ -36,6 +36,8 @@ object Glitcher {
     var baseBitmap : Bitmap? = null
     var anaglyphPaint = Paint()
 
+    val RANDOM = Random()
+
     var w = 0
     var h = 0
 
@@ -73,13 +75,10 @@ object Glitcher {
 
     fun corruption(result: Bitmap?) : Bitmap?{
 
-        if(baseBitmap == null) baseBitmap = result
-
-        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+        setBitmap(result)
 
         val JPEG_CORRUPTION_COUNT = 35
         //val JPEG_HEADER_SIZE = 100
-        val RANDOM = Random()
 
         val res = baseArray.copyOf()
 
@@ -95,7 +94,35 @@ object Glitcher {
         return null
     }
 
+    private fun setBitmap(result: Bitmap?) {
+        if(baseBitmap == null) baseBitmap = result
+        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result)?.clone()?:kotlin.ByteArray(0)
+    }
 
+
+    fun webp(result: Bitmap?): Bitmap? {
+        setBitmap(result)
+
+
+        val res = baseArray.copyOf()
+
+        val perc = (RANDOM.nextFloat()%2)
+        var i = 1
+        if(res.size >100){
+            var ii : Int = 0
+            var power = (res.size * perc).toInt()
+            var rnd = RANDOM.nextInt(255)
+
+            ii = if(perc < 1f) 1 else 0
+            i = if(power <=100) 0 else 1
+
+            if( (i and ii) != 0 ){
+                Arrays.fill(res,power,power+1,rnd.toByte())
+            }
+        }
+
+        return GlitcherUtil.bitmapFromByteArray(res)
+    }
 
 
     fun negative(result: Bitmap?) : Bitmap?{
