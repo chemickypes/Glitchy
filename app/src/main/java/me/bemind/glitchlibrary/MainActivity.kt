@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.TextView
 import me.bemind.glitchappcore.app.*
+import net.idik.lib.slimadapter.SlimAdapter
 
 
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
@@ -53,6 +54,21 @@ SaveImageBottomSheet.OnSaveImageListener{
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
 
     private val saveImageBS = SaveImageBottomSheet.Creator.getSaveImageBottomSheet(this,this)
+
+
+    private val effectAdapter by lazy {
+        SlimAdapter.create()
+                .register<EffectView>(R.layout.effect_view_row) {
+                    data,injector ->
+                    injector.text(R.id.effect_name,data.name)
+                            .clicked(R.id.effect_view_id){
+                                initEffect(data.effect)
+                            }
+                }
+                .attachTo(effectList)
+    }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +130,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         webpButton?.setOnClickListener {
             makeWebpEffect(true)
         }*/
+
+        effectAdapter.updateData(EffectList.data).notifyDataSetChanged()
 
 
 
@@ -331,6 +349,16 @@ SaveImageBottomSheet.OnSaveImageListener{
         super.onConfigurationChanged(newConfig)
 
         appPresenter.onConfigurationChanged(newConfig)
+    }
+
+    private fun initEffect(effect:Effect) {
+        when (effect){
+            Effect.ANAGLYPH -> makeAnaglyphEffect(true)
+            Effect.GLITCH -> makeGlitchEffect(true)
+            Effect.WEBP -> makeWebpEffect(true)
+            else -> {}
+        }
+
     }
 
     private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
