@@ -39,6 +39,8 @@ dependencies {
 
     compile 'com.sromku:simple-storage:1.2.0'
 
+    compile 'com.google.code.gson:gson:2.8.0'
+
     compile project(':glitch')
 }
 repositories {

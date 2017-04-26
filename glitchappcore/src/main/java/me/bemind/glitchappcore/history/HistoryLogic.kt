@@ -1,11 +1,13 @@
 package me.bemind.glitchappcore.history
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import me.bemind.glitch.Effect
 import me.bemind.glitchappcore.ImageDescriptor
 import me.bemind.glitchappcore.ImageStorage
-import me.bemind.glitchappcore.LinkedStack
 import java.util.*
 
 /**
@@ -34,7 +36,14 @@ interface IHistoryLogic {
 }
 
 class HistoryLogic(val context:Context) : IHistoryLogic {
+    private val PREFERENCES_NAME = "history_preferences"
+    private val STACK_K: String? = "stack_k"
+
     private val imageStorage = ImageStorage
+    private val historyPref : SharedPreferences by lazy {
+
+        context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE)
+    }
 
     init {
         imageStorage.context = context
@@ -63,19 +72,45 @@ class HistoryLogic(val context:Context) : IHistoryLogic {
 
     override fun clearHistory() {
         imageStorage.clear()
+        historyPref.edit().putString(STACK_K,"").apply()
     }
 
     override fun setStack(list: List<ImageDescriptor>?) {
         imageStorage.stack.clear()
-        imageStorage.stack.addAll(list?: LinkedList<ImageDescriptor>())
+        if(list !=null) {
+            imageStorage.stack.addAll(list )
+        }else{
+
+            imageStorage.stack.addAll(getListFromStorage())
+        }
     }
+
+
 
     override fun back(): Bitmap?  = imageStorage.back()
 
-    override fun getStack(): ArrayList<ImageDescriptor> = imageStorage.stack.getAllAsList()
+    override fun getStack(): ArrayList<ImageDescriptor> {
+        val l = imageStorage.stack.getAllAsList()
+
+        historyPref.edit().putString(STACK_K,Gson().toJson(l)).apply()
+
+        return l
+    }
 
     override fun canBack(): Boolean  = imageStorage.canBack()
 
 
+
+
+    private fun getListFromStorage(): Collection<ImageDescriptor> {
+        val list = historyPref.getString(STACK_K,"")
+
+        if (list.isEmpty()){
+            return LinkedList()
+        }else{
+            val listType = object : TypeToken<LinkedList<ImageDescriptor>>() {}.type
+            return Gson().fromJson(list,listType)
+        }
+    }
 
 }
