@@ -350,6 +350,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             Effect.ANAGLYPH -> makeAnaglyphEffect(true)
             Effect.GLITCH -> makeGlitchEffect(true)
             Effect.WEBP -> makeWebpEffect(true)
+            Effect.SWAP -> makeSwapEffect(true)
             else -> {}
         }
 

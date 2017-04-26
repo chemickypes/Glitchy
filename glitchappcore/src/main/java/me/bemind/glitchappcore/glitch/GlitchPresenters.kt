@@ -57,6 +57,7 @@ interface IGlitchPresenter{
     fun anaglyph(canvas: Canvas?,progress:Int = 20)
     fun glitch(canvas: Canvas?)
     fun webp(canvas: Canvas?)
+    fun swap(canvas: Canvas?)
 
 
 }
@@ -106,6 +107,7 @@ class GlitchPresenter : IGlitchPresenter{
         get() = when (effect){
             Effect.GLITCH -> TypeEffect.JPEG
             Effect.WEBP -> TypeEffect.JPEG
+            Effect.SWAP -> TypeEffect.JPEG
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
@@ -122,21 +124,14 @@ class GlitchPresenter : IGlitchPresenter{
         observeImage({
             glithce.corruption(glithce.baseBitmap)
         },setImageAction)
-        /*Observable.fromCallable {  }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            b : Bitmap? -> glitchView?.setImageBitmap(b,true) //volatile
-                            volatileBitmap = b
-                        },
-                        {
-                            t : Throwable -> t.printStackTrace()
-                        }
-                )*/
 
     }
 
+    override fun swap(canvas: Canvas?) {
+        observeImage({
+            glithce.corruption(glithce.baseBitmap) //TODO swap algorithm
+        },setImageAction)
+    }
 
     override fun webp(canvas: Canvas?) {
         observeImage(
@@ -268,6 +263,7 @@ class GlitchPresenter : IGlitchPresenter{
         when (effect){
             Effect.GLITCH -> glitch(null)
             Effect.WEBP -> webp(null)
+            Effect.SWAP -> swap(null)
             else -> {}
         }
     }
