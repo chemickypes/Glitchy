@@ -42,6 +42,8 @@ object Glitcher {
     var w = 0
     var h = 0
 
+    val MAX_VALUE = 10
+
 
 
     fun corruptBitmap(result:Bitmap?) : Bitmap{
@@ -127,7 +129,32 @@ object Glitcher {
     }
 
     fun swap(result: Bitmap?) :Bitmap? {
-        return null
+
+        setBitmap(result)
+
+        val x = RANDOM.nextInt(w)
+        //val y = RANDOM.nextInt(h)
+
+        val a = MAX_VALUE.toFloat().div((w * x).toFloat())
+        //val b = MAX_VALUE.toFloat().div((h * (h-y)).toFloat())
+
+        val res = baseArray.copyOf()
+        val blockSize = res.size * 10 / 100
+        val header = if(res.size <1000) 100 else 417
+
+        val c = a.div(2)
+
+        for(i in 0..c.toInt()){
+            val rnd1 = RANDOM.nextInt((res.size - header) - blockSize)
+            val rnd2 = RANDOM.nextInt((res.size - header) - blockSize)
+
+            for( j in 0..blockSize){
+                val tmp = res[(header+rnd1)+j]
+                res[(header+rnd1)+j] = res[(header+rnd2)+j]
+                res[(header+rnd2)+j] = tmp
+            }
+        }
+        return GlitcherUtil.bitmapFromByteArray(res)
     }
 
     fun negative(result: Bitmap?) : Bitmap?{
