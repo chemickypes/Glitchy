@@ -56,11 +56,29 @@ enum class State {
 
 abstract class EffectState(open val layout:Int) :Parcelable
 
+
 data class WebpEffectState(override val layout: Int) : EffectState(layout), Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<WebpEffectState> = object : Parcelable.Creator<WebpEffectState> {
             override fun createFromParcel(source: Parcel): WebpEffectState = WebpEffectState(source)
             override fun newArray(size: Int): Array<WebpEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+    }
+}
+
+data class SwapEffectState (override val layout: Int) : EffectState(layout), Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<SwapEffectState> = object : Parcelable.Creator<SwapEffectState> {
+            override fun createFromParcel(source: Parcel): SwapEffectState = SwapEffectState(source)
+            override fun newArray(size: Int): Array<SwapEffectState?> = arrayOfNulls(size)
         }
     }
 

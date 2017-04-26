@@ -22,4 +22,5 @@
     <string name="webp">WEBP</string>
     <string name="tap_here_to_glitch_webp">Tap to glitch WEBP</string>
     <string name="swap">Swap</string>
+    <string name="tap_here_to_swap">Tap here to Swap image</string>
 </resources>

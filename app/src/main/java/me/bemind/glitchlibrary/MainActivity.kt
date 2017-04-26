@@ -398,6 +398,19 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
 
+    private fun makeSwapEffect(init: Boolean = false){
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.SWAP)
+            inflateEffectLayout(WebpEffectState(R.layout.effect_glitch_layout))
+        }
+
+        //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
+    }
+
+
     private fun inflateEffectLayout(effectState: EffectState){
         appPresenter.effectState = effectState
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
@@ -407,6 +420,13 @@ SaveImageBottomSheet.OnSaveImageListener{
                 b.setText(R.string.tap_here_to_glitch_webp)
                 b.setOnClickListener {
                     makeWebpEffect()
+                }
+            }
+            is SwapEffectState -> {
+                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                b.setText(R.string.tap_here_to_swap)
+                b.setOnClickListener {
+                    makeSwapEffect()
                 }
             }
             is GlitchEffectState -> {
