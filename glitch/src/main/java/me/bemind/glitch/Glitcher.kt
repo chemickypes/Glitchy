@@ -100,7 +100,6 @@ object Glitcher {
         if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result,compression)?.clone()?:kotlin.ByteArray(0)
     }
 
-
     fun webp(result: Bitmap?): Bitmap? {
         setBitmap(result,Bitmap.CompressFormat.WEBP)
 
@@ -127,6 +126,9 @@ object Glitcher {
         return GlitcherUtil.bitmapFromByteArray(res)
     }
 
+    fun swap(result: Bitmap?) :Bitmap? {
+        return null
+    }
 
     fun negative(result: Bitmap?) : Bitmap?{
 
@@ -177,7 +179,6 @@ object Glitcher {
     fun shuffle(result: Bitmap?) :Bitmap?{
         return generateBitmap(result) { shuffleRow(it)}
     }
-
 
     fun pixelSort (result: Bitmap?) :Bitmap?{
         return generateBitmap(result){sortRow(it)}
@@ -262,9 +263,6 @@ object Glitcher {
         //c?.drawBitmap(result,0f,0f,anaglyphPaint)
     }
 
-
-
-
     private fun shuffleRow(row: List<Int>) : List<Int> {
         val RANDOM = Random()
         val offset = RANDOM.nextInt(row.size/2)
@@ -316,8 +314,6 @@ object Glitcher {
         initEffect(we,he)
 
     }
-
-
 
     fun initEffect(w:Int, h:Int){
         Glitcher.w = w

@@ -129,7 +129,7 @@ class GlitchPresenter : IGlitchPresenter{
 
     override fun swap(canvas: Canvas?) {
         observeImage({
-            glithce.corruption(glithce.baseBitmap) //TODO swap algorithm
+            glithce.swap(glithce.baseBitmap)
         },setImageAction)
     }
 
