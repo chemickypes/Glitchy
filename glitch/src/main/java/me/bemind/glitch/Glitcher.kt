@@ -145,8 +145,8 @@ object Glitcher {
         val c = a.div(2)
 
         for(i in 0..c.toInt()){
-            val rnd1 = RANDOM.nextInt((res.size - header) - blockSize)
-            val rnd2 = RANDOM.nextInt((res.size - header) - blockSize)
+            val rnd1 = RANDOM.nextInt((res.size ) - blockSize)
+            val rnd2 = RANDOM.nextInt((res.size ) - blockSize)
 
             for( j in 0..blockSize){
                 val tmp = res[(header+rnd1)+j]
