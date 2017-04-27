@@ -260,12 +260,14 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     private fun drawJPEGEffect(){
+        glitchView?.showLoader(true)
         when (effect){
             Effect.GLITCH -> glitch(null)
             Effect.WEBP -> webp(null)
             Effect.SWAP -> swap(null)
             else -> {}
         }
+        glitchView?.showLoader(false)
     }
 
 

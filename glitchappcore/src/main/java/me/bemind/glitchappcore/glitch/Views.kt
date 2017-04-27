@@ -12,9 +12,13 @@ import me.bemind.glitch.Glitcher
 import android.graphics.drawable.Drawable
 import android.R.attr.scaleY
 import android.R.attr.scaleX
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter
 import android.view.View
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
@@ -60,6 +64,8 @@ interface IGlitchView {
 
     fun onResume()
 
+    fun showLoader(show:Boolean)
+
 
 }
 
@@ -84,6 +90,23 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     override var dispTop: Int = 0
 
     override var dispLeft: Int = 0
+
+    var loaderView : View? =  null
+
+    val loaderAnimation by lazy {
+        loaderView?.animate()
+                ?.alpha(1f)
+                ?.setListener(
+                        object : AnimatorListenerAdapter() {
+                            override fun onAnimationStart(animation: Animator?) {
+                                super.onAnimationStart(animation)
+                                loaderView?.visibility = View.VISIBLE
+                            }
+                        }
+                )
+                ?.setDuration(350)
+                ?.setStartDelay(75)
+    }
 
 
     val glitcPresenter = GlitchPresenter()
@@ -187,6 +210,16 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
             return true
         }else{
             return false
+        }
+    }
+
+    override fun showLoader(show: Boolean) {
+        if(show){
+            loaderAnimation?.start()
+        }else{
+            loaderAnimation?.cancel()
+            loaderView?.visibility = View.GONE
+            loaderView?.alpha = 0f
         }
     }
 
