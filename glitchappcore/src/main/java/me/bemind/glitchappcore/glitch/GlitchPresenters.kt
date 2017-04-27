@@ -94,7 +94,10 @@ class GlitchPresenter : IGlitchPresenter{
         /*canvas?.drawBitmap(b,0f,0f,null)
         b?.recycle()
         glitchView?.invalidateGlitchView()*/
+        glitchView?.showLoader(false)
         volatileBitmap = b
+
+
     }
 
     override var effect  = Effect.BASE
@@ -260,14 +263,12 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     private fun drawJPEGEffect(){
-        glitchView?.showLoader(true)
         when (effect){
             Effect.GLITCH -> glitch(null)
             Effect.WEBP -> webp(null)
             Effect.SWAP -> swap(null)
             else -> {}
         }
-        glitchView?.showLoader(false)
     }
 
 
@@ -285,6 +286,7 @@ class GlitchPresenter : IGlitchPresenter{
     }
 
     private fun observeImage(action : () ->Bitmap?, nextAction : (Bitmap?) -> Unit){
+        glitchView?.showLoader(true)
         Observable.fromCallable(action)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

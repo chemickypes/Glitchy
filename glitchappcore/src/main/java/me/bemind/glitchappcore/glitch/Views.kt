@@ -104,8 +104,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
                             }
                         }
                 )
-                ?.setDuration(350)
-                ?.setStartDelay(75)
+                ?.setDuration(120)
+                //?.setStartDelay(75)
     }
 
 

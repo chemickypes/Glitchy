@@ -44,6 +44,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
+    private val loaderView by lazy {
+        findViewById(R.id.loaderView)
+    }
+
 
     private var toolbar : Toolbar? = null
     private var toolbarEffect : Toolbar? = null
@@ -107,6 +111,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
         }
+        mImageView?.loaderView = loaderView
 
         mImageView?.restoreSavedInstanceState(this,savedInstanceState)
 
