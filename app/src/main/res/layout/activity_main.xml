@@ -145,29 +145,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
 
-            <!--<Button
-                android:id="@+id/glitch_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/glitch"
-                android:background="@android:color/transparent"
-                android:layout_margin="16dp"/>
-
-             <Button
-                android:id="@+id/anaglyph_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/anaglyph"
-                android:background="@android:color/transparent"
-                android:layout_margin="16dp"/>
-
-            <Button
-                android:id="@+id/webp_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/webp"
-                android:background="@android:color/transparent"
-                android:layout_margin="16dp"/>-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/effect_list"

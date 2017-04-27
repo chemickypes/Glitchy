@@ -79,6 +79,22 @@
                     android:layout_marginTop="8dp"
                     android:cropToPadding="true"/>
 
+                <com.tuyenmonkey.mkloader.MKLoader
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:mk_type="Whirlpool"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0"
+                    android:id="@+id/loaderView"
+                    android:visibility="gone"
+                    />
+
 
             </RelativeLayout>
 
@@ -87,39 +103,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <!--<LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/glitch_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/glitch"
-                        android:background="@android:color/transparent"
-                        android:layout_margin="16dp"/>
-
-                    <Button
-                        android:id="@+id/anaglyph_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/anaglyph"
-                        android:background="@android:color/transparent"
-                        android:layout_margin="16dp"/>
-
-                    <Button
-                        android:id="@+id/webp_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/webp"
-                        android:background="@android:color/transparent"
-                        android:layout_margin="16dp"/>
-                </LinearLayout>-->
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/effect_list"
