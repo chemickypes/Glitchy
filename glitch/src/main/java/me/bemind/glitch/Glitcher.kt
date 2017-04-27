@@ -157,6 +157,10 @@ object Glitcher {
         return GlitcherUtil.bitmapFromByteArray(res)
     }
 
+    fun noise(result: Bitmap?):Bitmap? {
+        return result
+    }
+
     fun negative(result: Bitmap?) : Bitmap?{
 
 
