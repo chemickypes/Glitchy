@@ -58,6 +58,7 @@ interface IGlitchPresenter{
     fun glitch(canvas: Canvas?)
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
+    fun noise(canvas: Canvas?)
 
 
 }
@@ -111,6 +112,7 @@ class GlitchPresenter : IGlitchPresenter{
             Effect.GLITCH -> TypeEffect.JPEG
             Effect.WEBP -> TypeEffect.JPEG
             Effect.SWAP -> TypeEffect.JPEG
+            Effect.NOISE -> TypeEffect.JPEG
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
@@ -140,6 +142,13 @@ class GlitchPresenter : IGlitchPresenter{
         observeImage(
                 {glithce.webp(glithce.baseBitmap)},
                 setImageAction)
+    }
+
+    override fun noise(canvas: Canvas?) {
+        observeImage(
+                {glithce.noise(glithce.baseBitmap)},
+                setImageAction
+        )
     }
 
 
@@ -267,6 +276,7 @@ class GlitchPresenter : IGlitchPresenter{
             Effect.GLITCH -> glitch(null)
             Effect.WEBP -> webp(null)
             Effect.SWAP -> swap(null)
+            Effect.NOISE -> noise(null)
             else -> {}
         }
     }
