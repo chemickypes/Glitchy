@@ -158,7 +158,23 @@ object Glitcher {
     }
 
     fun noise(result: Bitmap?):Bitmap? {
-        return result
+
+        val arrayLen = (w * h)
+        val stride =  w
+
+        val intArray = IntArray(arrayLen)
+        result!!.getPixels(intArray,0,stride,0,0,w,h)
+
+        val intArrayM = IntArray(intArray.size,{ i -> intArray[i].or(Color.rgb(
+                RANDOM.nextInt(255),
+                RANDOM.nextInt(255),
+                RANDOM.nextInt(255)
+        ))})
+
+        val vv = result!!.copy(result!!.config,true)
+        vv!!.setPixels(intArrayM,0,stride,0,0,w,h)
+
+        return vv
     }
 
     fun negative(result: Bitmap?) : Bitmap?{
