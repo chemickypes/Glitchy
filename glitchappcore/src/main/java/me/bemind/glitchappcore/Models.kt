@@ -74,6 +74,23 @@ data class WebpEffectState(override val layout: Int) : EffectState(layout), Parc
     }
 }
 
+data class NoiseEffectState(override val layout: Int) : EffectState(layout), Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<NoiseEffectState> = object : Parcelable.Creator<NoiseEffectState> {
+            override fun createFromParcel(source: Parcel): NoiseEffectState = NoiseEffectState(source)
+            override fun newArray(size: Int): Array<NoiseEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+    }
+}
+
 data class SwapEffectState (override val layout: Int) : EffectState(layout), Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<SwapEffectState> = object : Parcelable.Creator<SwapEffectState> {

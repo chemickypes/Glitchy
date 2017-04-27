@@ -356,9 +356,22 @@ SaveImageBottomSheet.OnSaveImageListener{
             Effect.GLITCH -> makeGlitchEffect(true)
             Effect.WEBP -> makeWebpEffect(true)
             Effect.SWAP -> makeSwapEffect(true)
+            Effect.NOISE -> makeNoiseEffect(true)
             else -> {}
         }
 
+    }
+
+    private fun makeNoiseEffect(init: Boolean = false) {
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.NOISE)
+            inflateEffectLayout(NoiseEffectState(R.layout.effect_glitch_layout))
+        }
+
+        //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
     }
 
     private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
@@ -421,6 +434,13 @@ SaveImageBottomSheet.OnSaveImageListener{
         appPresenter.effectState = effectState
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
+            is NoiseEffectState ->{
+                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                b.setText(R.string.tap_here_to_create_noise)
+                b.setOnClickListener {
+                    makeNoiseEffect()
+                }
+            }
             is WebpEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_glitch_webp)
