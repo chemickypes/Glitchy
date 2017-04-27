@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter
 import android.view.View
+import android.view.ViewPropertyAnimator
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
@@ -93,20 +94,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     var loaderView : View? =  null
 
-    val loaderAnimation by lazy {
-        loaderView?.animate()
-                ?.alpha(1f)
-                ?.setListener(
-                        object : AnimatorListenerAdapter() {
-                            override fun onAnimationStart(animation: Animator?) {
-                                super.onAnimationStart(animation)
-                                loaderView?.visibility = View.VISIBLE
-                            }
-                        }
-                )
-                ?.setDuration(120)
-                //?.setStartDelay(75)
-    }
+    var loaderAnimation : ViewPropertyAnimator? = null
+
 
 
     val glitcPresenter = GlitchPresenter()
@@ -215,6 +204,19 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     override fun showLoader(show: Boolean) {
         if(show){
+            loaderAnimation = loaderView?.animate()
+                    ?.alpha(1f)
+                    ?.setListener(
+                            object : AnimatorListenerAdapter() {
+                                override fun onAnimationStart(animation: Animator?) {
+                                    super.onAnimationStart(animation)
+                                    loaderView?.visibility = View.VISIBLE
+                                }
+                            }
+                    )
+                    ?.setDuration(300)
+                    ?.setStartDelay(100)
+
             loaderAnimation?.start()
         }else{
             loaderAnimation?.cancel()
