@@ -372,16 +372,21 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
-    private fun makeNoiseEffect(init: Boolean = false) {
+    private fun makeNoiseEffect(init: Boolean = false,progress: Int = 100) {
+        val effect = NoiseEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init){
             appPresenter.modState = State.EFFECT
 
             mImageView?.initEffect(Effect.NOISE)
-            inflateEffectLayout(NoiseEffectState(R.layout.effect_glitch_layout))
+            inflateEffectLayout(NoiseEffectState(R.layout.effect_anaglyph_layout,progress))
+        }else{
+
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
-        mImageView?.makeEffect()
+
     }
 
     private fun makeAnaglyphEffect(init: Boolean, progress:Int = 20) {
@@ -445,11 +450,28 @@ SaveImageBottomSheet.OnSaveImageListener{
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
             is NoiseEffectState ->{
-                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                /*val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_create_noise)
                 b.setOnClickListener {
                     makeNoiseEffect()
-                }
+                }*/
+
+                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+                seekbar?.progress = effectState.progress
+
+                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
+                        if(arg2) makeAnaglyphEffect(false,arg1)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                    }
+                })
             }
             is WebpEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView

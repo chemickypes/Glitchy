@@ -79,7 +79,7 @@ data class WebpEffectState(override val layout: Int) : EffectState(layout), Parc
     }
 }
 
-data class NoiseEffectState(override val layout: Int) : EffectState(layout), Parcelable{
+/*data class NoiseEffectState(override val layout: Int) : EffectState(layout), Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<NoiseEffectState> = object : Parcelable.Creator<NoiseEffectState> {
             override fun createFromParcel(source: Parcel): NoiseEffectState = NoiseEffectState(source)
@@ -93,6 +93,23 @@ data class NoiseEffectState(override val layout: Int) : EffectState(layout), Par
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(layout)
+    }
+}*/
+data class NoiseEffectState(override val layout: Int,val progress:Int) : EffectState(layout), Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<NoiseEffectState> = object : Parcelable.Creator<NoiseEffectState> {
+            override fun createFromParcel(source: Parcel): NoiseEffectState = NoiseEffectState(source)
+            override fun newArray(size: Int): Array<NoiseEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt(), source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+        dest?.writeInt(progress)
     }
 }
 
