@@ -268,7 +268,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
-            Effect.NOISE -> effectProgress = 150
+            Effect.NOISE -> effectProgress = 120
             else -> effectProgress = 0
         }
     }

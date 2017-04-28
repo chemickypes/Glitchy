@@ -372,7 +372,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
-    private fun makeNoiseEffect(init: Boolean = false,progress: Int = 100) {
+    private fun makeNoiseEffect(init: Boolean = false,progress: Int = 70) {
         val effect = NoiseEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init){
             appPresenter.modState = State.EFFECT
@@ -382,7 +382,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         }else{
 
             appPresenter.effectState = effect
-            mImageView?.makeEffect(progress)
+            mImageView?.makeEffect(progress+50)
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
@@ -461,7 +461,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
                 seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeAnaglyphEffect(false,arg1)
+                        if(arg2) makeNoiseEffect(false,arg1)
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar) {
