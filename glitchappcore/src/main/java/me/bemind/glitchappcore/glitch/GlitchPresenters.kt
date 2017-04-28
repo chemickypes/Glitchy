@@ -101,8 +101,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     val viewCoords = IntArray(2)
 
     //touch properties
-    private var touchX = -1
-    private var touchY = -1
+    private var touchX = 0
+    private var touchY = 0
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
