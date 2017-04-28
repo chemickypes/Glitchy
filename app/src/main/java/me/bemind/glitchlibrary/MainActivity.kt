@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.widget.Button
 import android.widget.SeekBar
 import android.support.v7.app.AlertDialog
 import android.view.*
@@ -33,9 +32,6 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
     private var mImageView : ExtendedImageView? = null
-    /*private var anaglyphButton: Button? = null
-    private var glitchButton: Button? = null
-    private var webpButton: Button? = null*/
     private var effectPanel: ViewGroup? = null
 
     private val effectList by lazy<RecyclerView> {
