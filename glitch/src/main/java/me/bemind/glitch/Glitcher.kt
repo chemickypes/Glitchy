@@ -360,8 +360,7 @@ object Glitcher {
         var fArr = FloatArray(0)
         synchronized(this){
             fArr = kotlin.FloatArray(SMCOUNT*2)
-            var i5 = 0
-            while (i5 < (SMCOUNT*2)){
+            for (i5 in 0..((SMCOUNT*2)-1)  step 2 ){
                 val xOriginal = matrixOriginal[i5]
                 val yOriginal = matrixOriginal[i5+1]
 
@@ -395,7 +394,6 @@ object Glitcher {
                     }
                 }
 
-                i5 += 2
             }
 
         }
@@ -485,9 +483,9 @@ object Glitcher {
         matrixOriginal = FloatArray(SMCOUNT*2)
 
         var i = 0
-        for(i2 in 0..(WHEIGHT+1)){
+        for(i2 in 0..(WHEIGHT)){
             val f = ((h*i2).div(WHEIGHT)).toFloat()
-            for(i3 in 0..(WWIDTH+1)){
+            for(i3 in 0..(WWIDTH)){
                 val f2 = ((w*i2).div(WWIDTH)).toFloat()
                 setXY(matrixVertsMoved,i,f2,f)
                 setXY(matrixOriginal,i,f2,f)

@@ -353,6 +353,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     private fun initEffect(effect:Effect) {
         when (effect){
             Effect.ANAGLYPH -> makeAnaglyphEffect(true)
+            Effect.GHOST-> makeGhostEffect(true)
             Effect.GLITCH -> makeGlitchEffect(true)
             Effect.WEBP -> makeWebpEffect(true)
             Effect.SWAP -> makeSwapEffect(true)
@@ -360,6 +361,15 @@ SaveImageBottomSheet.OnSaveImageListener{
             else -> {}
         }
 
+    }
+
+    private fun makeGhostEffect(init: Boolean) {
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.GHOST)
+            inflateEffectLayout(GhostEffectState(R.layout.effect_ghost_layout))
+        }
     }
 
     private fun makeNoiseEffect(init: Boolean = false) {
@@ -422,7 +432,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.modState = State.EFFECT
 
             mImageView?.initEffect(Effect.SWAP)
-            inflateEffectLayout(WebpEffectState(R.layout.effect_glitch_layout))
+            inflateEffectLayout(SwapEffectState(R.layout.effect_glitch_layout))
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
@@ -460,6 +470,9 @@ SaveImageBottomSheet.OnSaveImageListener{
                 b.setOnClickListener {
                     makeGlitchEffect()
                 }
+            }
+            is GhostEffectState -> {
+                //nothing
             }
             is AnaglyphEffectState -> {
                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
