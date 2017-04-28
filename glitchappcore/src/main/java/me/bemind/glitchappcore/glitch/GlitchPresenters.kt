@@ -279,6 +279,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         effect = Effect.BASE
         effectProgress = 0
         volatileBitmap = null
+        touchPoint = Point(0,0)
+        motion = Motion.NONE
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
