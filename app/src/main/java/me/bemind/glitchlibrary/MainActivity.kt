@@ -378,7 +378,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.modState = State.EFFECT
 
             mImageView?.initEffect(Effect.NOISE)
-            inflateEffectLayout(NoiseEffectState(R.layout.effect_anaglyph_layout,progress))
+            inflateEffectLayout(effect)
         }else{
 
             appPresenter.effectState = effect
