@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.util.Log
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
-import android.R.attr.scaleY
-import android.R.attr.scaleX
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
@@ -15,9 +13,9 @@ import android.view.MotionEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.bemind.glitch.Motion
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
-import me.bemind.glitchappcore.Motion
 
 
 /**
@@ -60,6 +58,7 @@ interface IGlitchPresenter{
 
     //effects
     fun anaglyph(canvas: Canvas?,progress:Int = 20)
+    fun ghost(canvas: Canvas?,x:Int,y:Int,motion: Motion)
     fun glitch(canvas: Canvas?)
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
@@ -130,6 +129,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.SWAP -> TypeEffect.JPEG
             Effect.NOISE -> TypeEffect.JPEG
             Effect.ANAGLYPH -> TypeEffect.CANVAS
+            Effect.GHOST -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
 
@@ -141,6 +141,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         //glitchLogic.anaglyph(canvas, progress)
 
         glithce.anaglyphCanvas(canvas,progress)
+    }
+
+    override fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
+        glithce.ghost(canvas,x,y,motion)
     }
 
 
@@ -343,6 +347,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
 
         when (effect) {
+            Effect.GHOST -> ghost(canvas,touchX,touchY,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             else -> Log.v("ImageView", "BASE")
         }

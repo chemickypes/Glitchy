@@ -372,6 +372,10 @@ object Glitcher {
         anaglyphPaint.shader = anaglyphShader
     }
 
+    fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
+
+    }
+
 
 }
 

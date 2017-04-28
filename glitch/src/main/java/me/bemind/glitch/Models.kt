@@ -11,3 +11,7 @@ enum class Effect {
 enum class TypeEffect {
     JPEG,CANVAS,NONE
 }
+
+enum class Motion{
+    NONE, LEFT, RIGHT, UP, DOWN
+}
