@@ -1,6 +1,7 @@
 package me.bemind.glitch
 
 import android.graphics.*
+import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -61,7 +62,7 @@ object Glitcher {
 
     val MAX_VALUE = 10
 
-    private val malpha: Int = 80
+    private val malpha: Int = 150
 
 
 
@@ -333,14 +334,16 @@ object Glitcher {
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
         c?.drawColor(0,PorterDuff.Mode.CLEAR)
+        //
+        //
         c?.drawBitmap(baseBitmap,0f,0f, redPaint)
         var b2 = baseBitmap
         var i4 = WWIDTH
-        /*draw bitmap */ c?.drawBitmapMesh(b2,i4, WHEIGHT,smudgeRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
+        /*draw bitmap */ c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
 
         b2 = baseBitmap
         i4 = WWIDTH
-        /* draw bitmap*/c?.drawBitmapMesh(b2,i4, WHEIGHT,smudgeRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
+        /* draw bitmap*/c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
 
     }
 
@@ -361,32 +364,37 @@ object Glitcher {
         synchronized(this){
             fArr = kotlin.FloatArray(SMCOUNT*2)
             for (i5 in 0..((SMCOUNT*2)-1)  step 2 ){
+                //Log.d("DEBUG","$i $i2 $i3 $i4 $i5")
+
                 val xOriginal = matrixOriginal[i5]
                 val yOriginal = matrixOriginal[i5+1]
 
-                val distX = (i.toFloat() - xOriginal) / w.toFloat() * 10.0f
-                val distY = (i2.toFloat() - yOriginal) / h.toFloat() * 10.0f
-                val d = (i4.toFloat() / 255.0f).toDouble() * 3.6 + 0.4
+
+                val distX = ((i.toFloat() - xOriginal) / w.toFloat()) * 10.0f
+                val distY = ((i2.toFloat() - yOriginal) / h.toFloat()) * 10.0f
+                val d = ((i4.toFloat() / 255.0f).toDouble() * 3.6 )+ 0.4
 
                 val gaussX = Math.exp((-(distX * distX)).toDouble() / d).toFloat() * 0.4f
                 val gaussY = Math.exp((-(distY * distY)).toDouble() / d).toFloat() * 0.4f
 
+                //Log.d("DEBUG","$xOriginal $yOriginal $distX $distY $d $gaussX $gaussY")
+
                 when (motion) {
                     Motion.LEFT -> {
-                        fArr[i5] = xOriginal - (w- i).toFloat() * gaussY / i3.toFloat()
+                        fArr[i5] = xOriginal - (((w - i).toFloat() * gaussY) / i3.toFloat())
                         fArr[i5 + 1] = yOriginal
                     }
                     Motion.RIGHT -> {
-                        fArr[i5] = xOriginal + i.toFloat() * gaussY / i3.toFloat()
+                        fArr[i5] = xOriginal + ((i.toFloat() * gaussY) / i3.toFloat())
                         fArr[i5 + 1] = yOriginal
                     }
                     Motion.UP -> {
                         fArr[i5] = xOriginal
-                        fArr[i5 + 1] = yOriginal - (h - i2).toFloat() * gaussX / i3.toFloat()
+                        fArr[i5 + 1] = yOriginal - (((h - i2).toFloat() * gaussX) / i3.toFloat())
                     }
                     Motion.DOWN -> {
                         fArr[i5] = xOriginal
-                        fArr[i5 + 1] = yOriginal + i2.toFloat() * gaussX / i3.toFloat()
+                        fArr[i5 + 1] = yOriginal + ((i2.toFloat() * gaussX )/ i3.toFloat())
                     }
                     else -> {
                         fArr[i5] = xOriginal
@@ -486,7 +494,7 @@ object Glitcher {
         for(i2 in 0..(WHEIGHT)){
             val f = ((h*i2).div(WHEIGHT)).toFloat()
             for(i3 in 0..(WWIDTH)){
-                val f2 = ((w*i2).div(WWIDTH)).toFloat()
+                val f2 = ((w*i3).div(WWIDTH)).toFloat()
                 setXY(matrixVertsMoved,i,f2,f)
                 setXY(matrixOriginal,i,f2,f)
                 i+=1

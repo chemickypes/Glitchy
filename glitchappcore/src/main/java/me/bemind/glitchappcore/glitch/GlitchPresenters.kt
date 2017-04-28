@@ -284,14 +284,17 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 motion = Motion.NONE
             }
             MotionEvent.ACTION_UP -> {
-
+                //touchX  = -1
+                //touchY  = -1
             }
             MotionEvent.ACTION_MOVE -> {
 
             }
         }
 
-        if(effect == Effect.GHOST) glitchView?.invalidateGlitchView()
+        if(effect == Effect.GHOST){
+            glitchView?.invalidateGlitchView()
+        }
 
         return true
     }
