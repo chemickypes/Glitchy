@@ -18,6 +18,6 @@ object EffectList{
         data.add(EffectView(Effect.WEBP,R.string.webp,R.layout.effect_glitch_layout))
         data.add(EffectView(Effect.ANAGLYPH,R.string.anaglyph,R.layout.effect_anaglyph_layout))
         data.add(EffectView(Effect.SWAP,R.string.swap,R.layout.effect_glitch_layout))
-        data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_glitch_layout))
+        //data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_glitch_layout))
     }
 }
