@@ -25,4 +25,6 @@
     <string name="tap_here_to_swap">Tap here to Swap image</string>
     <string name="noise">Noise</string>
     <string name="tap_here_to_create_noise">Tap to create Noise</string>
+    <string name="ghost">Ghost</string>
+    <string name="drag_on_the_image">Drag on the image</string>
 </resources>
