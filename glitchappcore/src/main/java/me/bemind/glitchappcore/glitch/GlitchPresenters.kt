@@ -6,6 +6,7 @@ import android.util.Log
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
@@ -17,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import me.bemind.glitch.Motion
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import java.lang.Exception
 
 
 /**
@@ -63,7 +65,7 @@ interface IGlitchPresenter{
     fun glitch(canvas: Canvas?)
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
-    fun noise(canvas: Canvas?)
+    fun noise(canvas: Canvas?,progress: Int = 170)
 
 
 }
@@ -130,7 +132,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.GLITCH -> TypeEffect.JPEG
             Effect.WEBP -> TypeEffect.JPEG
             Effect.SWAP -> TypeEffect.JPEG
-            Effect.NOISE -> TypeEffect.JPEG
+            Effect.NOISE -> TypeEffect.CANVAS
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             Effect.GHOST -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
@@ -173,11 +175,12 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 setImageAction)
     }
 
-    override fun noise(canvas: Canvas?) {
-        observeImage(
+    override fun noise(canvas: Canvas?, progress: Int) {
+        /*observeImage(
                 {glithce.noise(glithce.baseBitmap)},
                 setImageAction
-        )
+        )*/
+        glithce.noiseCanvas(canvas,progress)
     }
 
 
@@ -255,8 +258,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun initEffect(bitmap: Bitmap?,effect: Effect) {
        // glitchLogic.initEffect(bitmap?.width?:0,bitmap?.height?:0,effect)
 
+
         effectON = true
-        glithce.initEffect(effect,bitmap)
+        glithce.initEffect(effect,bitmap,getNoiseBitmap())
 
         this.effect = effect
 
@@ -264,7 +268,17 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
+            Effect.NOISE -> effectProgress = 150
             else -> effectProgress = 0
+        }
+    }
+
+    private fun getNoiseBitmap(): Bitmap? {
+        try {
+            return BitmapFactory.decodeStream(context.assets.open("noise.png"))
+        }catch(e:Exception) {
+            e.printStackTrace()
+            return null
         }
     }
 
@@ -365,6 +379,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         when (effect) {
             Effect.GHOST -> ghost(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
+            Effect.NOISE -> noise(canvas,effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
         canvas?.restore()

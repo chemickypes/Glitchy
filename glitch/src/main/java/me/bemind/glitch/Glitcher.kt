@@ -45,6 +45,8 @@ object Glitcher {
     private val redPaint = Paint()
     private val greenPaint = Paint()
     private val bluePaint = Paint()
+    val noisePaint = Paint()
+    var noiseBMPshader : BitmapShader? = null
 
     private val XFE_ADD = PorterDuffXfermode(PorterDuff.Mode.ADD)
 
@@ -197,6 +199,16 @@ object Glitcher {
         return vv
     }
 
+    fun noiseCanvas(c:Canvas?,progress:Int = 170 ){
+        val rndInt = RANDOM.nextInt(w)
+        val rndInt2 = RANDOM.nextInt(h)
+        val matrix = Matrix()
+        matrix.setTranslate(rndInt.toFloat(),rndInt2.toFloat())
+        noiseBMPshader?.setLocalMatrix(matrix)
+        noisePaint.alpha = progress
+        c?.drawRect(0f,0f,w.toFloat(),h.toFloat(), noisePaint)
+    }
+
     fun negative(result: Bitmap?) : Bitmap?{
 
 
@@ -334,15 +346,9 @@ object Glitcher {
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
         c?.drawColor(0,PorterDuff.Mode.CLEAR)
-        //
-        //
         c?.drawBitmap(baseBitmap,0f,0f, redPaint)
-        var b2 = baseBitmap
-        var i4 = WWIDTH
         /*draw bitmap */ c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
 
-        b2 = baseBitmap
-        i4 = WWIDTH
         /* draw bitmap*/c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
 
     }
@@ -425,11 +431,16 @@ object Glitcher {
         return rr
     }
 
-    fun initEffect(effect: Effect,bitmap: Bitmap?,w: Int = -1,h: Int = -1) {
+    fun initEffect(effect: Effect,bitmap: Bitmap?, noiseBitmap:Bitmap? = null,w: Int = -1,h: Int = -1) {
 
         result = bitmap
         baseBitmap = result
         baseArray = kotlin.ByteArray(0)
+
+        if(noiseBitmap!=null){
+            noiseBMPshader = BitmapShader(noiseBitmap,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT);
+            noisePaint.shader = noiseBMPshader
+        }
 
 
         val we = if((w == -1) || (w > bitmap?.width?: Int.MAX_VALUE)){
