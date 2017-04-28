@@ -17,8 +17,11 @@ import android.animation.AnimatorListenerAdapter
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Bundle
+import android.support.v4.view.GestureDetectorCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewPropertyAnimator
 import me.bemind.glitch.TypeEffect
@@ -74,7 +77,7 @@ interface IGlitchView {
 /**
  * extension of ImageView in order to implement IGlitchView
  */
-class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChangeListener {
+class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChangeListener, GestureDetector.OnGestureListener {
 
 
     override var scaleXG: Float = 0.0f
@@ -95,6 +98,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     var loaderView : View? =  null
 
     var loaderAnimation : ViewPropertyAnimator? = null
+
+    var gestureDetector : GestureDetectorCompat? = null
 
 
 
@@ -264,6 +269,36 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector?.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+
+    override fun onShowPress(p0: MotionEvent?) {
+        //nothing
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+        //nothing
+        return false
+    }
+
+    override fun onDown(p0: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        return false
+    }
+
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+     return false
+    }
+
+    override fun onLongPress(p0: MotionEvent?) {
+    }
+
 
 
     private fun loadMesure() {
@@ -281,6 +316,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         historyPresenter.historyView = this
 
         addOnLayoutChangeListener(this)
+
+        gestureDetector = GestureDetectorCompat(context,this)
 
     }
 }
