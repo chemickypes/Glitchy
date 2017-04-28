@@ -144,7 +144,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
-        glithce.ghost(canvas,x,y,motion)
+        glithce.ghostCanvas(canvas,x,y,motion)
     }
 
 

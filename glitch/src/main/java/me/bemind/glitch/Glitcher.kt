@@ -31,18 +31,37 @@ object Glitcher {
 
     val leftArray = floatArrayOf(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
     val rightArray = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
+    val redMatrix = floatArrayOf(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
+    val blueMatrix = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
+    val greenMatrix = floatArrayOf(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
+
 
     var anaglyphShader : BitmapShader? = null
     var result : Bitmap? = null
     var baseBitmap : Bitmap? = null
+
     var anaglyphPaint = Paint()
+    private val redPaint = Paint()
+    private val greenPaint = Paint()
+    private val bluePaint = Paint()
+
+    private val XFE_ADD = PorterDuffXfermode(PorterDuff.Mode.ADD)
 
     val RANDOM = Random()
+
+    private var WWIDTH: Int = 10
+    private var WHEIGHT: Int = 10
+
+    private var SMCOUNT: Int = 0
+    private var matrixVertsMoved = kotlin.FloatArray(0)
+    private var matrixOriginal = kotlin.FloatArray(0)
 
     var w = 0
     var h = 0
 
     val MAX_VALUE = 10
+
+    private val malpha: Int = 80
 
 
 
@@ -310,6 +329,21 @@ object Glitcher {
         //c?.drawBitmap(result,0f,0f,anaglyphPaint)
     }
 
+
+
+    fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
+        c?.drawColor(0,PorterDuff.Mode.CLEAR)
+        c?.drawBitmap(baseBitmap,0f,0f, redPaint)
+        var b2 = baseBitmap
+        var i4 = WWIDTH
+        /*draw bitmap */ c?.drawBitmapMesh(b2,i4, WHEIGHT,smudgeRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
+
+        b2 = baseBitmap
+        i4 = WWIDTH
+        /* draw bitmap*/c?.drawBitmapMesh(b2,i4, WHEIGHT,smudgeRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
+
+    }
+
     private fun shuffleRow(row: List<Int>) : List<Int> {
         val RANDOM = Random()
         val offset = RANDOM.nextInt(row.size/2)
@@ -320,6 +354,52 @@ object Glitcher {
     private fun sortRow (row: List<Int>) : List<Int> {
         val sortedRow = List(row.size,{ri -> row[ri]})
         return sortedRow.sorted()
+    }
+
+    private fun smudgeRGB(i:Int,i2:Int,i3:Int,i4:Int,motion:Motion) : FloatArray?{
+        var fArr = FloatArray(0)
+        synchronized(this){
+            fArr = kotlin.FloatArray(SMCOUNT*2)
+            var i5 = 0
+            while (i5 < (SMCOUNT*2)){
+                val xOriginal = matrixOriginal[i5]
+                val yOriginal = matrixOriginal[i5+1]
+
+                val distX = (i.toFloat() - xOriginal) / w.toFloat() * 10.0f
+                val distY = (i2.toFloat() - yOriginal) / h.toFloat() * 10.0f
+                val d = (i4.toFloat() / 255.0f).toDouble() * 3.6 + 0.4
+
+                val gaussX = Math.exp((-(distX * distX)).toDouble() / d).toFloat() * 0.4f
+                val gaussY = Math.exp((-(distY * distY)).toDouble() / d).toFloat() * 0.4f
+
+                when (motion) {
+                    Motion.LEFT -> {
+                        fArr[i5] = xOriginal - (w- i).toFloat() * gaussY / i3.toFloat()
+                        fArr[i5 + 1] = yOriginal
+                    }
+                    Motion.RIGHT -> {
+                        fArr[i5] = xOriginal + i.toFloat() * gaussY / i3.toFloat()
+                        fArr[i5 + 1] = yOriginal
+                    }
+                    Motion.UP -> {
+                        fArr[i5] = xOriginal
+                        fArr[i5 + 1] = yOriginal - (h - i2).toFloat() * gaussX / i3.toFloat()
+                    }
+                    Motion.DOWN -> {
+                        fArr[i5] = xOriginal
+                        fArr[i5 + 1] = yOriginal + i2.toFloat() * gaussX / i3.toFloat()
+                    }
+                    else -> {
+                        fArr[i5] = xOriginal
+                        fArr[i5 + 1] = yOriginal
+                    }
+                }
+
+                i5 += 2
+            }
+
+        }
+        return fArr
     }
 
     private fun generateBitmap (result: Bitmap?, action: (List<Int>) -> List<Int>) : Bitmap?{
@@ -360,6 +440,60 @@ object Glitcher {
 
         initEffect(we,he)
 
+        if(effect == Effect.GHOST){
+            initGhost()
+        }
+
+    }
+
+
+
+    private fun initGhost() {
+        WWIDTH = 100
+        WHEIGHT = 100
+        InitSmudgeMatrix()
+        setGhostColor()
+    }
+
+
+
+    private fun setGhostColor() {
+        redPaint.isFilterBitmap = true
+        redPaint.xfermode = XFE_ADD
+        greenPaint.isFilterBitmap = true
+        greenPaint.xfermode = XFE_ADD
+        bluePaint.isFilterBitmap = true
+        bluePaint.xfermode = XFE_ADD
+
+        val colorMatrix = ColorMatrix()
+
+        colorMatrix.set(redMatrix)
+        redPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+        colorMatrix.set(greenMatrix)
+        greenPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+        colorMatrix.set(blueMatrix)
+        bluePaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+    }
+
+
+    private fun InitSmudgeMatrix() {
+        SMCOUNT = (WWIDTH+1)*(WHEIGHT+1)
+        matrixVertsMoved = FloatArray(SMCOUNT*2)
+        matrixOriginal = FloatArray(SMCOUNT*2)
+
+        var i = 0
+        for(i2 in 0..(WHEIGHT+1)){
+            val f = ((h*i2).div(WHEIGHT)).toFloat()
+            for(i3 in 0..(WWIDTH+1)){
+                val f2 = ((w*i2).div(WWIDTH)).toFloat()
+                setXY(matrixVertsMoved,i,f2,f)
+                setXY(matrixOriginal,i,f2,f)
+                i+=1
+            }
+        }
     }
 
     fun initEffect(w:Int, h:Int){
@@ -368,13 +502,19 @@ object Glitcher {
 
 
         anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
+        anaglyphPaint.xfermode = XFE_ADD
         anaglyphPaint.shader = anaglyphShader
     }
 
-    fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
-
+    private fun setXY(fArr: FloatArray, i: Int, f: Float, f2: Float) {
+        fArr[i * 2] = f
+        fArr[i * 2 + 1] = f2
     }
+
+
+
+
+
 
 
 }
