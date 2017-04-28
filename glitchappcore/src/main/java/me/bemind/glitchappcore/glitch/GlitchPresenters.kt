@@ -7,12 +7,17 @@ import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.R.attr.scaleY
 import android.R.attr.scaleX
+import android.content.Context
 import android.os.Bundle
+import android.support.v4.view.GestureDetectorCompat
+import android.view.GestureDetector
+import android.view.MotionEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import me.bemind.glitchappcore.Motion
 
 
 /**
@@ -37,7 +42,7 @@ interface IGlitchPresenter{
 
     fun onDraw(canvas: Canvas?,scale:Boolean = false)
 
-
+    fun onTouchEvent(event:MotionEvent?) :Boolean
 
     fun saveEffect()
 
@@ -63,7 +68,9 @@ interface IGlitchPresenter{
 
 }
 
-class GlitchPresenter : IGlitchPresenter{
+class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener {
+
+
 
     private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
     private val EFFECT_K: String? = "effect_k"
@@ -90,11 +97,20 @@ class GlitchPresenter : IGlitchPresenter{
 
     override var canvas: Canvas? = null
 
+    var gestureDetector : GestureDetectorCompat? = null
+
+    val viewCoords = IntArray(2)
+
+    //touch properties
+    private var touchX = 0
+    private var touchY = 0
+    private var startTouchX = 0
+    private var startTouchY = 0
+    private var motion: Motion = Motion.NONE
+    //end touch properties
+
     val setImageAction = {
         b : Bitmap? -> glitchView?.setImageBitmap(b,true) //volatile
-        /*canvas?.drawBitmap(b,0f,0f,null)
-        b?.recycle()
-        glitchView?.invalidateGlitchView()*/
         glitchView?.showLoader(false)
         volatileBitmap = b
 
@@ -116,6 +132,10 @@ class GlitchPresenter : IGlitchPresenter{
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
+
+    init {
+        gestureDetector = GestureDetectorCompat(context,this)
+    }
 
     override fun anaglyph(canvas: Canvas?, progress: Int) {
         //glitchLogic.anaglyph(canvas, progress)
@@ -245,6 +265,68 @@ class GlitchPresenter : IGlitchPresenter{
         volatileBitmap = null
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector?.onTouchEvent(event)
+
+        touchX = event?.x?.toInt()?:0 - viewCoords[0]
+        touchY = event?.y?.toInt()?:0 - viewCoords[1]
+
+        when (event?.action){
+            MotionEvent.ACTION_DOWN -> {
+                startTouchX = touchX
+                startTouchY = touchY
+                motion = Motion.NONE
+            }
+            MotionEvent.ACTION_UP -> {
+
+            }
+            MotionEvent.ACTION_MOVE -> {
+
+            }
+        }
+
+        if(effect == Effect.GHOST) glitchView?.invalidateGlitchView()
+
+        return true
+    }
+
+    override fun onShowPress(p0: MotionEvent?) {
+        //nothing
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+        //nothing
+        return false
+    }
+
+    override fun onDown(p0: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        return false
+    }
+
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        if(motion != Motion.NONE) return false
+
+        if(Math.abs(p2)>Math.abs(p3)){
+            if(Math.abs(p2)<1) return true
+
+            motion = if(p2 < 0){ Motion.RIGHT }else{ Motion.LEFT }
+            return true
+
+        }else if(Math.abs(p3)<=1){
+            return true
+        }else{
+            motion = if (p3 < 0) { Motion.DOWN }else{ Motion.UP }
+            return true
+        }
+    }
+
+    override fun onLongPress(p0: MotionEvent?) {
+    }
+
     override fun onDraw(canvas: Canvas?,scale: Boolean){
 
 
@@ -261,13 +343,10 @@ class GlitchPresenter : IGlitchPresenter{
                 glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
 
         when (effect) {
-            Effect.GLITCH -> Log.v("ImageView", "glitch")
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
-
         canvas?.restore()
-
 
     }
 

@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import me.bemind.glitchappcore.Motion
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
 
@@ -77,7 +78,7 @@ interface IGlitchView {
 /**
  * extension of ImageView in order to implement IGlitchView
  */
-class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChangeListener, GestureDetector.OnGestureListener {
+class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChangeListener {
 
 
     override var scaleXG: Float = 0.0f
@@ -99,16 +100,16 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     var loaderAnimation : ViewPropertyAnimator? = null
 
-    var gestureDetector : GestureDetectorCompat? = null
 
 
 
-    val glitcPresenter = GlitchPresenter()
+    val glitcPresenter = GlitchPresenter(context)
     val historyPresenter = HistoryPresenter(context)
 
     override var hasHistory: Boolean
         get() = historyPresenter.hasHistory
         set(value) {/*nothing*/}
+
 
 
 
@@ -269,35 +270,13 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         }
     }
 
+
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gestureDetector?.onTouchEvent(event)
-        return super.onTouchEvent(event)
+       return glitcPresenter.onTouchEvent(event)
     }
 
 
-    override fun onShowPress(p0: MotionEvent?) {
-        //nothing
-    }
-
-    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
-        //nothing
-        return false
-    }
-
-    override fun onDown(p0: MotionEvent?): Boolean {
-        return false
-    }
-
-    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
-        return false
-    }
-
-    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
-     return false
-    }
-
-    override fun onLongPress(p0: MotionEvent?) {
-    }
 
 
 
@@ -309,6 +288,9 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         this.scaleY = fArr[4]
         this.dispTop = fArr[5].toInt()
         this.dispLeft = fArr[2].toInt()
+
+        getLocationOnScreen(glitcPresenter.viewCoords)
+
     }
 
     private fun initView() {
@@ -317,7 +299,6 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
         addOnLayoutChangeListener(this)
 
-        gestureDetector = GestureDetectorCompat(context,this)
 
     }
 }

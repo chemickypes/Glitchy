@@ -9,6 +9,10 @@ import me.bemind.glitch.Effect
  * Created by angelomoroni on 10/04/17.
  */
 
+enum class Motion{
+    NONE, LEFT, RIGHT, UP, DOWN
+}
+
 data class Response<out T, out V>(val activity: T, val image: V)
 
 data class Image(val bitmap: Bitmap,val effect: Effect,var saved:Boolean) : Parcelable{
