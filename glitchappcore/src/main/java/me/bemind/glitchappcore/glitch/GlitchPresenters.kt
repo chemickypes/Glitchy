@@ -6,6 +6,7 @@ import android.util.Log
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.content.Context
+import android.graphics.Point
 import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
 import android.view.GestureDetector
@@ -74,6 +75,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     private val EFFECT_PROGRESS_K: String? = "eef_pro_k"
     private val EFFECT_K: String? = "effect_k"
     private val EFFECT_ON_K: String? = "eef_on_k"
+    private val TOUCH_POINT_K: String? = "touch_point_k"
+    private val MOTION_K: String? = "motion_k"
 
     var volatileBitmap: Bitmap? = null
 
@@ -101,8 +104,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     val viewCoords = IntArray(2)
 
     //touch properties
-    private var touchX = 0
-    private var touchY = 0
+
+    private var touchPoint = Point(0,0)
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
@@ -144,7 +147,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
-        if(touchX>-1) {
+        if(touchPoint.x>-1) {
             glithce.ghostCanvas(canvas, x, y, motion)
         }
     }
@@ -198,6 +201,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         outState?.putSerializable(EFFECT_K,effect)
         outState?.putBoolean(EFFECT_ON_K,effectON)
 
+        outState?.putParcelable(TOUCH_POINT_K,touchPoint)
+        outState?.putInt(MOTION_K,motion.ordinal)
+
 
         glitchyBaseActivity.retainedFragment?.volatileBitmap = volatileBitmap
 
@@ -205,12 +211,16 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity,savedInstanceState: Bundle?) {
+        touchPoint = savedInstanceState?.getParcelable(TOUCH_POINT_K)?: Point(0,0)
+        motion = Motion.values()[savedInstanceState?.getInt(MOTION_K,Motion.NONE.ordinal)?:0]
         effectProgress = savedInstanceState?.getInt(EFFECT_PROGRESS_K,0)?:0
         effectON = savedInstanceState?.getBoolean(EFFECT_ON_K,false)?:false
         if(effectON){
             restore = true
             effect = savedInstanceState?.getSerializable(EFFECT_K) as Effect
             volatileBitmap = glitchyBaseActivity.retainedFragment?.volatileBitmap
+
+            //if(effect == Effect.GHOST) glitchView?.invalidateGlitchView()
         }
     }
 
@@ -274,13 +284,12 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector?.onTouchEvent(event)
 
-        touchX = event?.x?.toInt()?:0 - viewCoords[0]
-        touchY = event?.y?.toInt()?:0 - viewCoords[1]
+        touchPoint = Point(event?.x?.toInt()?:0 - viewCoords[0],event?.y?.toInt()?:0 - viewCoords[1])
 
         when (event?.action){
             MotionEvent.ACTION_DOWN -> {
-                startTouchX = touchX
-                startTouchY = touchY
+                startTouchX = touchPoint.x
+                startTouchY = touchPoint.y
                 motion = Motion.NONE
             }
             MotionEvent.ACTION_UP -> {
@@ -352,7 +361,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 glitchView?.dispTop?.toFloat()?.div(glitchView?.scaleYG?:1f)?:0f)
 
         when (effect) {
-            Effect.GHOST -> ghost(canvas,touchX,touchY,motion)
+            Effect.GHOST -> ghost(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             else -> Log.v("ImageView", "BASE")
         }

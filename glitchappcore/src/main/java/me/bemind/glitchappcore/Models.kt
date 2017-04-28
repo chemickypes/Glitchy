@@ -4,10 +4,13 @@ import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 import me.bemind.glitch.Effect
+import me.bemind.glitch.Motion
 
 /**
  * Created by angelomoroni on 10/04/17.
  */
+
+
 
 
 
