@@ -158,6 +158,9 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     private fun closeCurrentEffect() {
+
+        SideMenu.openable = true
+
         val runnable : Runnable = Runnable {
             effectPanel?.visibility = GONE
             effectPanel?.alpha = 1f
@@ -175,6 +178,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     private fun openEffectPanel() {
+
+        SideMenu.openable = false
 
         val runnable : Runnable = Runnable {
             effectPanel?.alpha = 0f

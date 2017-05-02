@@ -232,9 +232,9 @@ public class SideMenu extends ViewGroup {
     private int childHeight;
 
     /*
-    draggedChild is a flag to check if there is a child who can be dragged
+    openable is a flag to check if there is a child who can be dragged
      */
-    public static boolean draggedChild = false;
+    public static boolean openable = false;
 
     public SideMenuToggle getSideMenuToggle() {
         return mSideMenuToggle;
@@ -1405,7 +1405,7 @@ public class SideMenu extends ViewGroup {
         }
 
         /* special case ViewPagers, which don't properly implement the scrolling interface */
-        return checkV && (ViewCompat.canScrollHorizontally(v, -dx) || draggedChild ||
+        return checkV && (ViewCompat.canScrollHorizontally(v, -dx) || !openable ||
                 ((v instanceof ViewPager) && canViewPagerScrollHorizontally((ViewPager) v, -dx)));
 
         //return checkV && ViewCompat.canScrollHorizontally(v, (isLayoutRtlSupport() ? dx : -dx));

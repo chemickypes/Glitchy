@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:id="@+id/side_menu"
     tools:context=".MainActivity"
-    android:background="@android:color/holo_orange_dark">
+    android:background="@color/colorAccent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +55,8 @@
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            style="@style/AppBarNoOverlay">
             <RelativeLayout
                 android:id="@+id/toolbar_effect_panel"
                 android:layout_width="match_parent"
@@ -63,7 +64,7 @@
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
-                    style="@style/AppBarOverlay"
+                    style="@style/AppBarNoOverlay"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"/>
 

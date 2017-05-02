@@ -4,4 +4,10 @@
     <style name="SeekBarPanelTheme">
         <item name="android:translationZ">10dp</item>
     </style>
+
+    <style name="AppBarNoOverlay">
+        <item name="android:elevation">0dp</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@color/material_grey</item>
+    </style>
 </resources>
