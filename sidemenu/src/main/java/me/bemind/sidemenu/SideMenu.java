@@ -232,9 +232,9 @@ public class SideMenu extends ViewGroup {
     private int childHeight;
 
     /*
-    openable is a flag to check if there is a child who can be dragged
+    openable is a flag to check if side menu is openable
      */
-    public static boolean openable = false;
+    public boolean openable = true;
 
     public SideMenuToggle getSideMenuToggle() {
         return mSideMenuToggle;
