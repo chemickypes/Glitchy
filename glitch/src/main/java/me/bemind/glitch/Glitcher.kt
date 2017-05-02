@@ -438,7 +438,8 @@ object Glitcher {
         baseArray = kotlin.ByteArray(0)
 
         if(noiseBitmap!=null){
-            noiseBMPshader = BitmapShader(noiseBitmap,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT);
+            noiseBMPshader = BitmapShader(noiseBitmap,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT)
+            noisePaint.xfermode = XFE_ADD
             noisePaint.shader = noiseBMPshader
         }
 

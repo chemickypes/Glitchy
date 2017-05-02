@@ -42,6 +42,9 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
     val historyLogic  = HistoryLogic(context)
     var historyView : IHistoryView? = null
 
+    val image : Bitmap?
+    get() = historyLogic.lastBitmap
+
     private var disposable: Disposable? = null
 
     override var hasHistory: Boolean

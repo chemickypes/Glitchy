@@ -151,8 +151,10 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     override fun getImageBitmap(): Bitmap? {
 
         if(drawable!=null) {
-            val b = (drawable as BitmapDrawable).bitmap
-           return b
+           /* val b = (drawable as BitmapDrawable).bitmap
+           return b*/
+            //return historyPresenter.image
+            return (drawable as BitmapDrawable).bitmap
         }else{
             return null
         }
