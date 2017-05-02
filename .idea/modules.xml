@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/glitch/glitch.iml" filepath="$PROJECT_DIR$/glitch/glitch.iml" />
       <module fileurl="file://$PROJECT_DIR$/glitchappcore/glitchappcore.iml" filepath="$PROJECT_DIR$/glitchappcore/glitchappcore.iml" />
       <module fileurl="file://$PROJECT_DIR$/glitchlibrary.iml" filepath="$PROJECT_DIR$/glitchlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sidemenu/sidemenu.iml" filepath="$PROJECT_DIR$/sidemenu/sidemenu.iml" />
     </modules>
   </component>
 </project>

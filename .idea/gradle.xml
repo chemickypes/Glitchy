@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/glitch" />
             <option value="$PROJECT_DIR$/glitchappcore" />
+            <option value="$PROJECT_DIR$/sidemenu" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

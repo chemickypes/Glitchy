@@ -1,1 +1,1 @@
-include ':app', ':glitch', ':glitchappcore'
+include ':app', ':glitch', ':glitchappcore', ':sidemenu'
