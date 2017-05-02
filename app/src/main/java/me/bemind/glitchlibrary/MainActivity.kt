@@ -23,6 +23,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.TextView
 import me.bemind.glitchappcore.app.*
+import me.bemind.sidemenu.SideMenu
+import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
 
 
@@ -55,6 +57,14 @@ SaveImageBottomSheet.OnSaveImageListener{
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
 
     private val saveImageBS = SaveImageBottomSheet.Creator.getSaveImageBottomSheet(this,this)
+
+    val sidemenu : SideMenu by lazy {
+        findViewById(R.id.side_menu) as SideMenu
+    }
+
+    val sideMenuToggle : SideMenuToggle by lazy {
+        SideMenuToggle(this,sidemenu,toolbar,R.string.open,R.string.close)
+    }
 
 
     private val effectAdapter by lazy {
@@ -98,6 +108,13 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
 
         setSupportActionBar(toolbar)
+
+
+        sidemenu.sideMenuToggle = sideMenuToggle
+        sidemenu.post { sideMenuToggle.syncState() }
+
+
+
 
         mImageView = findViewById(R.id.imageView) as ExtendedImageView
         mImageView?.setOnClickListener {

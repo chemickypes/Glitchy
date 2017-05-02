@@ -27,4 +27,6 @@
     <string name="tap_here_to_create_noise">Tap to create Noise</string>
     <string name="ghost">Ghost</string>
     <string name="drag_on_the_image">Drag on the image</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
