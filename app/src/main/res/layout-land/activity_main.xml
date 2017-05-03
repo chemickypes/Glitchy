@@ -1,152 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<me.bemind.sidemenu.SideMenu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="me.bemind.glitchlibrary.MainActivity">
+    android:id="@+id/side_menu"
+    tools:context=".MainActivity"
+    android:background="@color/colorAccent">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:id="@+id/toolbar_effect_panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/AppBarOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"/>
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_effect"
-                style="@style/AppBarOverlay"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:background="@color/colorAccent"/>
-
-        </RelativeLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
-
-
-
-
-    <FrameLayout
-        android:id="@+id/content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <!-- first child -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:orientation="vertical"
+        android:layout_gravity="start"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="33sp"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:padding="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="33sp"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:padding="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="33sp"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:padding="16dp"/>
+    </LinearLayout>
 
-        <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/material_grey"
+        tools:context="me.bemind.glitchlibrary.MainActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/toolbar_effect_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    style="@style/AppBarOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"/>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_effect"
+                    style="@style/AppBarOverlay"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:background="@color/colorAccent"/>
+
+            </RelativeLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
+
+
+
+
+        <FrameLayout
+            android:id="@+id/content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <RelativeLayout
-                android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/void_text_view"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:textSize="22sp"
-                    android:textAllCaps="true"
-                    android:gravity="center"
-                    android:text="@string/tap_to_open_ad_image"/>
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/void_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="22sp"
+                        android:textAllCaps="true"
+                        android:gravity="center"
+                        android:text="@string/tap_to_open_ad_image"/>
 
 
-                <me.bemind.glitchappcore.glitch.ExtendedImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
-                    android:adjustViewBounds="true"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:cropToPadding="true"/>
+                    <me.bemind.glitchappcore.glitch.ExtendedImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:cropToPadding="true"/>
 
-                <com.tuyenmonkey.mkloader.MKLoader
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:mk_type="Whirlpool"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:alpha="0"
-                    android:id="@+id/loaderView"
-                    android:visibility="gone"
-                    />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                    <com.tuyenmonkey.mkloader.MKLoader
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mk_type="Whirlpool"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:alpha="0"
+                        android:id="@+id/loaderView"
+                        android:visibility="gone"
+                        />
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/effect_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
 
-                <FrameLayout
-                    android:id="@+id/effect_panel"
-                    style="@style/SeekBarPanelTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="100dp"
-                    android:layout_alignParentBottom="true"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:visibility="gone"
-                    android:background="@color/colorPrimaryDark">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/effect_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
 
-
-                </FrameLayout>
-            </RelativeLayout>
-        </LinearLayout>
-
-
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="100dp"
-            tools:layout_editor_absoluteY="750dp"
-            tools:layout_editor_absoluteX="0dp" />
+                    <FrameLayout
+                        android:id="@+id/effect_panel"
+                        style="@style/SeekBarPanelTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="100dp"
+                        android:layout_alignParentBottom="true"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:visibility="gone"
+                        android:background="@color/colorPrimaryDark">
 
 
 
+                    </FrameLayout>
+                </RelativeLayout>
+            </LinearLayout>
 
 
 
-    </FrameLayout>
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="100dp"
+                tools:layout_editor_absoluteY="750dp"
+                tools:layout_editor_absoluteX="0dp" />
 
 
 
-</android.support.design.widget.CoordinatorLayout>
+
+
+
+        </FrameLayout>
+
+
+
+    </android.support.design.widget.CoordinatorLayout>
+</me.bemind.sidemenu.SideMenu>
