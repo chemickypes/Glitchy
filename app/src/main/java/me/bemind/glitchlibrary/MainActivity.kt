@@ -344,7 +344,9 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onBackPressed() {
 
-        if(appPresenter.onBackPressed()){
+        if(sidemenu.isOpen){
+            sidemenu.closePane()
+        }else if(appPresenter.onBackPressed()){
             mImageView?.clearEffect()
         }else {
 
