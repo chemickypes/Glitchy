@@ -10,40 +10,11 @@
     tools:context=".MainActivity"
     android:background="@color/colorAccent">
 
-    <LinearLayout
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="start"
-        android:padding="16dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="33sp"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:padding="16dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="33sp"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:padding="16dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="33sp"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:padding="16dp"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:name="me.bemind.glitchlibrary.MenuFragment"
+        android:id="@+id/menu_fragment"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/container"

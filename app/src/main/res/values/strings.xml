@@ -29,4 +29,7 @@
     <string name="drag_on_the_image">Drag on the image</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="bemind_interavtive_srl">Bemind Interactive S.R.L.</string>
+    <string name="donate">Donate</string>
+    <string name="text_desc_app">Glitchy is free. If you are so kind to donate us a beer we\'ll be so happy to continue app development introducing new effects in order to keep you have fun! Best regards, Glitchy Team!</string>
 </resources>
