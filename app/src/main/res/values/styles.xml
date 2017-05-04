@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/amaranth</item>
         <item name="colorAccent">@color/amaranth</item>
         <item name="android:actionBarStyle">@style/AppBarNoOverlay</item>
+        <item name="android:windowBackground">@color/dark_gunmetal</item>
+        <!--<item name="android:background">@color/dark_gunmetal</item>
+        <item name="background">@color/dark_gunmetal</item>-->
     </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
