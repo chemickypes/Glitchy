@@ -117,7 +117,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         setSupportActionBar(toolbar)
 
         val spS = SpannableString(toolbar?.title?.toString()?.toUpperCase(Locale.ITALIAN))
-        spS.setSpan(RegularTypeFaceSpan("",
+        spS.setSpan(GlitcyTypefaceSpan("",
                 GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.REGULAR)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         supportActionBar?.title = spS
 
@@ -565,10 +565,14 @@ SaveImageBottomSheet.OnSaveImageListener{
     private fun applyFont(menu: Menu?) {
         for(i in 0 until menu?.size()!!){
             val item = menu.getItem(i)
-            val spS = SpannableString(item.title)
-            spS.setSpan(RegularTypeFaceSpan("",
-                    GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.LIGHT)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            item.title = spS
+            val tv = LayoutInflater.from(this).inflate(R.layout.menu_text_item,toolbar,false) as TextView
+            tv.text = item.title
+            item.actionView = tv
+
+            tv.setOnClickListener {
+                val onOptionsItemSelected = onOptionsItemSelected(item)
+            }
+
         }
     }
 
