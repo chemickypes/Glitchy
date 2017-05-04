@@ -20,12 +20,16 @@ import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TypefaceSpan
 import android.util.Log
 import android.widget.TextView
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
+import java.util.*
 
 
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
@@ -96,6 +100,9 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
         }
 
+
+
+
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
         toolbarEffect?.setOnMenuItemClickListener {  item ->
             when (item.itemId){
@@ -108,6 +115,11 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
 
         setSupportActionBar(toolbar)
+
+        val spS = SpannableString(toolbar?.title?.toString()?.toUpperCase(Locale.ITALIAN))
+        spS.setSpan(RegularTypeFaceSpan("",
+                GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.REGULAR)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        supportActionBar?.title = spS
 
 
         sidemenu.sideMenuToggle = sideMenuToggle
@@ -205,8 +217,11 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        applyFont(menu)
         return true
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId){
@@ -544,6 +559,17 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
         effectPanel?.addView(view)
+    }
+
+
+    private fun applyFont(menu: Menu?) {
+        for(i in 0 until menu?.size()!!){
+            val item = menu.getItem(i)
+            val spS = SpannableString(item.title)
+            spS.setSpan(RegularTypeFaceSpan("",
+                    GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.LIGHT)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            item.title = spS
+        }
     }
 
 
