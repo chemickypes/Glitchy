@@ -3,18 +3,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorAccent</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/han_purple</item>
+        <item name="colorPrimaryDark">@color/amaranth</item>
+        <item name="colorAccent">@color/amaranth</item>
         <item name="android:actionBarStyle">@style/AppBarNoOverlay</item>
     </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-        <item name="android:background">@color/material_grey</item>
+        <item name="android:background">@color/dark_gunmetal</item>
         </style>
 
     <style name="AppBarNoOverlay">
-        <item name="android:background">@color/material_grey</item>
+        <item name="android:background">@color/dark_gunmetal</item>
         <item name="elevation">0dp</item>
     </style>
 

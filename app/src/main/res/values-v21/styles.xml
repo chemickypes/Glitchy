@@ -8,6 +8,6 @@
     <style name="AppBarNoOverlay">
         <item name="android:elevation">0dp</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:background">@color/material_grey</item>
+        <item name="android:background">@color/dark_gunmetal</item>
     </style>
 </resources>
