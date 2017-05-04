@@ -68,13 +68,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-                    <TextView
+                    <me.bemind.glitchlibrary.GlithcyTextView
                         android:id="@+id/void_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textSize="22sp"
                         android:textAllCaps="true"
                         android:gravity="center"
+                        app:glitchyTypeface="bold"
                         android:text="@string/tap_to_open_ad_image"/>
 
 
