@@ -45,7 +45,7 @@ class MenuFragment: Fragment() {
 
         bemindLink.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("http://www.facebook.com/bemind.me/")
+            i.data = Uri.parse("http://www.bemind.me")
             startActivity(i)
         }
 
