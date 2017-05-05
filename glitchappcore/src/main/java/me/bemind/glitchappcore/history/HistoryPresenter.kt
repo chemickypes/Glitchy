@@ -2,6 +2,7 @@ package me.bemind.glitchappcore.history
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -32,7 +33,7 @@ interface IHistoryPresenter {
 
     fun getHistoryToSave(): ArrayList<ImageDescriptor>?
 
-    fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage:Boolean = true)
+    fun restoreHistory(savedInstanceState: Bundle?, list: ArrayList<ImageDescriptor>?, setImage:Boolean = true)
 
 
 }
@@ -100,8 +101,9 @@ class HistoryPresenter(val context:Context) : IHistoryPresenter {
         return historyLogic.getStack()
     }
 
-    override fun restoreHistory(list: ArrayList<ImageDescriptor>?,setImage: Boolean) {
+    override fun restoreHistory(savedInstanceState: Bundle?,list: ArrayList<ImageDescriptor>?,setImage: Boolean) {
         historyLogic.setStack(list)
+        if(savedInstanceState==null) historyLogic.clearHistory()
         if(setImage){
             observableImage(
                     {

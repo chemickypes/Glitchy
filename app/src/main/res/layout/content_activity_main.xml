@@ -7,50 +7,58 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <me.bemind.glitchlibrary.GlithcyTextView
-        android:id="@+id/void_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="50dp"
-        android:textSize="22sp"
-        android:textAllCaps="true"
-        android:gravity="center"
-        app:glitchyTypeface="bold"
-        android:text="@string/tap_to_open_ad_image"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/list_effect">
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:id="@+id/void_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="50dp"
+            android:textSize="22sp"
+            android:textAllCaps="true"
+            android:gravity="center"
+            app:glitchyTypeface="bold"
+            android:text="@string/tap_to_open_ad_image"/>
 
 
-    <me.bemind.glitchappcore.glitch.ExtendedImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_above="@+id/list_effect"
-        android:cropToPadding="true" />
+        <me.bemind.glitchappcore.glitch.ExtendedImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:cropToPadding="true" />
 
-    <com.tuyenmonkey.mkloader.MKLoader
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:mk_type="Whirlpool"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_centerInParent="true"
-        android:alpha="0"
-        android:id="@+id/loaderView"
-        android:visibility="gone"
-        />
+        <com.tuyenmonkey.mkloader.MKLoader
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:mk_type="Whirlpool"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:alpha="0"
+            android:id="@+id/loaderView"
+            android:visibility="gone"
+            />
+
+    </FrameLayout>
+
+
 
 
 

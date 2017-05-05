@@ -51,6 +51,8 @@ interface IGlitchView {
     val glitchWidth : Float
     val glitchHeight : Float
 
+    val canInitEffect : Boolean
+
     fun clearEffect()
 
     fun saveInstanceState(glitchyBaseActivity: GlitchyBaseActivity,outState: Bundle?)
@@ -89,6 +91,10 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
     var loaderView : View? =  null
 
     var loaderAnimation : ViewPropertyAnimator? = null
+
+
+    override val canInitEffect: Boolean
+        get() = hasHistory && !glitcPresenter.effectON
 
 
 
@@ -238,7 +244,7 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     override fun restoreSavedInstanceState(glitchyBaseActivity: GlitchyBaseActivity, savedInstanceState: Bundle?) {
         glitcPresenter.restoreSavedInstanceState(glitchyBaseActivity, savedInstanceState)
-        historyPresenter.restoreHistory(glitchyBaseActivity.retainedFragment?.history)
+        historyPresenter.restoreHistory(savedInstanceState,glitchyBaseActivity.retainedFragment?.history)
 
     }
 

@@ -395,14 +395,18 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     private fun initEffect(effect:Effect) {
-        when (effect){
-            Effect.ANAGLYPH -> makeAnaglyphEffect(true)
-            Effect.GHOST-> makeGhostEffect(true)
-            Effect.GLITCH -> makeGlitchEffect(true)
-            Effect.WEBP -> makeWebpEffect(true)
-            Effect.SWAP -> makeSwapEffect(true)
-            Effect.NOISE -> makeNoiseEffect(true)
-            else -> {}
+
+        if(mImageView?.canInitEffect?:false) {
+            when (effect) {
+                Effect.ANAGLYPH -> makeAnaglyphEffect(true)
+                Effect.GHOST -> makeGhostEffect(true)
+                Effect.GLITCH -> makeGlitchEffect(true)
+                Effect.WEBP -> makeWebpEffect(true)
+                Effect.SWAP -> makeSwapEffect(true)
+                Effect.NOISE -> makeNoiseEffect(true)
+                else -> {
+                }
+            }
         }
 
     }
