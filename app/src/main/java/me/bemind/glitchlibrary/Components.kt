@@ -50,9 +50,13 @@ class GlitcyTypefaceSpan(family:String,val typeface:Typeface) : TypefaceSpan(fam
 
 
 object GlitchyTypeFaceGetter {
-    val BOLD = "Montserrat-Bold.otf"
+/*    val BOLD = "Montserrat-Bold.otf"
     val REGULAR = "Montserrat-Regular.otf"
-    val LIGHT = "Montserrat-Light.otf"
+    val LIGHT = "Montserrat-Light.otf"*/
+
+    val BOLD = "apercu-bold-webfont.ttf"
+    val REGULAR = "apercu-regular-webfont.ttf"
+    val LIGHT = "apercu-light-webfont.ttf"
 
     fun getTypeFace(context:Context, typefont: TYPEFONT = TYPEFONT.REGULAR) : Typeface{
         return Typeface.createFromAsset(context.assets,
