@@ -144,6 +144,10 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         effectPanel = findViewById(R.id.effect_panel) as ViewGroup
 
+        findViewById(R.id.void_text_view).setOnClickListener {
+            pickPhotoBS.show()
+        }
+
 
 
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
