@@ -89,7 +89,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@+id/list_effect"
         android:visibility="gone"
-        android:background="@color/colorPrimaryDark"/>
+        android:background="@color/han_purple"/>
 
 
 
