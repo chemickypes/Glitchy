@@ -412,16 +412,20 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
-    private fun makeHooloovooEffect(init: Boolean) {
+    private fun makeHooloovooEffect(init: Boolean = false) {
+        val effect =HooloovooEffectState(R.layout.effect_hooloovoo_layout);
         if(init){
             appPresenter.modState = State.EFFECT
 
             mImageView?.initEffect(Effect.HOOLOOVOO)
-            inflateEffectLayout(HooloovooEffectState(R.layout.effect_hooloovoo_layout))
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(0)
         }
     }
 
-    private fun makeGhostEffect(init: Boolean) {
+    private fun makeGhostEffect(init: Boolean = false) {
         if(init){
             appPresenter.modState = State.EFFECT
 
@@ -553,6 +557,12 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
             is GhostEffectState -> {
                 //nothing
+            }
+            is HooloovooEffectState ->{
+                val b = view.findViewById(R.id.text_effect) as TextView
+                b.setOnClickListener {
+                    makeHooloovooEffect()
+                }
             }
             is AnaglyphEffectState -> {
                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
