@@ -404,11 +404,21 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.WEBP -> makeWebpEffect(true)
                 Effect.SWAP -> makeSwapEffect(true)
                 Effect.NOISE -> makeNoiseEffect(true)
+                Effect.HOOLOOVOO -> makeHooloovooEffect(true)
                 else -> {
                 }
             }
         }
 
+    }
+
+    private fun makeHooloovooEffect(init: Boolean) {
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.HOOLOOVOO)
+            inflateEffectLayout(HooloovooEffectState(R.layout.effect_hooloovoo_layout))
+        }
     }
 
     private fun makeGhostEffect(init: Boolean) {
