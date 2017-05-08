@@ -529,10 +529,9 @@ object Glitcher {
         fArr[i * 2 + 1] = f2
     }
 
-
-
-
-
+    fun hooloovooizeCanvas(canvas: Canvas?) {
+        //nothing
+    }
 
 
 }

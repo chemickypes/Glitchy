@@ -66,6 +66,7 @@ interface IGlitchPresenter{
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
     fun noise(canvas: Canvas?,progress: Int = 170)
+    fun hooloovooize(canvas: Canvas?)
 
 
 }
@@ -135,6 +136,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.NOISE -> TypeEffect.CANVAS
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             Effect.GHOST -> TypeEffect.CANVAS
+            Effect.HOOLOOVOO -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
 
@@ -155,6 +157,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
 
+    override fun hooloovooize(canvas: Canvas?) {
+        glithce.hooloovooizeCanvas(canvas)
+    }
 
     override fun glitch(canvas: Canvas?) {
         observeImage({
