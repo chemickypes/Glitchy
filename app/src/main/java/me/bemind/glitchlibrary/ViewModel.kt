@@ -21,5 +21,6 @@ object EffectList{
         data.add(EffectView(Effect.GHOST,R.string.ghost,R.layout.effect_ghost_layout))
 //        data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_glitch_layout))
         data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_anaglyph_layout))
+        data.add(EffectView(Effect.HOOLOOVOO,R.string.hooloovoo,R.layout.effect_hooloovoo_layout))
     }
 }

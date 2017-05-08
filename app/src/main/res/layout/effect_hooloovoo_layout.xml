@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:padding="16dp"
         android:textAllCaps="true"
-        android:text="@string/drag_on_the_image"
+        android:text="@string/do_you_like_hooloovoo_image"
         android:gravity="center"
         app:glitchyTypeface="regular"
         android:textSize="18sp"/>
