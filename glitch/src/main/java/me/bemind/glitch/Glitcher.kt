@@ -49,6 +49,7 @@ object Glitcher {
     var noiseBMPshader : BitmapShader? = null
 
     private val XFE_ADD = PorterDuffXfermode(PorterDuff.Mode.ADD)
+    private val XFE_SRC_IN = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
 
     val RANDOM = Random()
 
@@ -417,14 +418,14 @@ object Glitcher {
     private fun generateBitmap (result: Bitmap?, action: (List<Int>) -> List<Int>) : Bitmap?{
         val r = List(result?.width?:0,{ row -> List(result?.height?:0,{ col -> result!!.getPixel(row,col)})})
 
-        val  rShuffle = List(result?.height?:0,{row -> action(r[row])})
+        val  rShuffle = List(result?.width?:0,{row -> action(r[row])})
 
         val rr= Bitmap.createBitmap(result?.width?:0,result?.height?:0, Bitmap.Config.ARGB_8888)
 
 
-        for(i in 0..(rr?.height?:1)-1){
-            for (j in 0..(rr?.width?:1)-1){
-                rr!!.setPixel(j,i,rShuffle[i][j])
+        for(i in 0 until (rr?.height?:1)-1){
+            for (j in 0 until (rr?.width?:1)-1){
+                rr!!.setPixel(j,i,rShuffle[j][i])
             }
         }
 
@@ -531,6 +532,40 @@ object Glitcher {
 
     fun hooloovooizeCanvas(canvas: Canvas?) {
         //nothing
+
+        val debossPaint = Paint()
+
+        val colorMatrix = ColorMatrix()
+
+        colorMatrix.setSaturation(1.25f)
+
+        val m = colorMatrix.array
+        val c = RANDOM.nextInt(10)* (if(RANDOM.nextBoolean()) 1 else -1)//10 //14
+        val bright = RANDOM.nextInt(10) //10 //56
+        colorMatrix.set(floatArrayOf(m[ 0] * c, m[ 1] * c, m[ 2] * c, m[ 3] * c, m[ 4] * c + bright,
+                m[ 5] * c, m[ 6] * c, m[ 7] * c, m[ 8] * c, m[ 9] * c + bright,
+                m[10] * c, m[11] * c, m[12] * c, m[13] * c, m[14] * c + bright,
+                m[15]    , m[16]    , m[17]    , m[18]    , m[19]))
+
+        debossPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        canvas?.drawBitmap(result, Matrix(),debossPaint)
+
+
+
+
+       /* colorMatrix.set(blueMatrix)
+
+        debossPaint.xfermode = XFE_SRC_IN
+        debossPaint.maskFilter = EmbossMaskFilter(floatArrayOf(44f, 22.5f, 3.5f),2.8f,25f,4f)
+        //debossPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+        canvas?.drawPaint(debossPaint)
+        canvas?.drawBitmap(result,0f,0f,debossPaint)*/
+
+
+
+        //canvas?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(),debossPaint)
+        //canvas?.drawFilter
     }
 
 
