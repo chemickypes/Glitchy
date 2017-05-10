@@ -348,9 +348,9 @@ object Glitcher {
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
         c?.drawColor(0,PorterDuff.Mode.CLEAR)
         c?.drawBitmap(baseBitmap,0f,0f, redPaint)
-        /*draw bitmap */ c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
+        /*draw bitmap */ c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeGhostRGB(x,y,2,malpha,motion),0,null,0, greenPaint)
 
-        /* draw bitmap*/c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
+        /* draw bitmap*/c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeGhostRGB(x,y,4,malpha,motion),0,null,0, bluePaint)
 
     }
 
@@ -366,7 +366,7 @@ object Glitcher {
         return sortedRow.sorted()
     }
 
-    private fun smudgeRGB(i:Int,i2:Int,i3:Int,i4:Int,motion:Motion) : FloatArray?{
+    private fun smudgeGhostRGB(i:Int,i2:Int,i3:Int,i4:Int,motion:Motion) : FloatArray?{
         var fArr = FloatArray(0)
         synchronized(this){
             fArr = kotlin.FloatArray(SMCOUNT*2)
