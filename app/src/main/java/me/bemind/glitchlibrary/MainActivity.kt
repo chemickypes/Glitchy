@@ -434,6 +434,15 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
+    private fun makeWobbleEffect(init: Boolean = false) {
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.WOBBLE)
+            inflateEffectLayout(WobbleEffectState(R.layout.effect_ghost_layout))
+        }
+    }
+
     private fun makeNoiseEffect(init: Boolean = false,progress: Int = 70) {
         val effect = NoiseEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init){

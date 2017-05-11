@@ -181,6 +181,23 @@ data class GhostEffectState(override val layout: Int) : EffectState(layout), Par
     }
 }
 
+data class WobbleEffectState(override val layout: Int) : EffectState(layout), Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<WobbleEffectState> = object : Parcelable.Creator<WobbleEffectState> {
+            override fun createFromParcel(source: Parcel): WobbleEffectState = WobbleEffectState(source)
+            override fun newArray(size: Int): Array<WobbleEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(layout)
+    }
+}
+
 data class AnaglyphEffectState(override val layout:Int,val progress:Int) : EffectState(layout), Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<AnaglyphEffectState> = object : Parcelable.Creator<AnaglyphEffectState> {
