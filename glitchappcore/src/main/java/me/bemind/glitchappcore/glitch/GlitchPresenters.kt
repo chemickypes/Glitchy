@@ -62,6 +62,7 @@ interface IGlitchPresenter{
     //effects
     fun anaglyph(canvas: Canvas?,progress:Int = 20)
     fun ghost(canvas: Canvas?,x:Int,y:Int,motion: Motion)
+    fun wobble(canvas: Canvas?,x:Int,y:Int,motion: Motion)
     fun glitch(canvas: Canvas?)
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
@@ -136,6 +137,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.NOISE -> TypeEffect.CANVAS
             Effect.ANAGLYPH -> TypeEffect.CANVAS
             Effect.GHOST -> TypeEffect.CANVAS
+            Effect.WOBBLE -> TypeEffect.CANVAS
             Effect.HOOLOOVOO -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
@@ -153,6 +155,12 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
         if(touchPoint.x>-1) {
             glithce.ghostCanvas(canvas, x, y, motion)
+        }
+    }
+
+    override fun wobble(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
+        if(touchPoint.x>-1) {
+            glithce.wobbleCanvas(canvas, x, y, motion)
         }
     }
 
@@ -324,7 +332,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             }
         }
 
-        if(effect == Effect.GHOST){
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE){
             glitchView?.invalidateGlitchView()
         }
 
@@ -385,6 +393,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
         when (effect) {
             Effect.GHOST -> ghost(canvas,touchPoint.x,touchPoint.y,motion)
+            Effect.WOBBLE -> wobble(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             Effect.NOISE -> noise(canvas,effectProgress)
             Effect.HOOLOOVOO -> hooloovooize(canvas)

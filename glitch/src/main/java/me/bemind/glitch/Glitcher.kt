@@ -1,6 +1,7 @@
 package me.bemind.glitch
 
 import android.graphics.*
+import android.util.FloatMath
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -354,6 +355,53 @@ object Glitcher {
 
     }
 
+    fun wobbleCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
+        c?.drawColor(0,PorterDuff.Mode.CLEAR)
+        c?.drawBitmap(baseBitmap,0f,0f, redPaint)
+        /*draw bitmap */ c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeWobbleRGB(x,y,4,malpha,motion),0,null,0, greenPaint)
+
+        /* draw bitmap*/c?.drawBitmapMesh(baseBitmap, WWIDTH, WHEIGHT,smudgeWobbleRGB(x,y,6,malpha,motion),0,null,0, bluePaint)
+    }
+
+    private fun smudgeWobbleRGB(x: Int, y: Int, i: Int, malpha: Int, motion: Motion): FloatArray? {
+        var fArr = FloatArray(0)
+        synchronized(this){
+            fArr = kotlin.FloatArray(SMCOUNT*2)
+            for (i5 in 0..((SMCOUNT*2)-1)  step 2 ){
+                //Log.d("DEBUG","$i $i2 $i3 $i4 $i5")
+
+                val xOriginal = matrixOriginal[i5]
+                val yOriginal = matrixOriginal[i5+1]
+
+
+                val distX = ((x.toFloat() - xOriginal) / w.toFloat()) * 10.0f
+                val distY = ((y.toFloat() - yOriginal) / h.toFloat()) *10.0f
+
+                val dist = Math.sqrt((distX * distX + distY * distY).toDouble())
+
+                val coof = (i - dist) / i
+
+
+                val oc = (-Math.sin(coof * 2 * Math.PI)).toFloat() * 0.15f
+                if ( dist < i )
+                {
+                    fArr[i5] = (xOriginal + 40 * (coof+oc)).toFloat()
+                    fArr[i5+1] = yOriginal
+                }
+                else
+                {
+                    fArr[i5] = xOriginal
+                    fArr[i5+1] = yOriginal
+                }
+
+
+
+            }
+
+        }
+        return fArr
+    }
+
     private fun shuffleRow(row: List<Int>) : List<Int> {
         val RANDOM = Random()
         val offset = RANDOM.nextInt(row.size/2)
@@ -459,7 +507,7 @@ object Glitcher {
 
         initEffect(we,he)
 
-        if(effect == Effect.GHOST){
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE){
             initGhost()
         }
 
@@ -569,6 +617,8 @@ object Glitcher {
         //canvas?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(),debossPaint)
         //canvas?.drawFilter
     }
+
+
 
 
 }
