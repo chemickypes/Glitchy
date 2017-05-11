@@ -400,6 +400,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             when (effect) {
                 Effect.ANAGLYPH -> makeAnaglyphEffect(true)
                 Effect.GHOST -> makeGhostEffect(true)
+                Effect.WOBBLE -> makeWobbleEffect(true)
                 Effect.GLITCH -> makeGlitchEffect(true)
                 Effect.WEBP -> makeWebpEffect(true)
                 Effect.SWAP -> makeSwapEffect(true)
@@ -565,6 +566,9 @@ SaveImageBottomSheet.OnSaveImageListener{
                 }
             }
             is GhostEffectState -> {
+                //nothing
+            }
+            is WobbleEffectState -> {
                 //nothing
             }
             is HooloovooEffectState ->{
