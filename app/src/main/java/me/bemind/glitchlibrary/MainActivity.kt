@@ -313,8 +313,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun canShareImage(uri: Uri) {
 
         val clipboard =  getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.primaryClip = ClipData.newPlainText("Glitchyapp","Glitched using Glitchy App! #glitchyapp")
-        Toast.makeText(this,"Text copied on the clipboard",Toast.LENGTH_LONG).show()
+        clipboard.primaryClip = ClipData.newPlainText(getString(R.string.app_name),getString(R.string.hashtag_text_to_share))
+        Toast.makeText(this,R.string.text_copied_on_the_clipboard,Toast.LENGTH_LONG).show()
 
         val share = Intent(Intent.ACTION_SEND)
         share.setType("image/jpg");

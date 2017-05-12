@@ -37,4 +37,6 @@
     <string name="do_you_like_hooloovoo_image">do u like hooloovoo image?</string>
     <string name="tap_ro_make_hooloovoo_effect">Tap to make Hooloovoo effect</string>
     <string name="wobble">Wobble</string>
+    <string name="hashtag_text_to_share">Glitched using Glitchy App! #glitchyapp</string>
+    <string name="text_copied_on_the_clipboard">Text copied on the clipboard</string>
 </resources>
