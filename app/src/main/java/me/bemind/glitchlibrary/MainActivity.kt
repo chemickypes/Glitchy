@@ -1,5 +1,8 @@
 package me.bemind.glitchlibrary
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
@@ -308,6 +311,11 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     override fun canShareImage(uri: Uri) {
+
+        val clipboard =  getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.primaryClip = ClipData.newPlainText("Glitchyapp","Glitched using Glitchy App! #glitchyapp")
+        Toast.makeText(this,"Text copied on the clipboard",Toast.LENGTH_LONG).show()
+
         val share = Intent(Intent.ACTION_SEND)
         share.setType("image/jpg");
         share.putExtra(Intent.EXTRA_STREAM, uri)
