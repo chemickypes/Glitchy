@@ -250,7 +250,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
                 val canvas = Canvas(b)
 
-                if(effect == Effect.NOISE) canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
+                if(effect == Effect.NOISE /*|| effect == Effect.HOOLOOVOO*/) {
+                    canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
+                }
 
                 onDraw(canvas)
                 return@fromCallable b
@@ -261,8 +263,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            b -> glitchView?.setImageBitmap(b)
-                            clearEffect()
+                            b -> clearEffect()
+                            glitchView?.setImageBitmap(b)
+
 
                         },
                         { t ->  t.printStackTrace()}

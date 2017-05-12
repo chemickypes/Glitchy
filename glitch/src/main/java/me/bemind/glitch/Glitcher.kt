@@ -596,7 +596,9 @@ object Glitcher {
                 m[15]    , m[16]    , m[17]    , m[18]    , m[19]))
 
         debossPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
-        canvas?.drawBitmap(result, Matrix(),debossPaint)
+        debossPaint.xfermode = XFE_ADD
+        //canvas?.drawPaint(debossPaint)
+        canvas?.drawBitmap(baseBitmap, Matrix(),debossPaint)
 
         //try
 
