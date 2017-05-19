@@ -267,7 +267,7 @@ object Glitcher {
 
     fun initAnaglyph ( result: Bitmap?){
         this.result = result
-        anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        anaglyphShader = BitmapShader(result, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 
         anaglyphPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
         anaglyphPaint.shader = anaglyphShader
@@ -568,7 +568,7 @@ object Glitcher {
         Glitcher.h = h
 
 
-        anaglyphShader = BitmapShader(result, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        anaglyphShader = BitmapShader(result, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         anaglyphPaint.xfermode = XFE_ADD
         anaglyphPaint.shader = anaglyphShader
     }
