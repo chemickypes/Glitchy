@@ -1,8 +1,5 @@
 <resources>
-    <!-- facebook -->
-    <string name="facebook_app_id">1350480828371311</string>
-    <!-- crashlytucs -->
-    <string name="crashlytics_id">ca2eabdf9d0df2cc28077c5ae412e50a568dc89e</string>
+
 
     <string name="app_name">Glitchy</string>
     <string name="title_home">Home</string>
