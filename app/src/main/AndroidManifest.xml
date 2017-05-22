@@ -22,7 +22,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="ca2eabdf9d0df2cc28077c5ae412e50a568dc89e" />
+            android:value="@string/crashlytics_id" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
