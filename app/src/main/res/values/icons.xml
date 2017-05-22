@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="send_char">&#xE163;</string>
+    <string name="lock_char">&#xE899;</string>
+    <string name="unlock_char">&#xE898;</string>
+    <string name="info_char">&#xE88F;</string>
+    <string name="share_char">&#xE80D;</string>
+
+    <string name="add_char">&#xE145;</string>
+    <string name="gallery_char">&#xE3B6;</string>
+    <string name="camera_char">&#xE3B0;</string>
+    <string name="save_char">&#xE161;</string>
+    <string name="done_char">&#xE876;</string>
+
+    <!--<i class="material-icons">&#xE163;</i>-->
+</resources>
