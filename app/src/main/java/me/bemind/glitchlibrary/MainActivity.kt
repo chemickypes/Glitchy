@@ -29,6 +29,7 @@ import android.text.style.TypefaceSpan
 import android.util.Log
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
+import com.shamanland.fonticon.FontIconTypefaceHolder
 import io.fabric.sdk.android.Fabric
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
@@ -95,6 +96,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
+        FontIconTypefaceHolder.init(assets, "material_icons.ttf")
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
