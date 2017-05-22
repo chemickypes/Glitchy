@@ -1,4 +1,7 @@
 <resources>
+    <!-- facebook -->
+    <string name="facebook_app_id">1350480828371311</string>
+
     <string name="app_name">Glitchy</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

@@ -1,5 +1,6 @@
 package me.bemind.glitchlibrary
 
+import com.facebook.appevents.AppEventsLogger
 import me.bemind.glitchappcore.GlitchyCoreApplication
 
 /**
@@ -10,5 +11,6 @@ class GlitchyApplication : GlitchyCoreApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        AppEventsLogger.activateApp(this)
     }
 }
