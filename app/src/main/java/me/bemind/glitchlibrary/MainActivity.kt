@@ -28,10 +28,13 @@ import android.text.SpannableString
 import android.text.style.TypefaceSpan
 import android.util.Log
 import android.widget.TextView
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
+import java.lang.RuntimeException
 import java.util.*
 
 
@@ -91,6 +94,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
