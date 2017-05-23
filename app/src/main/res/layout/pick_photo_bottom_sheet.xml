@@ -7,28 +7,57 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
-    <me.bemind.glitchlibrary.GlithcyTextView
-        android:id="@+id/camera_text_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawablePadding="15dp"
-        android:gravity="center_vertical"
-        android:padding="15dp"
-        android:textAllCaps="true"
-        app:glitchyTypeface="bold"
-        android:textColor="@color/colorAccent"
-        android:text="@string/fotocamera" />
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/gallery_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/gallery_char"
+            android:textColor="@color/colorAccent"/>
 
-    <me.bemind.glitchlibrary.GlithcyTextView
-        android:id="@+id/gallery_text_view"
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="bold"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/galleria" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:drawablePadding="15dp"
-    android:textAllCaps="true"
-        app:glitchyTypeface="bold"
-        android:gravity="center_vertical"
-        android:padding="15dp"
-        android:text="@string/galleria" />
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/camera_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/camera_char"
+            android:textColor="@color/colorAccent"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="bold"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/fotocamera" />
+    </LinearLayout>
+
 
 </LinearLayout>
