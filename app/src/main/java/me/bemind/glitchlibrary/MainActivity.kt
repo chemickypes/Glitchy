@@ -77,6 +77,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         SideMenuToggle(this,sidemenu,toolbar,R.string.open,R.string.close)
     }
 
+    val listEffectPanel : View by lazy {
+        findViewById(R.id.list_effect)
+    }
+
 
     private val effectAdapter by lazy {
         SlimAdapter.create()
@@ -383,6 +387,10 @@ SaveImageBottomSheet.OnSaveImageListener{
             inflateEffectLayout(effectState)
         }
 
+        if(!emptyImageView){
+            showListEffect()
+        }
+
     }
 
 
@@ -424,6 +432,20 @@ SaveImageBottomSheet.OnSaveImageListener{
         appPresenter.emptyImageView = false
 
         inflateActivityMenu()
+
+        showListEffect()
+
+        //listEffectPanel.visibility = VISIBLE
+    }
+
+    private fun showListEffect() {
+        runOnUiThread {
+            animateAlpha(listEffectPanel, Runnable {
+                listEffectPanel.alpha = 0f
+                listEffectPanel.visibility = VISIBLE
+            }, 450, true, 1f)
+        }
+
     }
 
     private fun inflateActivityMenu(){
