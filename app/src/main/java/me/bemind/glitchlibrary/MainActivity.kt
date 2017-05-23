@@ -41,7 +41,6 @@ import java.util.*
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
 SaveImageBottomSheet.OnSaveImageListener{
 
-    private val SAVE_ACTION: Int = 123
 
     private var mImageView : ExtendedImageView? = null
     private var effectPanel: ViewGroup? = null
@@ -234,9 +233,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.optionMenu = menu
-        menuInflater.inflate(R.menu.main_menu, optionMenu)
-
-        optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.open_menu)
+        inflateActivityMenu()
         //applyFont(menu)
         return true
     }
@@ -303,13 +300,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun setImage(bitmap: Bitmap) {
         runOnUiThread {
-            if(optionMenu?.size() == 1){
-                //optionMenu?.add(Menu.NONE,SAVE_ACTION,Menu.NONE,R.string.save)?.icon = FontIconDrawable.inflate(this,R.xml.ic_save)
-                optionMenu?.clear()
-                menuInflater.inflate(R.menu.main_menu_ex,optionMenu)
-                optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.open_menu)
-                optionMenu?.getItem(1)?.icon = FontIconDrawable.inflate(this,R.xml.ic_save)
-            }
+            openListEffectPanel()
             mImageView!!.setImageBitmap(bitmap,true,true)
         }
     }
@@ -353,6 +344,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun onPostResume() {
         super.onPostResume()
        // mImageView?.onResume()
+
+
     }
 
     override fun updateState(state: State) {
@@ -383,13 +376,16 @@ SaveImageBottomSheet.OnSaveImageListener{
         saveImageBS.dismiss()
     }
 
-    override fun restoreView(effectState: EffectState?) {
+    override fun restoreView(effectState: EffectState?,emptyImageView:Boolean) {
         /*updateState(appPresenter.modState)
         if(appPresenter.effectLayout!=0)inflateEffectLayout(appPresenter.effectLayout)*/
         if(effectState!=null){
             inflateEffectLayout(effectState)
         }
+
     }
+
+
 
     override fun onBackPressed() {
 
@@ -422,6 +418,26 @@ SaveImageBottomSheet.OnSaveImageListener{
         super.onConfigurationChanged(newConfig)
 
         appPresenter.onConfigurationChanged(newConfig)
+    }
+
+    private fun openListEffectPanel() {
+        appPresenter.emptyImageView = false
+
+        inflateActivityMenu()
+    }
+
+    private fun inflateActivityMenu(){
+
+        if(appPresenter.emptyImageView) {
+            menuInflater.inflate(R.menu.main_menu, optionMenu)
+            optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this, R.xml.open_menu)
+        }else {
+            optionMenu?.clear()
+            menuInflater.inflate(R.menu.main_menu_ex, optionMenu)
+            optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this, R.xml.open_menu)
+            optionMenu?.getItem(1)?.icon = FontIconDrawable.inflate(this, R.xml.ic_save)
+
+        }
     }
 
     private fun initEffect(effect:Effect) {

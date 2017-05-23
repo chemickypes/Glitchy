@@ -12,12 +12,13 @@ import me.bemind.glitchappcore.State
 
 interface IAppView {
     fun updateState(state: State)
-    fun restoreView(effectState: EffectState?)
+    fun restoreView(effectState: EffectState?,emptyImageView: Boolean)
 }
 
 interface IAppPresenter {
     var modState : State
     var appView : IAppView?
+    var emptyImageView: Boolean
 
     var effectState : EffectState?
 
