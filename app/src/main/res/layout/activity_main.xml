@@ -56,7 +56,8 @@
 
 
         <include android:layout_height="match_parent" android:layout_width="match_parent"
-            layout="@layout/content_activity_main"/>
+            layout="@layout/content_activity_main"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
 
