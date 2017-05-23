@@ -11,6 +11,6 @@
     <string name="camera_char">&#xE3B0;</string>
     <string name="save_char">&#xE161;</string>
     <string name="done_char">&#xE876;</string>
-
+    <string name="close_char">&#xE5CD;</string>
     <!--<i class="material-icons">&#xE163;</i>-->
 </resources>

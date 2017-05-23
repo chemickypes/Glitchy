@@ -102,7 +102,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
-        toolbarEffect?.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        toolbarEffect?.navigationIcon = FontIconDrawable.inflate(this,R.xml.ic_close)
         toolbarEffect?.setNavigationOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
@@ -114,6 +114,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
+        toolbarEffect?.menu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.ic_done)
         toolbarEffect?.setOnMenuItemClickListener {  item ->
             when (item.itemId){
                 R.id.ok_action -> {
