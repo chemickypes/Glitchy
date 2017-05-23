@@ -25,24 +25,23 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.TypefaceSpan
 import android.util.Log
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
+import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
 import io.fabric.sdk.android.Fabric
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
-import java.lang.RuntimeException
 import java.util.*
 
 
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
 SaveImageBottomSheet.OnSaveImageListener{
 
-
+    private val SAVE_ACTION: Int = 123
 
     private var mImageView : ExtendedImageView? = null
     private var effectPanel: ViewGroup? = null
@@ -68,6 +67,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
 
     private val saveImageBS = SaveImageBottomSheet.Creator.getSaveImageBottomSheet(this,this)
+
+    private var optionMenu: Menu? = null
 
     val sidemenu : SideMenu by lazy {
         findViewById(R.id.side_menu) as SideMenu
@@ -228,11 +229,17 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        applyFont(menu)
+        this.optionMenu = menu
+        menuInflater.inflate(R.menu.main_menu, optionMenu)
+
+        optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.open_menu)
+        //applyFont(menu)
         return true
     }
+
 
 
 
@@ -242,6 +249,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 //open action
                 pickPhotoBS.show()
             }
+
 
             R.id.save_action -> {
                 //imagePresenter.saveImage()
@@ -294,6 +302,13 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun setImage(bitmap: Bitmap) {
         runOnUiThread {
+            if(optionMenu?.size() == 1){
+                //optionMenu?.add(Menu.NONE,SAVE_ACTION,Menu.NONE,R.string.save)?.icon = FontIconDrawable.inflate(this,R.xml.ic_save)
+                optionMenu?.clear()
+                menuInflater.inflate(R.menu.main_menu_ex,optionMenu)
+                optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.open_menu)
+                optionMenu?.getItem(1)?.icon = FontIconDrawable.inflate(this,R.xml.ic_save)
+            }
             mImageView!!.setImageBitmap(bitmap,true,true)
         }
     }

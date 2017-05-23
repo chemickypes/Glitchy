@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="big_icon_size">72sp</dimen>
+    <dimen name="menu_icon_size">24dp</dimen>
 </resources>
