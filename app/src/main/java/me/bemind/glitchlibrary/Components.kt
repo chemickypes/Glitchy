@@ -16,7 +16,7 @@ import android.widget.TextView
 
 
 enum class TYPEFONT {
-    BOLD,REGULAR,LIGHT
+    BOLD,REGULAR,LIGHT,MONO
 }
 
 class GlitcyTypefaceSpan(family:String,val typeface:Typeface) : TypefaceSpan(family){
@@ -57,12 +57,14 @@ object GlitchyTypeFaceGetter {
     val BOLD = "apercu-bold-webfont.ttf"
     val REGULAR = "apercu-regular-webfont.ttf"
     val LIGHT = "apercu-light-webfont.ttf"
+    val MONO = "apercu-mono-webfont.ttf"
 
     fun getTypeFace(context:Context, typefont: TYPEFONT = TYPEFONT.REGULAR) : Typeface{
         return Typeface.createFromAsset(context.assets,
                 when(typefont){
                     TYPEFONT.LIGHT -> LIGHT
                     TYPEFONT.BOLD -> BOLD
+                    TYPEFONT.MONO -> MONO
                     else -> REGULAR
                 })
     }
@@ -100,6 +102,7 @@ class GlithcyTextView : TextView,CustomFontText{
             0 -> TYPEFONT.REGULAR
             1 -> TYPEFONT.BOLD
             2 -> TYPEFONT.LIGHT
+            3 -> TYPEFONT.MONO
             else -> TYPEFONT.REGULAR
         }
 
