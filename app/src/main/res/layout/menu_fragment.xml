@@ -32,13 +32,13 @@
             android:layout_gravity="center"
             app:glitchyTypeface="mono"/>
 
-        <View
+        <!--<View
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/transparent"
-            android:alpha="0.2"/>
+            android:alpha="0.2"/>-->
 
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="wrap_content"
@@ -74,8 +74,47 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="22dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
             app:glitchyTypeface="mono"
             android:text="@string/text_desc_app"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/transparent"
+            android:alpha="0.2"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="22dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            app:glitchyTypeface="mono"
+            android:text="@string/if_u_like_app"/>
+
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:text="@string/share_char"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:background="@drawable/share_button_background"
+            android:padding="16dp"/>
+
+
 
 
 

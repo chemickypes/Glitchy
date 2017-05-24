@@ -34,7 +34,7 @@
     <string name="drag_on_the_image">Drag on the image</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="bemind_interavtive_srl">Bemind Interactive</string>
+    <string name="bemind_interavtive_srl">by <u>Bemind Interactive</u></string>
     <string name="donate">Donate</string>
     <string name="text_desc_app">\"The most beautiful experience wa can have is the mysterious. It is the fundamental emotion that stands a the cradle of true art and true science\"\nAlbert Einstein</string>
     <string name="v_d">%1$s</string>
@@ -44,4 +44,5 @@
     <string name="wobble">Wobble</string>
     <string name="hashtag_text_to_share">Glitched using Glitchy App! #glitchyapp</string>
     <string name="text_copied_on_the_clipboard">Text copied on the clipboard</string>
+    <string name="if_u_like_app">If you like Glitchy follow it on the Social or share it with your friends:</string>
 </resources>

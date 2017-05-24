@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:state_pressed="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@color/material_grey"/>
+                    <!--shadow Color-->
+                </shape>
+            </item>
+
+            <item
+                android:left="0dp"
+                android:right="0dp"
+                android:top="0dp"
+                android:bottom="0dp">
+                <shape android:shape="oval">
+                    <solid android:color="@color/amaranth"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item>
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <item>
+                <shape android:shape="oval">
+                    <!--<solid android:color="@color/material_grey"/>-->
+
+                    <gradient
+                        android:angle="135"
+                        android:centerColor="@color/material_grey"
+                        android:endColor="@color/material_grey"
+                        android:startColor="@android:color/transparent"
+                        android:type="linear" />
+                    <!--shadow Color-->
+                </shape>
+            </item>
+
+            <item
+                android:left="0dp"
+                android:right="3dp"
+                android:top="0dp"
+                android:bottom="3dp">
+                <shape android:shape="oval">
+                    <solid android:color="@color/amaranth"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
