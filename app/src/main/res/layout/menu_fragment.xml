@@ -29,27 +29,16 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:text="@string/app_name"
-            android:textAllCaps="true"
             android:layout_gravity="center"
-            app:glitchyTypeface="bold"/>
+            app:glitchyTypeface="mono"/>
 
         <View
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/material_grey"
+            android:background="@android:color/transparent"
             android:alpha="0.2"/>
-
-        <me.bemind.glitchlibrary.GlithcyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:id="@+id/bemind_link"
-            android:text="@string/bemind_interavtive_srl"
-            android:textAllCaps="true"
-            android:layout_gravity="center"
-            app:glitchyTypeface="bold"/>
 
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="wrap_content"
@@ -57,36 +46,38 @@
             android:textSize="18sp"
             android:text="V 1.0"
             android:id="@+id/version_text"
-            android:textAllCaps="true"
             android:layout_gravity="center"
-            app:glitchyTypeface="bold"/>
+            app:glitchyTypeface="mono"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:id="@+id/bemind_link"
+            android:text="@string/bemind_interavtive_srl"
+            android:layout_gravity="center"
+            app:glitchyTypeface="mono"/>
+
 
         <View
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/material_grey"
+            android:background="@android:color/transparent"
             android:alpha="0.2"/>
 
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textAllCaps="true"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="22dp"
+            app:glitchyTypeface="mono"
             android:text="@string/text_desc_app"/>
 
-        <me.bemind.glitchlibrary.GlithcyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="@string/donate"
-            android:textAllCaps="true"
-            android:layout_gravity="center"
-            app:glitchyTypeface="bold"/>
+
 
     </LinearLayout>
 
