@@ -11,6 +11,8 @@
     <string name="galleria">Gallery</string>
     <string name="want_close_app">Do you want to close %1$s? You\'ll lose modification!</string>
     <string name="anaglyph">Anaglyph</string>
+    <string name="new_">• New</string>
+    <string name="pro_">• Pro</string>
     <string name="tap_to_open_ad_image">Tap to open image</string>
     <string name="ok">OK</string>
     <string name="glitch">Glitch</string>

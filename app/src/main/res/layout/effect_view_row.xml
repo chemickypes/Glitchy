@@ -4,21 +4,36 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:id="@+id/effect_view_id"
-    android:minHeight="30dp"
-    android:minWidth="30dp"
+    android:minHeight="70dp"
+    android:minWidth="100dp"
     android:layout_margin="7dp"
+    android:background="@drawable/effect_item_background"
     android:layout_height="wrap_content">
+
+
+    <me.bemind.glitchlibrary.GlithcyTextView
+        android:id="@+id/badge_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="100dp"
+        android:text="@string/new_"
+        app:glitchyTypeface="light"
+        android:textAllCaps="true"
+        android:padding="5dp"
+        android:gravity="top"
+        android:textColor="@color/amaranth"
+        android:textSize="12sp"
+        android:layout_gravity="top"/>
 
     <me.bemind.glitchlibrary.GlithcyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="100dp"
         android:text="@string/anaglyph"
         app:glitchyTypeface="light"
         android:textAllCaps="true"
         android:padding="18dp"
+        android:textSize="18sp"
         android:gravity="center"
-        android:background="@drawable/effect_item_background"
         android:id="@+id/effect_name"
         android:layout_gravity="center"/>
 

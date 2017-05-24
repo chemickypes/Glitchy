@@ -81,11 +81,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         SideMenuToggle(this,sidemenu,toolbar,R.string.open,R.string.close)
     }
 
-    val listEffectPanel : View by lazy {
-        findViewById(R.id.list_effect)
-    }
-
-
     private val effectAdapter by lazy {
         SlimAdapter.create()
                 .register<EffectView>(R.layout.effect_view_row) {
