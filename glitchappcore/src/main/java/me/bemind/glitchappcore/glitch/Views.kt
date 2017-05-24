@@ -190,12 +190,8 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         setImageBitmap(bitmap,false,true)
     }
 
-    fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false, animation:Boolean = false){
-        if (animation) {
-               ImageViewAnimatedChange(context,this,bm)
-        } else {
-            super.setImageBitmap(bm)
-        }
+    fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
+        super.setImageBitmap(bm)
         if(toAdd) historyPresenter.addImage(bm!!,newphoto)
 
         loadMesure()
@@ -303,22 +299,4 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     }
 
-    private fun ImageViewAnimatedChange(c: Context, v: ImageView, new_image: Bitmap?) {
-        val anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out)
-        val anim_in = AnimationUtils.loadAnimation(c, android.R.anim.fade_in)
-        anim_out.setAnimationListener(object : AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationRepeat(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                v.setImageBitmap(new_image)
-                anim_in.setAnimationListener(object : AnimationListener {
-                    override fun onAnimationStart(animation: Animation) {}
-                    override fun onAnimationRepeat(animation: Animation) {}
-                    override fun onAnimationEnd(animation: Animation) {}
-                })
-                v.startAnimation(anim_in)
-            }
-        })
-        v.startAnimation(anim_out)
-    }
 }
