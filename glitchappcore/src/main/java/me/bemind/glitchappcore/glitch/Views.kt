@@ -15,10 +15,15 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewPropertyAnimator
+import android.view.animation.Animation
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
+
+
 
 
 /**
@@ -185,8 +190,12 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         setImageBitmap(bitmap,false,true)
     }
 
-    fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false){
-        super.setImageBitmap(bm)
+    fun setImageBitmap(bm: Bitmap?,newphoto:Boolean = false,toAdd:Boolean = false, animation:Boolean = false){
+        if (animation) {
+               ImageViewAnimatedChange(context,this,bm)
+        } else {
+            super.setImageBitmap(bm)
+        }
         if(toAdd) historyPresenter.addImage(bm!!,newphoto)
 
         loadMesure()
@@ -268,15 +277,9 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         }
     }
 
-
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
        return glitcPresenter.onTouchEvent(event)
     }
-
-
-
-
 
     private fun loadMesure() {
         val fArr = FloatArray(9)
@@ -298,5 +301,24 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
         addOnLayoutChangeListener(this)
 
 
+    }
+
+    private fun ImageViewAnimatedChange(c: Context, v: ImageView, new_image: Bitmap?) {
+        val anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out)
+        val anim_in = AnimationUtils.loadAnimation(c, android.R.anim.fade_in)
+        anim_out.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                v.setImageBitmap(new_image)
+                anim_in.setAnimationListener(object : AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {}
+                    override fun onAnimationRepeat(animation: Animation) {}
+                    override fun onAnimationEnd(animation: Animation) {}
+                })
+                v.startAnimation(anim_in)
+            }
+        })
+        v.startAnimation(anim_out)
     }
 }

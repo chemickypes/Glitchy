@@ -20,12 +20,14 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import com.shamanland.fonticon.FontIconDrawable
@@ -35,6 +37,7 @@ import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
+import org.jraf.android.alibglitch.GlitchEffect
 import java.util.*
 
 
@@ -43,6 +46,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
     private var mImageView : ExtendedImageView? = null
+
     private var effectPanel: ViewGroup? = null
 
     private val effectList by lazy<RecyclerView> {
@@ -55,12 +59,12 @@ SaveImageBottomSheet.OnSaveImageListener{
         findViewById(R.id.loaderView)
     }
 
-
     private var toolbar : Toolbar? = null
+
     private var toolbarEffect : Toolbar? = null
 
-
     private var appPresenter : IAppPresenter = AppPresenter()
+
     private var ioPresenter: IIOPresenter = IOPresenter()
 
     private val pickPhotoBS = PickPhotoBottomSheet.Creator.getPickPhotoBottomSheet(this,this)
@@ -113,9 +117,6 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
         }
 
-
-
-
         toolbarEffect?.inflateMenu(R.menu.ok_menu)
         toolbarEffect?.menu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.ic_done)
         toolbarEffect?.setOnMenuItemClickListener {  item ->
@@ -135,12 +136,8 @@ SaveImageBottomSheet.OnSaveImageListener{
                 GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.REGULAR)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         supportActionBar?.title = spS
 
-
         sidemenu.sideMenuToggle = sideMenuToggle
         sidemenu.post { sideMenuToggle.syncState() }
-
-
-
 
         mImageView = findViewById(R.id.imageView) as ExtendedImageView
         mImageView?.setOnClickListener {
@@ -162,8 +159,6 @@ SaveImageBottomSheet.OnSaveImageListener{
             pickPhotoBS.show()
         }
 
-
-
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
             effectList.apply {
                 layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
@@ -178,8 +173,6 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
     }
-
-
 
     private fun applyEffect() {
         appPresenter.modState = State.BASE
@@ -233,17 +226,12 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.optionMenu = menu
         inflateActivityMenu()
         //applyFont(menu)
         return true
     }
-
-
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId){
@@ -290,15 +278,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         appPresenter.saveInstanceState(this,outState)
 
     }
-
-    /*fun setImagebitmap(bitmap: Bitmap) {
-        runOnUiThread {
-            mImageView!!.setImageBitmap(bitmap,true,true)
-            *//*mImageView?.layoutParams?.width = bitmap.width
-            mImageView?.layoutParams?.height = bitmap.height
-            mImageView?.requestLayout()*//*
-        }
-    }*/
 
     override fun getIOPresenter(): IIOPresenter  = ioPresenter
 
@@ -393,8 +372,6 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
-
-
     override fun onBackPressed() {
 
         if(sidemenu.isOpen){
@@ -435,16 +412,26 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         showListEffect()
 
+        GlitchEffect.showGlitch(this)
+
         //listEffectPanel.visibility = VISIBLE
     }
 
     private fun showListEffect() {
-        runOnUiThread {
-            animateAlpha(listEffectPanel, Runnable {
-                listEffectPanel.alpha = 0f
-                listEffectPanel.visibility = VISIBLE
-            }, 450, true, 1f)
-        }
+        /*animateAlpha(listEffectPanel, Runnable {
+            listEffectPanel.alpha = 0f
+            listEffectPanel.visibility = VISIBLE
+        }, 10050, true, 1f)*/
+
+        effectList.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                //.setInterpolator(AccelerateDecelerateInterpolator())
+                .withStartAction {
+                    effectList.alpha = 0f
+                    effectList.visibility = VISIBLE
+                }
+                .start()
 
     }
 
@@ -571,7 +558,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         mImageView?.makeEffect()
     }
 
-
     private fun makeSwapEffect(init: Boolean = false){
         if(init){
             appPresenter.modState = State.EFFECT
@@ -583,7 +569,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         //imagePresenter.glitchImage(Effect.GLITCH)
         mImageView?.makeEffect()
     }
-
 
     private fun inflateEffectLayout(effectState: EffectState){
         appPresenter.effectState = effectState
@@ -669,7 +654,6 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         effectPanel?.addView(view)
     }
-
 
     private fun applyFont(menu: Menu?) {
         for(i in 0 until menu?.size()!!){

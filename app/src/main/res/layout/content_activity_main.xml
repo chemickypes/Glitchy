@@ -74,7 +74,6 @@
 
     <FrameLayout
         android:id="@+id/list_effect"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -83,6 +82,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/effect_list"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:layout_height="wrap_content"/>
