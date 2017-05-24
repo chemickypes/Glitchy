@@ -20,6 +20,7 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -89,6 +90,22 @@ SaveImageBottomSheet.OnSaveImageListener{
                             .clicked(R.id.effect_view_id){
                                 initEffect(data.effect)
                             }
+                            .text(R.id.badge_textView,
+                            when(data.effectNew){
+                                EFFECT_NEWS.PRO -> getString(R.string.pro_)
+                                EFFECT_NEWS.NEW -> getString(R.string.new_)
+                                else -> getString(R.string.new_)
+                            })
+                            .textColor(R.id.badge_textView,
+                                    when(data.effectNew){
+                                        EFFECT_NEWS.PRO -> ContextCompat.getColor(this,R.color.turquoise)
+                                        EFFECT_NEWS.NEW -> ContextCompat.getColor(this,R.color.amaranth)
+                                        else -> ContextCompat.getColor(this,R.color.amaranth)
+                                    })
+                    when(data.effectNew){
+                        EFFECT_NEWS.NONE -> injector.gone(R.id.badge_textView)
+                        else -> {}//nothing
+                    }
                 }
                 .attachTo(effectList)
     }

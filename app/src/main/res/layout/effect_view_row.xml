@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:minWidth="100dp"
         android:text="@string/new_"
-        app:glitchyTypeface="light"
+        app:glitchyTypeface="bold"
         android:textAllCaps="true"
         android:padding="5dp"
         android:gravity="top"
