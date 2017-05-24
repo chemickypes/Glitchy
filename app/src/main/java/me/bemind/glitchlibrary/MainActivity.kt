@@ -143,9 +143,9 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         setSupportActionBar(toolbar)
 
-        val spS = SpannableString(toolbar?.title?.toString()?.toUpperCase(Locale.ITALIAN))
+        val spS = SpannableString(toolbar?.title?.toString()/*?.toUpperCase(Locale.ITALIAN)*/)
         spS.setSpan(GlitcyTypefaceSpan("",
-                GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.REGULAR)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                GlitchyTypeFaceGetter.getTypeFace(this,TYPEFONT.MONO)),0,spS.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         supportActionBar?.title = spS
 
         sidemenu.sideMenuToggle = sideMenuToggle
