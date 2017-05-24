@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/han_purple</item>
-        <item name="colorPrimaryDark">@color/amaranth</item>
+        <item name="colorPrimaryDark">@color/dark_gunmetal</item>
         <item name="colorAccent">@color/amaranth</item>
         <item name="android:actionBarStyle">@style/AppBarNoOverlay</item>
         <item name="android:windowBackground">@color/dark_gunmetal</item>
