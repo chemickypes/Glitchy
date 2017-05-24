@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/anaglyph"
-        app:glitchyTypeface="light"
+        app:glitchyTypeface="mono"
         android:textAllCaps="true"
         android:padding="18dp"
         android:textSize="18sp"
