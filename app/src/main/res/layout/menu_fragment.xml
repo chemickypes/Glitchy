@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:scrollbars="none"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -103,7 +104,8 @@
             app:glitchyTypeface="mono"
             android:text="@string/if_u_like_app"/>
 
-        <com.shamanland.fonticon.FontIconView
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/share_app_button"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:text="@string/share_char"
@@ -111,7 +113,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_gravity="center"
-            android:background="@drawable/share_button_background"
+            android:background="@color/amaranth"
             android:padding="16dp"/>
 
 

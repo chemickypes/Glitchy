@@ -12,11 +12,7 @@
                 </shape>
             </item>
 
-            <item
-                android:left="0dp"
-                android:right="0dp"
-                android:top="0dp"
-                android:bottom="0dp">
+            <item>
                 <shape android:shape="oval">
                     <solid android:color="@color/amaranth"/>
                 </shape>
@@ -28,7 +24,11 @@
         <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
             <item>
-                <shape android:shape="oval">
+                <shape android:shape="oval"
+                    android:left="0dp"
+                    android:right="3dp"
+                    android:top="0dp"
+                    android:bottom="3dp">
                     <!--<solid android:color="@color/material_grey"/>-->
 
                     <gradient
@@ -41,11 +41,7 @@
                 </shape>
             </item>
 
-            <item
-                android:left="0dp"
-                android:right="3dp"
-                android:top="0dp"
-                android:bottom="3dp">
+            <item>
                 <shape android:shape="oval">
                     <solid android:color="@color/amaranth"/>
                 </shape>
