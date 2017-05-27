@@ -3,17 +3,42 @@ package me.bemind.glitchlibrary
 import android.content.Context
 import android.support.design.widget.BottomSheetDialog
 import android.view.LayoutInflater
+import android.view.View
 
 /**
  * Created by angelomoroni on 09/04/17.
  */
 
-class PickPhotoBottomSheet private constructor(){
+abstract class GenericBottomSheet {
+    protected var mBottomSheet :BottomSheetDialog? = null
+    protected var context: Context? = null
+
+    fun dismiss() {
+        mBottomSheet?.dismiss()
+    }
+
+    abstract fun inflateView(view:View)
+    abstract fun getLayoutResource():Int
+
+    fun show(){
+        mBottomSheet = BottomSheetDialog(context!!)
+
+        val view = LayoutInflater.from(context)
+                .inflate(getLayoutResource(),null, false)
+
+        mBottomSheet?.setContentView(view)
+        mBottomSheet?.setOnDismissListener { mBottomSheet = null }
+        mBottomSheet?.show()
+
+        inflateView(view)
+    }
+}
+
+class PickPhotoBottomSheet private constructor() : GenericBottomSheet(){
 
     private var listener: OnPickPhotoListener? = null
-    private var context: Context? = null
 
-    private var mBottomSheet :BottomSheetDialog? = null
+
 
     companion object Creator {
         fun getPickPhotoBottomSheet(context:Context,listener: OnPickPhotoListener) : PickPhotoBottomSheet{
@@ -26,23 +51,14 @@ class PickPhotoBottomSheet private constructor(){
         }
     }
 
-    fun dismiss() {
-        mBottomSheet?.dismiss()
+    override fun getLayoutResource(): Int {
+        return R.layout.pick_photo_bottom_sheet
     }
 
-   fun show() {
-       mBottomSheet = BottomSheetDialog(context!!)
-
-       val view = LayoutInflater.from(context)
-               .inflate(R.layout.pick_photo_bottom_sheet,null, false)
-
-       mBottomSheet?.setContentView(view)
-       mBottomSheet?.setOnDismissListener { mBottomSheet = null }
-       mBottomSheet?.show()
-
-       view.findViewById(R.id.camera_text_view).setOnClickListener { listener?.openCamera() }
-       view.findViewById(R.id.gallery_text_view).setOnClickListener { listener?.openGallery() }
-   }
+    override fun inflateView(view: View) {
+        view.findViewById(R.id.camera_text_view).setOnClickListener { listener?.openCamera() }
+        view.findViewById(R.id.gallery_text_view).setOnClickListener { listener?.openGallery() }
+    }
 
     interface OnPickPhotoListener{
         fun openCamera()
@@ -51,11 +67,10 @@ class PickPhotoBottomSheet private constructor(){
 
 }
 
-class SaveImageBottomSheet private constructor(){
+class SaveImageBottomSheet private constructor() : GenericBottomSheet(){
 
     private var listener : OnSaveImageListener? = null
-    private var context: Context? = null
-    private var mBottomSheet :BottomSheetDialog? = null
+
 
     companion object Creator {
         fun getSaveImageBottomSheet(context:Context,listener: SaveImageBottomSheet.OnSaveImageListener) : SaveImageBottomSheet{
@@ -68,27 +83,46 @@ class SaveImageBottomSheet private constructor(){
         }
     }
 
-    fun dismiss() {
-        mBottomSheet?.dismiss()
-    }
+    override fun getLayoutResource() = R.layout.save_image_bottom_sheet
 
-    fun show() {
-        mBottomSheet = BottomSheetDialog(context!!)
-
-        val view = LayoutInflater.from(context)
-                .inflate(R.layout.save_image_bottom_sheet,null, false)
-
-        mBottomSheet?.setContentView(view)
-        mBottomSheet?.setOnDismissListener { mBottomSheet = null }
-        mBottomSheet?.show()
-
+    override fun inflateView(view: View) {
         view.findViewById(R.id.share_text_view).setOnClickListener { listener?.shareImage() }
         view.findViewById(R.id.save_text_view).setOnClickListener { listener?.saveImage() }
     }
 
 
+
     interface OnSaveImageListener{
         fun saveImage()
         fun shareImage()
+    }
+}
+
+class ShareAppBottomSheet private constructor() : GenericBottomSheet(){
+
+    private var listener: OnShareDialogClick? = null
+
+    companion object Creator {
+        fun getShareAppDialogFragment(context: Context,onShareDialogClick: OnShareDialogClick) : ShareAppBottomSheet{
+            val shareAppBS = ShareAppBottomSheet()
+            shareAppBS.listener = onShareDialogClick
+            shareAppBS.context = context
+
+            return shareAppBS
+
+        }
+    }
+
+    override fun inflateView(view: View) {
+        //nothing
+    }
+
+    override fun getLayoutResource() = R.layout.share_app_bottom_sheet
+
+    interface OnShareDialogClick{
+        fun rateApp()
+        fun instagram()
+        fun facebook()
+        fun shareAppLink()
     }
 }

@@ -45,4 +45,8 @@
     <string name="hashtag_text_to_share">Glitched using Glitchy App! #glitchyapp</string>
     <string name="text_copied_on_the_clipboard">Text copied on the clipboard</string>
     <string name="if_u_like_app">If you like Glitchy follow it on the Social or share it with your friends:</string>
+    <string name="instagram_text">Follow on Instagram</string>
+    <string name="facebook_share">Follow on Facebook</string>
+    <string name="rate">Rate Glitchy!</string>
+    <string name="share_glitchy">Share Glitchy!</string>
 </resources>

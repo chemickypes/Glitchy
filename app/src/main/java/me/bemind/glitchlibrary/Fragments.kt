@@ -17,7 +17,8 @@ import org.jraf.android.alibglitch.GlitchEffect
  * Created by angelomoroni on 03/05/17.
  */
 
-class MenuFragment: Fragment() {
+class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
+
 
     var rootview : View? = null
 
@@ -35,6 +36,15 @@ class MenuFragment: Fragment() {
 
     val shareApp : FloatingActionButton by lazy {
         rootview?.findViewById(R.id.share_app_button) as FloatingActionButton
+    }
+
+    private val mShareBottomSheet: ShareAppBottomSheet by lazy {
+        ShareAppBottomSheet.getShareAppDialogFragment(activity,this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mShareBottomSheet.dismiss()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,11 +68,27 @@ class MenuFragment: Fragment() {
         shareApp.setImageDrawable(FontIconDrawable.inflate(activity,R.xml.ic_big_share))
         shareApp.setOnClickListener {
             //open share bottomsheet dialog
+            mShareBottomSheet.show()
         }
 
         return rootview!!
     }
 
+    override fun rateApp() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun instagram() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun facebook() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun shareAppLink() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
 }

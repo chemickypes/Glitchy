@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/instagram_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/save_char"
+            android:textColor="@color/colorAccent"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="mono"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/instagram_text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/facebook_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/share_char"
+            android:textColor="@color/colorAccent"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="mono"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/facebook_share"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/rate_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/save_char"
+            android:textColor="@color/colorAccent"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="mono"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/rate" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/share_text_view">
+        <com.shamanland.fonticon.FontIconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:text="@string/share_char"
+            android:textColor="@color/colorAccent"/>
+
+        <me.bemind.glitchlibrary.GlithcyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:glitchyTypeface="mono"
+            android:textSize="18sp"
+            android:textColor="@color/ucla_blue"
+            android:layout_gravity="center_vertical"
+            android:text="@string/share_glitchy"  />
+    </LinearLayout>
+
+
+
+</LinearLayout>
