@@ -44,7 +44,7 @@
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:text="V 1.0"
             android:id="@+id/version_text"
             android:layout_gravity="center"
@@ -53,7 +53,7 @@
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:id="@+id/bemind_link"
             android:text="@string/bemind_interavtive_srl"
             android:layout_gravity="center"
@@ -71,7 +71,7 @@
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="22dp"
@@ -83,8 +83,8 @@
             android:text="@string/text_desc_app"/>
 
         <View
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/transparent"
@@ -93,7 +93,7 @@
         <me.bemind.glitchlibrary.GlithcyTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="22dp"
