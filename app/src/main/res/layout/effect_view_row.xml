@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:id="@+id/effect_view_id"
-    android:minHeight="70dp"
+    android:minHeight="55dp"
     android:minWidth="100dp"
     android:layout_margin="7dp"
     android:background="@drawable/effect_item_background"
@@ -32,7 +32,7 @@
         app:glitchyTypeface="mono"
         android:textAllCaps="true"
         android:padding="18dp"
-        android:textSize="18sp"
+        android:textSize="13sp"
         android:gravity="center"
         android:id="@+id/effect_name"
         android:layout_gravity="center"/>
