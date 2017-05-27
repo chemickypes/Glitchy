@@ -4,11 +4,13 @@ import android.app.Fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.shamanland.fonticon.FontIconDrawable
 import org.jraf.android.alibglitch.GlitchEffect
 
 /**
@@ -31,6 +33,10 @@ class MenuFragment: Fragment() {
         rootview?.findViewById(R.id.bemind_link) as TextView
     }
 
+    val shareApp : FloatingActionButton by lazy {
+        rootview?.findViewById(R.id.share_app_button) as FloatingActionButton
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         rootview = inflater?.inflate(R.layout.menu_fragment,container)!!
 
@@ -47,6 +53,11 @@ class MenuFragment: Fragment() {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse("http://www.bemind.me")
             startActivity(i)
+        }
+
+        shareApp.setImageDrawable(FontIconDrawable.inflate(activity,R.xml.ic_big_share))
+        shareApp.setOnClickListener {
+            //open share bottomsheet dialog
         }
 
         return rootview!!
