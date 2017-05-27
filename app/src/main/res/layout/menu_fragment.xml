@@ -106,15 +106,12 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/share_app_button"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:text="@string/share_char"
-            android:textSize="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_gravity="center"
-            android:background="@color/amaranth"
-            android:padding="16dp"/>
+            android:background="@color/amaranth" />
 
 
 
