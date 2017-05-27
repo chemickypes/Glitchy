@@ -75,19 +75,15 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
     }
 
     override fun rateApp() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun instagram() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun facebook() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun shareAppLink() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
