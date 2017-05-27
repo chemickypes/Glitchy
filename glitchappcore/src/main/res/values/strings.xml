@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">glitchappcore</string>
+    <string name="generic_error">Ops! Something is wrong!</string>
 </resources>

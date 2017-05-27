@@ -439,6 +439,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                         nextAction,
                         {
                             t : Throwable -> t.printStackTrace()
+                            glitchView?.showError(t)
                         }
                 )
     }

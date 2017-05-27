@@ -22,8 +22,8 @@ import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-
-
+import android.widget.Toast
+import me.bemind.glitchappcore.R
 
 
 /**
@@ -67,6 +67,8 @@ interface IGlitchView {
     fun onResume()
 
     fun showLoader(show:Boolean)
+
+    fun showError(t:Throwable)
 
 
 }
@@ -232,6 +234,11 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
             loaderView?.visibility = View.GONE
             loaderView?.alpha = 0f
         }
+    }
+
+    override fun showError(t:Throwable) {
+        showLoader(false)
+        Toast.makeText(context, R.string.generic_error,Toast.LENGTH_LONG).show()
     }
 
     override fun setPreviousImage(back: Bitmap?,restore:Boolean ) {
