@@ -12,6 +12,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.shamanland.fonticon.FontIconDrawable
 import org.jraf.android.alibglitch.GlitchEffect
+import android.content.ActivityNotFoundException
+
+
 
 /**
  * Created by angelomoroni on 03/05/17.
@@ -75,12 +78,31 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
     }
 
     override fun rateApp() {
+
+        val uri = Uri.parse("market://details?id=" + activity.packageName)
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+//                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + activity.packageName)))
+        }
+
     }
 
     override fun instagram() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/glitchyapp/"))
+        startActivity(browserIntent)
     }
 
     override fun facebook() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("fb.me/glitchyapp"))
+        startActivity(browserIntent)
     }
 
     override fun shareAppLink() {
