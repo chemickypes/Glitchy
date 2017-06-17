@@ -49,6 +49,8 @@ object Glitcher {
     val noisePaint = Paint()
     var noiseBMPshader : BitmapShader? = null
 
+    private var headerOfImage: Int = 417
+
     private val XFE_ADD = PorterDuffXfermode(PorterDuff.Mode.ADD)
     private val XFE_SRC_IN = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
 
@@ -111,19 +113,25 @@ object Glitcher {
 
         if(res.isNotEmpty()) {
             for (i in 0..JPEG_CORRUPTION_COUNT - 1) {
-                val idx = RANDOM.nextInt(res.size )
-                res[idx] = (res[idx] + RANDOM.nextInt(3)).toByte()
+                val idx = headerOfImage + RANDOM.nextInt(res.size - headerOfImage -1)
+                res[idx] = (res[idx] + RANDOM.nextInt(4)).toByte()
             }
 
-            return GlitcherUtil.bitmapFromByteArray(res)
+            val b = GlitcherUtil.bitmapFromByteArray(res)
+            return b
         }
 
         return null
     }
 
+
+
     private fun setBitmap(result: Bitmap?, compression: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG) {
         if(baseBitmap == null) baseBitmap = result
-        if(baseArray.isEmpty()) baseArray =  GlitcherUtil.byteArrayFromBitmap(result,compression)?.clone()?:kotlin.ByteArray(0)
+        if(baseArray.isEmpty()){
+            baseArray =  GlitcherUtil.byteArrayFromBitmap(result,compression)?.clone()?:kotlin.ByteArray(0)
+            this.headerOfImage = getJpegHeaderSize(baseArray)
+        }
     }
 
     fun webp(result: Bitmap?): Bitmap? {
@@ -133,9 +141,7 @@ object Glitcher {
         val res = baseArray.copyOf()
 
         val perc = (RANDOM.nextFloat()%2)
-        for (f in 0..165) {
-
-        }
+        Log.d("WEBP","perc $perc")
 
         if (res.size > 100) {
             val power = (res.size * perc).toInt()
@@ -149,7 +155,8 @@ object Glitcher {
             }
         }
 
-        return GlitcherUtil.bitmapFromByteArray(res)
+        val b =  GlitcherUtil.bitmapFromByteArray(res)
+        return b
     }
 
     fun swap(result: Bitmap?) :Bitmap? {
@@ -618,6 +625,19 @@ object Glitcher {
 
         //canvas?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(),debossPaint)
         //canvas?.drawFilter
+    }
+
+    private fun getJpegHeaderSize(byteArrayIn: ByteArray): Int {
+        val byteFF = java.lang.Byte.valueOf((-1).toByte())
+        val byteDA = java.lang.Byte.valueOf((-38).toByte())
+        var i = 0
+        while (i < byteArrayIn.size) {
+            if (byteArrayIn[i] == byteFF!!.toByte() && byteArrayIn[i + 1] == byteDA!!.toByte()) {
+                return i + 2
+            }
+            i++
+        }
+        return 417
     }
 
 
