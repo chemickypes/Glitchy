@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         app:glitchyTypeface="mono"
         android:text="@string/drag_on_the_image"
         android:gravity="center"

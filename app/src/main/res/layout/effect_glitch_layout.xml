@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:padding="16dp"
         app:glitchyTypeface="mono"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:text="@string/tap_here_to_glitch"
         android:gravity="center"
         android:textSize="18sp"/>
