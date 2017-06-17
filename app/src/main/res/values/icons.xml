@@ -12,5 +12,7 @@
     <string name="save_char">&#xE161;</string>
     <string name="done_char">&#xE876;</string>
     <string name="close_char">&#xE5CD;</string>
+    <string name="rate_char">&#xE8D0;</string>
+    <string name="social_char">&#xE7EF;</string>
     <!--<i class="material-icons">&#xE163;</i>-->
 </resources>

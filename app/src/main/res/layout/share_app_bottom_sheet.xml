@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/menu_icon_size_sp"
-            android:text="@string/save_char"
+            android:text="@string/social_char"
             android:textColor="@color/colorAccent"/>
 
         <me.bemind.glitchlibrary.GlithcyTextView
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/menu_icon_size_sp"
-            android:text="@string/share_char"
+            android:text="@string/social_char"
             android:textColor="@color/colorAccent"/>
 
         <me.bemind.glitchlibrary.GlithcyTextView
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/menu_icon_size_sp"
-            android:text="@string/save_char"
+            android:text="@string/rate_char"
             android:textColor="@color/colorAccent"/>
 
         <me.bemind.glitchlibrary.GlithcyTextView
