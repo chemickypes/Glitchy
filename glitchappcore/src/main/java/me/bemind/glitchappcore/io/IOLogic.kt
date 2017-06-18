@@ -3,6 +3,7 @@ package me.bemind.glitchappcore.io
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
@@ -33,7 +34,7 @@ class IOLogic : IIOLogic{
     override fun saveImage(bitmap: Bitmap) :String?{
 
         if(SimpleStorage.isExternalStorageWritable()){
-            val storage = SimpleStorage.getExternalStorage()
+            val storage = SimpleStorage.getExternalStorage(Environment.DIRECTORY_PICTURES)
             createImageDir(storage)
             val byte = compressBitmap(bitmap)
             val fileName = getCustomFileName()
