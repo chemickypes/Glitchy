@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
+import com.sromku.simple.storage.ExternalStorage
 import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
 import me.bemind.glitchappcore.Utils
@@ -34,7 +35,7 @@ class IOLogic : IIOLogic{
     override fun saveImage(bitmap: Bitmap) :String?{
 
         if(SimpleStorage.isExternalStorageWritable()){
-            val storage = SimpleStorage.getExternalStorage(Environment.DIRECTORY_PICTURES)
+            val storage = getStorage()
             createImageDir(storage)
             val byte = compressBitmap(bitmap)
             val fileName = getCustomFileName()
@@ -60,7 +61,7 @@ class IOLogic : IIOLogic{
 
     override fun uriFromFileName(fileName: String?): Uri? {
         if(SimpleStorage.isExternalStorageWritable()){
-            val storage = SimpleStorage.getExternalStorage()
+            val storage = getStorage()
             if(storage.isFileExist(DIR_NAME,fileName)){
                 val uri = Uri.fromFile(storage.getFile(DIR_NAME,fileName))
                 return uri
@@ -70,6 +71,10 @@ class IOLogic : IIOLogic{
         }else{
             return null
         }
+    }
+
+    private fun getStorage(): ExternalStorage {
+        return SimpleStorage.getExternalStorage(Environment.DIRECTORY_PICTURES)
     }
 
     private fun getCustomFileName(): String? {
