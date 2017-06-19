@@ -57,8 +57,9 @@ class IOLogic : IIOLogic{
 
     override fun openImage(context: Context,file: File,w: Int,h: Int) :Bitmap{
         val uri = Uri.fromFile(file)
-        val b = Utils.getBitmap(context,uri,w,h)
-        return b
+        /*val b = Utils.getBitmap(context,uri,w,h)
+        return b*/
+        return openImage(context,uri,w,h)
     }
 
     override fun openImage(context: Context, uri: Uri, w: Int, h: Int): Bitmap {
