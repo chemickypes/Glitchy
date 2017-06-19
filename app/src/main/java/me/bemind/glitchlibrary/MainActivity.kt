@@ -184,6 +184,9 @@ SaveImageBottomSheet.OnSaveImageListener{
 
 
 
+
+
+
     }
 
     private fun applyEffect() {
@@ -274,6 +277,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         super.onStart()
         appPresenter.appView = this
         ioPresenter.ioView = this
+
+
     }
 
     override fun onStop() {
@@ -301,6 +306,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     override fun showErrorGetImage(t: Throwable) {
+        t.printStackTrace()
         Toast.makeText(this,R.string.get_image_error,Toast.LENGTH_SHORT).show()
     }
 
@@ -333,6 +339,14 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun onResume() {
         super.onResume()
         appPresenter.onResume()
+
+        val intent = intent
+        val action = intent.action
+        val type = intent.type
+
+        if (Intent.ACTION_SEND == action && type != null && type.startsWith("image/")) {
+            ioPresenter.openImage(this,intent)
+        }
 
     }
 
@@ -424,7 +438,11 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         showListEffect()
 
-        GlitchEffect.showGlitch(this)
+        try {
+            GlitchEffect.showGlitch(this)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
 
         //listEffectPanel.visibility = VISIBLE
     }
@@ -454,7 +472,9 @@ SaveImageBottomSheet.OnSaveImageListener{
             optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this, R.xml.open_menu)
         }else {
             optionMenu?.clear()
-            menuInflater.inflate(R.menu.main_menu_ex, optionMenu)
+            optionMenu?.let {
+                menuInflater.inflate(R.menu.main_menu_ex, optionMenu)
+            }
             optionMenu?.getItem(0)?.icon = FontIconDrawable.inflate(this, R.xml.open_menu)
             optionMenu?.getItem(1)?.icon = FontIconDrawable.inflate(this, R.xml.ic_save)
 

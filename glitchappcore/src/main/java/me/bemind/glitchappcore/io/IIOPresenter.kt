@@ -1,8 +1,11 @@
 package me.bemind.glitchappcore.io
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Parcelable
 import android.util.Log
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData
@@ -41,6 +44,7 @@ interface IIOPresenter {
     fun openImage(activity: GlitchyBaseActivity,typePick: TypePick,w:Int = BASE_DIM,h:Int = BASE_DIM)
     fun saveImage(bitmap: Bitmap?)
     fun shareImage(bitmap: Bitmap?)
+    fun openImage(context: Context,intent: Intent?,w:Int = BASE_DIM,h:Int = BASE_DIM)
 }
 
 class IOPresenter : IIOPresenter {
@@ -69,6 +73,15 @@ class IOPresenter : IIOPresenter {
             IIOPresenter.TypePick.CAMERA -> openImageFromCamera(activity,w,h)
             else -> openImageFromGallery(activity, w, h)
         }
+    }
+
+    override fun openImage(context:Context,intent: Intent?, w: Int, h: Int) {
+        val imageUri : Uri = intent?.getParcelableExtra(Intent.EXTRA_STREAM)!!
+        disposable = Observable.fromCallable { ioLogic.openImage(context,imageUri,w,h) }
+                .subscribe(
+                        { b -> ioView?.setImage(b)},
+                        {e -> ioView?.showErrorGetImage(e)}
+                )
     }
 
 
