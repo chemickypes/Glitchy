@@ -344,7 +344,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         val action = intent.action
         val type = intent.type
 
-        if (Intent.ACTION_SEND == action && type != null && type.startsWith("image/")) {
+        if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
             ioPresenter.openImage(this,intent)
         }
 
