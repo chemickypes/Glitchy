@@ -102,7 +102,7 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
     }
 
     override fun facebook() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("fb.me/glitchyapp"))
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://fb.me/glitchyapp"))
         openIntent(browserIntent)
     }
 
