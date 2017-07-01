@@ -25,6 +25,8 @@ interface IIOLogic {
 
     fun saveImage(bitmap: Bitmap):String?
 
+    fun openImage(context: Context,uri:Uri,w:Int = 1024, h:Int =  1024):Bitmap
+
     fun uriFromFileName(fileName:String?) : Uri?
 }
 
@@ -55,8 +57,13 @@ class IOLogic : IIOLogic{
 
     override fun openImage(context: Context,file: File,w: Int,h: Int) :Bitmap{
         val uri = Uri.fromFile(file)
-        val b = Utils.getBitmap(context,uri,w,h)
-        return b
+        /*val b = Utils.getBitmap(context,uri,w,h)
+        return b*/
+        return openImage(context,uri,w,h)
+    }
+
+    override fun openImage(context: Context, uri: Uri, w: Int, h: Int): Bitmap {
+        return Utils.getBitmap(context,uri,w,h)
     }
 
     override fun uriFromFileName(fileName: String?): Uri? {

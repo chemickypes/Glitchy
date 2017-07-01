@@ -114,10 +114,22 @@ class ShareAppBottomSheet private constructor() : GenericBottomSheet(){
     }
 
     override fun inflateView(view: View) {
-        view.findViewById(R.id.share_text_view).setOnClickListener { listener?.shareAppLink() }
-        view.findViewById(R.id.instagram_text_view).setOnClickListener { listener?.instagram() }
-        view.findViewById(R.id.facebook_text_view).setOnClickListener { listener?.facebook() }
-        view.findViewById(R.id.rate_text_view).setOnClickListener { listener?.rateApp() }
+        view.findViewById(R.id.share_text_view).setOnClickListener {
+            dismiss()
+            listener?.shareAppLink()
+        }
+        view.findViewById(R.id.instagram_text_view).setOnClickListener {
+            dismiss()
+            listener?.instagram()
+        }
+        view.findViewById(R.id.facebook_text_view).setOnClickListener {
+            dismiss()
+            listener?.facebook()
+        }
+        view.findViewById(R.id.rate_text_view).setOnClickListener {
+            dismiss()
+            listener?.rateApp()
+        }
     }
 
     override fun getLayoutResource() = R.layout.share_app_bottom_sheet

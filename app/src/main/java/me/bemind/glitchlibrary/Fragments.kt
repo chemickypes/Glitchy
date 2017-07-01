@@ -13,7 +13,7 @@ import android.widget.TextView
 import com.shamanland.fonticon.FontIconDrawable
 import org.jraf.android.alibglitch.GlitchEffect
 import android.content.ActivityNotFoundException
-
+import android.widget.Toast
 
 
 /**
@@ -89,23 +89,41 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
         try {
             startActivity(goToMarket)
         } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + activity.packageName)))
+            openIntent(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + activity.packageName)), R.string.open_with)
         }
 
     }
 
     override fun instagram() {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/glitchyapp/"))
-        startActivity(browserIntent)
+
+        openIntent(browserIntent, R.string.open_with)
     }
 
     override fun facebook() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("fb.me/glitchyapp"))
-        startActivity(browserIntent)
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://fb.me/glitchyapp"))
+        openIntent(browserIntent, R.string.open_with)
     }
 
     override fun shareAppLink() {
+        val text = getString(R.string.glitch_your_worl_using_glitchyapp,
+                "http://play.google.com/store/apps/details?id=" + activity.packageName)
+
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+        sendIntent.type = "text/plain"
+
+        openIntent(sendIntent,R.string.share_with)
+    }
+
+    private fun openIntent(intent: Intent, idTitle: Int = R.string.open_with){
+        try {
+            startActivity(Intent.createChooser(intent,getString(idTitle)))
+        }catch (e:Exception){
+            Toast.makeText(activity,R.string.no_activity_to_execute_action,Toast.LENGTH_SHORT).show()
+        }
     }
 
 
