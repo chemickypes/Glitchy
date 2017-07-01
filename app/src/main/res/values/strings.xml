@@ -49,4 +49,6 @@
     <string name="facebook_share">Follow on Facebook</string>
     <string name="rate">Rate Glitchy!</string>
     <string name="share_glitchy">Share Glitchy!</string>
+    <string name="open_with">Open with:</string>
+    <string name="no_activity_to_execute_action">No activity to to execute this action!</string>
 </resources>

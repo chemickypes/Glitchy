@@ -13,7 +13,7 @@ import android.widget.TextView
 import com.shamanland.fonticon.FontIconDrawable
 import org.jraf.android.alibglitch.GlitchEffect
 import android.content.ActivityNotFoundException
-
+import android.widget.Toast
 
 
 /**
@@ -89,7 +89,7 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
         try {
             startActivity(goToMarket)
         } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW,
+            openIntent(Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + activity.packageName)))
         }
 
@@ -97,15 +97,24 @@ class MenuFragment: Fragment(), ShareAppBottomSheet.OnShareDialogClick {
 
     override fun instagram() {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/glitchyapp/"))
-        startActivity(browserIntent)
+
+        openIntent(browserIntent)
     }
 
     override fun facebook() {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("fb.me/glitchyapp"))
-        startActivity(browserIntent)
+        openIntent(browserIntent)
     }
 
     override fun shareAppLink() {
+    }
+
+    private fun openIntent(intent: Intent){
+        try {
+            startActivity(Intent.createChooser(intent,getString(R.string.open_with)))
+        }catch (e:Exception){
+            Toast.makeText(activity,R.string.no_activity_to_execute_action,Toast.LENGTH_SHORT).show()
+        }
     }
 
 
