@@ -50,5 +50,7 @@
     <string name="rate">Rate Glitchy!</string>
     <string name="share_glitchy">Share Glitchy!</string>
     <string name="open_with">Open with:</string>
-    <string name="no_activity_to_execute_action">No activity to to execute this action!</string>
+    <string name="no_activity_to_execute_action">No activity to execute this action!</string>
+    <string name="glitch_your_worl_using_glitchyapp">Glitch your world using Glitchy! %1$s</string>
+    <string name="share_with">Share with:</string>
 </resources>
