@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -20,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -51,6 +57,10 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+
+    compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
+    kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+
 }
 repositories {
     mavenCentral()

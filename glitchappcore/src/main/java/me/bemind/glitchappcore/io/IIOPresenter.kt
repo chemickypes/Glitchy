@@ -76,12 +76,18 @@ class IOPresenter : IIOPresenter {
     }
 
     override fun openImage(context:Context,intent: Intent?, w: Int, h: Int) {
-        val imageUri : Uri = intent?.getParcelableExtra(Intent.EXTRA_STREAM)!!
-        disposable = Observable.fromCallable { ioLogic.openImage(context,imageUri,w,h) }
-                .subscribe(
-                        { b -> ioView?.setImage(b)},
-                        {e -> ioView?.showErrorGetImage(e)}
-                )
+        intent?.let {
+            val imageUri : Uri = when(it.action){
+                Intent.ACTION_EDIT -> intent.data
+                else -> it.getParcelableExtra(Intent.EXTRA_STREAM)!!
+            }
+            disposable = Observable.fromCallable { ioLogic.openImage(context,imageUri,w,h) }
+                    .subscribe(
+                            { b -> ioView?.setImage(b)},
+                            {e -> ioView?.showErrorGetImage(e)}
+                    )
+        }
+
     }
 
 

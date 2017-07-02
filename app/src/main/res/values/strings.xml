@@ -53,4 +53,9 @@
     <string name="no_activity_to_execute_action">No activity to execute this action!</string>
     <string name="glitch_your_worl_using_glitchyapp">Glitch your world using Glitchy! %1$s</string>
     <string name="share_with">Share with:</string>
+    <string name="error_open_image">Sorry! We got error with the image!</string>
+    <string name="fundamental_permissions">Storage permission are fundamental to Glitchy!</string>
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
+    <string name="permission_camera_rationale">Storage permissions are fundamental for Glitchy! Without them, you won\'t be able to save your glitched pics!</string>
 </resources>
