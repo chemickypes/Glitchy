@@ -26,7 +26,7 @@ class GlitchyFirebaseMessagingService: FirebaseMessagingService(){
 
         remoteMessage?.let {
             Log.d(TAG, "Message Notification Body: " + it.notification?.body)
-            sendNotification(it.notification.title,it.notification.body)
+           // sendNotification(it.notification.title,it.notification.body)
         }
 
     }

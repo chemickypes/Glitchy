@@ -24,6 +24,13 @@
             android:name="io.fabric.ApiKey"
             android:value="ca2eabdf9d0df2cc28077c5ae412e50a568dc89e" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_name" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.file_provider"
