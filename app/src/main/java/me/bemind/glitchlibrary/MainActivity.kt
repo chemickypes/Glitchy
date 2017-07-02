@@ -29,6 +29,7 @@ import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
 import io.fabric.sdk.android.Fabric
@@ -46,6 +47,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     private val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
 
 
+    private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
     private var mImageView : ExtendedImageView? = null
 
@@ -119,6 +121,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         Fabric.with(this, Crashlytics())
         FontIconTypefaceHolder.init(assets, "material_icons.ttf")
         setContentView(R.layout.activity_main)
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
