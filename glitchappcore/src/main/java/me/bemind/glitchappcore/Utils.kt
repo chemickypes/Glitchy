@@ -78,7 +78,7 @@ object Utils {
 
         try {
             original = Utils.modifyOrientation(original, path)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
         }
 
         return original

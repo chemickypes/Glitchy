@@ -13,6 +13,10 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import android.provider.MediaStore
+import android.content.ContentValues
+
+
 
 /**
  * Created by angelomoroni on 18/04/17.
@@ -23,7 +27,7 @@ interface IIOLogic {
     fun openImage(context: Context,
                   file: File, w:Int = 1024, h:Int =  1024) : Bitmap
 
-    fun saveImage(bitmap: Bitmap):String?
+    fun saveImage(bitmap: Bitmap,context: Context):String?
 
     fun openImage(context: Context,uri:Uri,w:Int = 1024, h:Int =  1024):Bitmap
 
@@ -34,7 +38,7 @@ class IOLogic : IIOLogic{
 
     private val DIR_NAME: String? = "Glitchy"
 
-    override fun saveImage(bitmap: Bitmap) :String?{
+    override fun saveImage(bitmap: Bitmap,context: Context) :String?{
 
         if(SimpleStorage.isExternalStorageWritable()){
             val storage = getStorage()
@@ -43,6 +47,7 @@ class IOLogic : IIOLogic{
             val fileName = getCustomFileName()
            val b = storage.createFile(DIR_NAME,fileName,byte)
             if(b){
+                saveImageToContentResolver(storage.getFile(DIR_NAME,fileName).absolutePath,context)
                 return fileName
             }else{
                 return null
@@ -52,7 +57,15 @@ class IOLogic : IIOLogic{
         }
     }
 
+    private fun saveImageToContentResolver(absolutePath: String?, context: Context) {
+        val values = ContentValues()
 
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        values.put(MediaStore.MediaColumns.DATA, absolutePath)
+
+        context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+    }
 
 
     override fun openImage(context: Context,file: File,w: Int,h: Int) :Bitmap{

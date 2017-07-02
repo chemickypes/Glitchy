@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -9,8 +10,8 @@ android {
         applicationId "me.bemind.glitchlibrary"
         minSdkVersion 16
         targetSdkVersion target_version
-        versionCode 3
-        versionName "0.1.2"
+        versionCode 4
+        versionName "0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -20,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -51,9 +57,20 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+
+    compile 'com.google.android.gms:play-services-base:11.0.2'
+    compile 'com.google.firebase:firebase-messaging:11.0.2'
+    compile 'com.google.firebase:firebase-core:11.0.2'
+    compile 'com.kingfisherphuoc:easy_sharedpreference_library:1.2'
+
+    compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
+    kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+
 }
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
     maven { url 'https://maven.fabric.io/public' }
 }
+
+apply plugin: 'com.google.gms.google-services'
