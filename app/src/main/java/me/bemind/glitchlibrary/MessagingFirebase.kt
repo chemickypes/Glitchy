@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import me.bemind.glitchappcore.RetainedFragment.TAG
 import com.google.firebase.iid.FirebaseInstanceId
 
 
