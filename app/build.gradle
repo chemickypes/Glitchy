@@ -58,6 +58,8 @@ dependencies {
         transitive = true;
     }
 
+    compile 'com.google.firebase:firebase-messaging:11.0.2'
+
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
     kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 
