@@ -344,12 +344,19 @@ SaveImageBottomSheet.OnSaveImageListener{
         if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
             try {
                 //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
+                MainActivityPermissionsDispatcher.handleIntentWithCheck(this)
                 //handleIntent()
             }catch (e: Exception){
                 Toast.makeText(this,R.string.error_open_image,Toast.LENGTH_LONG).show()
             }
         }
 
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults)
     }
 
 
@@ -485,7 +492,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
-    /*@NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun handleIntent() {
         ioPresenter.openImage(this, intent)
     }
@@ -507,8 +514,11 @@ SaveImageBottomSheet.OnSaveImageListener{
                 .setPositiveButton(R.string.button_allow,{ dialogInterface: DialogInterface, i: Int -> request.proceed()})
                 .setNegativeButton(R.string.button_deny, { dialogInterface: DialogInterface, i: Int -> request.cancel() })
                 .show()
-    }*/
-    
+    }
+
+
+
+
 
 
 

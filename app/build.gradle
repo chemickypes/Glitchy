@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -59,6 +60,7 @@ dependencies {
 
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
     kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+
 }
 repositories {
     mavenCentral()
