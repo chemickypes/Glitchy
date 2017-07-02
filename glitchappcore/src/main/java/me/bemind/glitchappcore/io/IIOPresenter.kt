@@ -42,8 +42,8 @@ interface IIOPresenter {
         CAMERA,GALLERY
     }
     fun openImage(activity: GlitchyBaseActivity,typePick: TypePick,w:Int = BASE_DIM,h:Int = BASE_DIM)
-    fun saveImage(bitmap: Bitmap?)
-    fun shareImage(bitmap: Bitmap?)
+    fun saveImage(bitmap: Bitmap?,context: Context)
+    fun shareImage(bitmap: Bitmap?,context: Context)
     fun openImage(context: Context,intent: Intent?,w:Int = BASE_DIM,h:Int = BASE_DIM)
 }
 
@@ -92,9 +92,9 @@ class IOPresenter : IIOPresenter {
 
 
 
-    override fun saveImage(bitmap: Bitmap?) {
+    override fun saveImage(bitmap: Bitmap?,context: Context) {
         if(bitmap!=null) {
-            disposable = handleSaveImageObservable(bitmap)
+            disposable = handleSaveImageObservable(bitmap,context )
                     .subscribe(
                             {
                                 b ->
@@ -113,9 +113,9 @@ class IOPresenter : IIOPresenter {
         }
     }
 
-    override fun shareImage(bitmap: Bitmap?) {
+    override fun shareImage(bitmap: Bitmap?,context: Context) {
         if(bitmap!=null){
-            disposable = handleSaveImageObservable(bitmap)
+            disposable = handleSaveImageObservable(bitmap,context )
                     .subscribe(
                             {
                                 fileName ->
@@ -152,8 +152,8 @@ class IOPresenter : IIOPresenter {
 
     }
 
-    fun handleSaveImageObservable(bitmap:Bitmap) : Observable<String?>{
-        return Observable.fromCallable { ioLogic.saveImage(bitmap) }
+    fun handleSaveImageObservable(bitmap:Bitmap,context: Context) : Observable<String?>{
+        return Observable.fromCallable { ioLogic.saveImage(bitmap,context) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

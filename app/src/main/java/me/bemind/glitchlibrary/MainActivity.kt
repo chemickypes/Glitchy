@@ -398,12 +398,12 @@ SaveImageBottomSheet.OnSaveImageListener{
     }
 
     override fun saveImage() {
-        ioPresenter.saveImage(mImageView?.getImageBitmap())
+        ioPresenter.saveImage(mImageView?.getImageBitmap(),this)
         saveImageBS.dismiss()
     }
 
     override fun shareImage() {
-        ioPresenter.shareImage(mImageView?.getImageBitmap())
+        ioPresenter.shareImage(mImageView?.getImageBitmap(),this)
         saveImageBS.dismiss()
     }
 
