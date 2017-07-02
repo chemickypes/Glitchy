@@ -27,6 +27,9 @@ import android.text.SpannableString
 import android.util.Log
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
 import io.fabric.sdk.android.Fabric
@@ -41,7 +44,10 @@ import permissions.dispatcher.*
 @RuntimePermissions
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
 SaveImageBottomSheet.OnSaveImageListener{
+    private val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
 
+
+    private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
     private var mImageView : ExtendedImageView? = null
 
@@ -115,6 +121,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         Fabric.with(this, Crashlytics())
         FontIconTypefaceHolder.init(assets, "material_icons.ttf")
         setContentView(R.layout.activity_main)
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
         toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
@@ -335,19 +343,22 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     override fun onResume() {
         super.onResume()
-        appPresenter.onResume()
 
-        val intent = intent
-        val action = intent.action
-        val type = intent.type
+        if(checkPlayServices()) {
+            appPresenter.onResume()
 
-        if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
-            try {
-                //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
-                MainActivityPermissionsDispatcher.handleIntentWithCheck(this)
-                //handleIntent()
-            }catch (e: Exception){
-                Toast.makeText(this,R.string.error_open_image,Toast.LENGTH_LONG).show()
+            val intent = intent
+            val action = intent.action
+            val type = intent.type
+
+            if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
+                try {
+                    //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
+                    MainActivityPermissionsDispatcher.handleIntentWithCheck(this)
+                    //handleIntent()
+                } catch (e: Exception) {
+                    Toast.makeText(this, R.string.error_open_image, Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -740,6 +751,22 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
         }
+    }
+
+    private fun checkPlayServices() : Boolean {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show()
+            } else {
+                Log.i("GlitchyApp", "This device is not supported.")
+                finish()
+            }
+            return false
+        }
+        return true
     }
 
 

@@ -58,6 +58,11 @@ dependencies {
         transitive = true;
     }
 
+    compile 'com.google.android.gms:play-services-base:11.0.2'
+    compile 'com.google.firebase:firebase-messaging:11.0.2'
+    compile 'com.google.firebase:firebase-core:11.0.2'
+    compile 'com.kingfisherphuoc:easy_sharedpreference_library:1.2'
+
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
     kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 
@@ -67,3 +72,5 @@ repositories {
     maven { url 'https://jitpack.io' }
     maven { url 'https://maven.fabric.io/public' }
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,6 +1,7 @@
 package me.bemind.glitchlibrary
 
 import com.facebook.appevents.AppEventsLogger
+import com.kingfisher.easy_sharedpreference_library.SharedPreferencesManager
 import me.bemind.glitchappcore.GlitchyCoreApplication
 
 /**
@@ -12,5 +13,6 @@ class GlitchyApplication : GlitchyCoreApplication() {
     override fun onCreate() {
         super.onCreate()
         AppEventsLogger.activateApp(this)
+        SharedPreferencesManager.init(this, true);
     }
 }

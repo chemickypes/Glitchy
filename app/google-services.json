@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "263585770175",
+    "firebase_url": "https://glitchy-9b8ce.firebaseio.com",
+    "project_id": "glitchy-9b8ce",
+    "storage_bucket": "glitchy-9b8ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263585770175:android:2b7c6f3a7ceee20c",
+        "android_client_info": {
+          "package_name": "me.bemind.glitchlibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "263585770175-qa30ggr9d8uo5ujrcmn2q1rnnlv7opml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.bemind.glitchlibrary",
+            "certificate_hash": "18086bf6669c001a77b2d9cfa91b85f60f8930ce"
+          }
+        },
+        {
+          "client_id": "263585770175-ibbpl8tt191gb6ok2s3balhrop7rk5i5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkySlTuDCKb6BbWMaJQcb_kVGZ43uVOnU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "263585770175-ibbpl8tt191gb6ok2s3balhrop7rk5i5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
