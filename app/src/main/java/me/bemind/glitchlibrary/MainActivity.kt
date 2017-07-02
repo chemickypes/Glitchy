@@ -347,19 +347,23 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(checkPlayServices()) {
             appPresenter.onResume()
 
-            val intent = intent
-            val action = intent.action
-            val type = intent.type
+            //val intent = intent
 
-            if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
-                try {
-                    //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
-                    MainActivityPermissionsDispatcher.handleIntentWithCheck(this)
-                    //handleIntent()
-                } catch (e: Exception) {
-                    Toast.makeText(this, R.string.error_open_image, Toast.LENGTH_LONG).show()
+            intent?.let {
+                val action = intent.action
+                val type = intent.type
+
+                if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
+                    try {
+                        //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
+                        MainActivityPermissionsDispatcher.handleIntentWithCheck(this)
+                        //handleIntent()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, R.string.error_open_image, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
+
         }
 
     }
@@ -506,6 +510,7 @@ SaveImageBottomSheet.OnSaveImageListener{
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun handleIntent() {
         ioPresenter.openImage(this, intent)
+        intent = null
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
