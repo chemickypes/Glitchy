@@ -1,8 +1,7 @@
 package me.bemind.glitchlibrary
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.Manifest
+import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
@@ -19,16 +18,13 @@ import me.bemind.glitchappcore.glitch.ExtendedImageView
 import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
-import android.content.Intent
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import com.shamanland.fonticon.FontIconDrawable
@@ -39,9 +35,10 @@ import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
 import org.jraf.android.alibglitch.GlitchEffect
-import java.util.*
+import permissions.dispatcher.*
 
 
+@RuntimePermissions
 class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPickPhotoListener,
 SaveImageBottomSheet.OnSaveImageListener{
 
@@ -346,13 +343,16 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         if ((Intent.ACTION_SEND == action || Intent.ACTION_EDIT == action) && type != null && type.startsWith("image/")) {
             try {
-                ioPresenter.openImage(this, intent)
+                //MainActivityPermissionsDispatcher.showCameraWithCheck(this)
+                //handleIntent()
             }catch (e: Exception){
                 Toast.makeText(this,R.string.error_open_image,Toast.LENGTH_LONG).show()
             }
         }
 
     }
+
+
 
     override fun onPostResume() {
         super.onPostResume()
@@ -484,6 +484,33 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         }
     }
+
+    /*@NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun handleIntent() {
+        ioPresenter.openImage(this, intent)
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onPermissionCameraDenied(){
+        showErrorGetImage(RuntimeException("need permission"))
+    }
+
+    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onNeverAskAgainStoragePermission(){
+        Toast.makeText(this,R.string.fundamental_permissions,Toast.LENGTH_LONG).show()
+    }
+
+    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun showRationaleForCamera(request: PermissionRequest) {
+        AlertDialog.Builder(this)
+                .setMessage(R.string.permission_camera_rationale)
+                .setPositiveButton(R.string.button_allow,{ dialogInterface: DialogInterface, i: Int -> request.proceed()})
+                .setNegativeButton(R.string.button_deny, { dialogInterface: DialogInterface, i: Int -> request.cancel() })
+                .show()
+    }*/
+    
+
+
 
     private fun initEffect(effect:Effect) {
 
