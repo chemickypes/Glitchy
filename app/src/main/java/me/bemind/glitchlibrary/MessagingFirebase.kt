@@ -12,6 +12,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.NotificationCompat
+import com.kingfisher.easy_sharedpreference_library.SharedPreferencesManager
 
 
 /**
@@ -62,5 +63,6 @@ class GlitchyFirebaseInstanceIDService: FirebaseInstanceIdService() {
         Log.d(TAG, "Refreshed token: " + refreshedToken!!)
 
         //save to SharedPReferences
+        SharedPreferencesManager.getInstance().putValue("FBTOKEN",refreshedToken)
     }
 }
