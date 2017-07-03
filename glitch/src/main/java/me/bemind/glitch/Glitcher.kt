@@ -636,19 +636,17 @@ object Glitcher {
 
         val paint : Paint = Paint()
 
-        val cols : Double = if(density>1)density.toDouble() else 1.0
+        val cols : Double = if(density>1)density.toDouble()+30 else 30.0
         val blockSize : Double = w/cols
         val rows : Double = Math.ceil(h/blockSize)
-        val startX = 0
-        val startY = 0
 
         for(row in 0 until rows.toInt()){
             for (col in 0 until cols.toInt()){
-                val pixelCoordX : Double = blockSize + col + startX
-                val pixelCoordY : Double = blockSize + row + startY
+                val pixelCoordX : Double = (blockSize * col)
+                val pixelCoordY : Double = (blockSize * row)
 
-                val midY = pixelCoordY + blockSize / 2
-                val midX = pixelCoordX + blockSize / 2
+                val midY = pixelCoordY + (blockSize / 2)
+                val midX = pixelCoordX + (blockSize / 2)
 
                 if(midX >= w || midX < 0) continue
                 if(midY >= h || midY < 0) continue

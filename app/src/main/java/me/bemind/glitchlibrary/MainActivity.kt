@@ -736,8 +736,12 @@ SaveImageBottomSheet.OnSaveImageListener{
                 seekbar?.progress = effectState.progress
 
                 seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    var pro = 0
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeHooloovooEffect(false,arg1)
+                        if(arg2){
+                            pro = arg1
+                            if(pro%10 == 0) makeHooloovooEffect(false,arg1)
+                        }
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -745,7 +749,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                     }
 
                     override fun onStopTrackingTouch(seekBar: SeekBar) {
-
+                        makeHooloovooEffect(false,pro)
                     }
                 })
             }
