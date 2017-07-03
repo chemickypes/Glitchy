@@ -31,5 +31,6 @@ object EffectList{
 //        data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_glitch_layout))
         data.add(EffectView(Effect.NOISE,R.string.noise,R.layout.effect_anaglyph_layout))
         data.add(EffectView(Effect.HOOLOOVOO,R.string.hooloovoo,R.layout.effect_anaglyph_layout,EFFECT_NEWS.NEW))
+        data.add(EffectView(Effect.PIXEL,R.string.pixel ,R.layout.effect_anaglyph_layout,EFFECT_NEWS.NEW))
     }
 }

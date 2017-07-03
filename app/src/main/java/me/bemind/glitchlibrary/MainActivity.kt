@@ -550,6 +550,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.SWAP -> makeSwapEffect(true)
                 Effect.NOISE -> makeNoiseEffect(true)
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
+                Effect.PIXEL -> makePixelEffect(true)
                 else -> {
                 }
             }
@@ -619,6 +620,19 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.effectState = effect
             mImageView?.makeEffect(progress)
         // imagePresenter.glitchImage(Effect.ANAGLYPH, progress, init)
+        }
+    }
+
+    private fun makePixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = PixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.PIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
         }
     }
 
