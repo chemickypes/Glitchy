@@ -408,6 +408,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             Effect.NOISE -> noise(canvas,effectProgress)
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
+            Effect.PIXEL -> pixelize(canvas,effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
         canvas?.restore()

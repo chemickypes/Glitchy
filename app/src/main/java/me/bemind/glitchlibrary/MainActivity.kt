@@ -767,6 +767,24 @@ SaveImageBottomSheet.OnSaveImageListener{
                     }
                 })
             }
+            is PixelEffectState ->{
+                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+                seekbar?.progress = effectState.progress
+
+                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
+                        if(arg2) makePixelEffect(false,arg1)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                    }
+                })
+            }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
 
