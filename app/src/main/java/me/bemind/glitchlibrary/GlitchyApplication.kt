@@ -13,6 +13,6 @@ class GlitchyApplication : GlitchyCoreApplication() {
     override fun onCreate() {
         super.onCreate()
         AppEventsLogger.activateApp(this)
-        SharedPreferencesManager.init(this, true);
+        SharedPreferencesManager.init(this, true)
     }
 }

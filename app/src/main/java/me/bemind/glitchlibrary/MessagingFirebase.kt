@@ -55,6 +55,8 @@ class GlitchyFirebaseMessagingService: FirebaseMessagingService(){
 
 class GlitchyFirebaseInstanceIDService: FirebaseInstanceIdService() {
 
+
+
     private val  TAG = "GlitchyFbInstanceIdSrv"
 
     override fun onTokenRefresh() {
@@ -62,7 +64,19 @@ class GlitchyFirebaseInstanceIDService: FirebaseInstanceIdService() {
         val refreshedToken = FirebaseInstanceId.getInstance().token
         Log.d(TAG, "Refreshed token: " + refreshedToken!!)
 
+
         //save to SharedPReferences
-        SharedPreferencesManager.getInstance().putValue("FBTOKEN",refreshedToken)
+        try{
+            SharedPreferencesManager.getInstance().putValue(Constants.FIREBASE_TOKEN,refreshedToken)
+        }catch (e:Exception){
+            try {
+                SharedPreferencesManager.init(this,true)
+                SharedPreferencesManager.getInstance().putValue(Constants.FIREBASE_TOKEN,refreshedToken)
+            }catch (e1:Exception){
+                e1.printStackTrace()
+            }
+        }
+
+
     }
 }

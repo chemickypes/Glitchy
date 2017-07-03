@@ -8,6 +8,10 @@ import java.util.ArrayList
  * Created by angelomoroni on 24/04/17.
  */
 
+object Constants {
+    val FIREBASE_TOKEN = "FBTOKEN"
+}
+
 enum class EFFECT_NEWS {
     NONE,PRO,NEW
 }
