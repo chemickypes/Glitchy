@@ -70,7 +70,7 @@ class GlitchyFirebaseInstanceIDService: FirebaseInstanceIdService() {
             SharedPreferencesManager.getInstance().putValue(Constants.FIREBASE_TOKEN,refreshedToken)
         }catch (e:Exception){
             try {
-                SharedPreferencesManager.init(this,true)
+                SharedPreferencesManager.init(this.applicationContext,true)
                 SharedPreferencesManager.getInstance().putValue(Constants.FIREBASE_TOKEN,refreshedToken)
             }catch (e1:Exception){
                 e1.printStackTrace()
