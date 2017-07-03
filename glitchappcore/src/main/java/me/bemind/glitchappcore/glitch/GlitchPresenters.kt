@@ -67,7 +67,7 @@ interface IGlitchPresenter{
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
     fun noise(canvas: Canvas?,progress: Int = 170)
-    fun hooloovooize(canvas: Canvas?)
+    fun hooloovooize(canvas: Canvas?,progress: Int = 20)
 
 
 }
@@ -165,8 +165,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
 
-    override fun hooloovooize(canvas: Canvas?) {
-        glithce.hooloovooizeCanvas(canvas)
+    override fun hooloovooize(canvas: Canvas?,progress: Int) {
+        glithce.hooloovooizeCanvas(canvas,progress)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -287,6 +287,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
             Effect.NOISE -> effectProgress = 120
+            Effect.HOOLOOVOO -> effectProgress = 20
             else -> effectProgress = 0
         }
     }
@@ -399,7 +400,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.WOBBLE -> wobble(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             Effect.NOISE -> noise(canvas,effectProgress)
-            Effect.HOOLOOVOO -> hooloovooize(canvas)
+            Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             else -> Log.v("ImageView", "BASE")
         }
         canvas?.restore()

@@ -130,7 +130,7 @@ data class SwapEffectState (override val layout: Int) : EffectState(layout), Par
     }
 }
 
-data class HooloovooEffectState (override val layout: Int) : EffectState(layout), Parcelable{
+data class HooloovooEffectState (override val layout: Int,val progress: Int) : EffectState(layout), Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<HooloovooEffectState> = object : Parcelable.Creator<HooloovooEffectState> {
             override fun createFromParcel(source: Parcel): HooloovooEffectState = HooloovooEffectState(source)
@@ -138,12 +138,16 @@ data class HooloovooEffectState (override val layout: Int) : EffectState(layout)
         }
     }
 
-    constructor(source: Parcel) : this(source.readInt())
+    constructor(source: Parcel) : this(
+    source.readInt(),
+    source.readInt()
+    )
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(layout)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(layout)
+        dest.writeInt(progress)
     }
 }
 

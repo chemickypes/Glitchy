@@ -557,8 +557,8 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
-    private fun makeHooloovooEffect(init: Boolean = false) {
-        val effect =HooloovooEffectState(R.layout.effect_hooloovoo_layout);
+    private fun makeHooloovooEffect(init: Boolean = false,progress:Int = 20) {
+        val effect = HooloovooEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init){
             appPresenter.modState = State.EFFECT
 
@@ -566,7 +566,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             inflateEffectLayout(effect)
         }else{
             appPresenter.effectState = effect
-            mImageView?.makeEffect(0)
+            mImageView?.makeEffect(progress)
         }
     }
 
@@ -714,10 +714,26 @@ SaveImageBottomSheet.OnSaveImageListener{
                 //nothing
             }
             is HooloovooEffectState ->{
-                val b = view.findViewById(R.id.text_effect) as TextView
+                /*val b = view.findViewById(R.id.text_effect) as TextView
                 b.setOnClickListener {
                     makeHooloovooEffect()
-                }
+                }*/
+                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+                seekbar?.progress = effectState.progress
+
+                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
+                        if(arg2) makeHooloovooEffect(false,arg1)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                    }
+                })
             }
             is AnaglyphEffectState -> {
                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
