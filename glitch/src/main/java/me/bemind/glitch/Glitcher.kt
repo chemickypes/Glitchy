@@ -585,7 +585,7 @@ object Glitcher {
         fArr[i * 2 + 1] = f2
     }
 
-    fun hooloovooizeCanvas(canvas: Canvas?) {
+    fun hooloovooizeCanvas(canvas: Canvas?,progress: Int = 20) {
         //nothing
 
         val debossPaint = Paint()
@@ -595,8 +595,10 @@ object Glitcher {
         colorMatrix.setSaturation(1.25f)
 
         val m = colorMatrix.array
-        val c = RANDOM.nextInt(10)+1/* * (if(RANDOM.nextBoolean()) 1 else -1)*///10 //14
-        val bright = RANDOM.nextInt(10)+1 //10 //56
+        val c = ((progress/10)+1)/* * (if(RANDOM.nextBoolean()) 1 else -1)*///10 //14
+        val bright = ((progress*2/3)/10)+1 /*RANDOM.nextInt(10)+1*/ //10 //56
+
+        Log.d("HOOLOOVOO","c: $c bright: $bright")
         colorMatrix.set(floatArrayOf(m[ 0] * c, m[ 1] * c, m[ 2] * c, m[ 3] * c, m[ 4] * c + bright,
                 m[ 5] * c, m[ 6] * c, m[ 7] * c, m[ 8] * c, m[ 9] * c + bright,
                 m[10] * c, m[11] * c, m[12] * c, m[13] * c, m[14] * c + bright,
