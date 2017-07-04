@@ -105,10 +105,12 @@ SaveImageBottomSheet.OnSaveImageListener{
                                         EFFECT_NEWS.NEW -> ContextCompat.getColor(this,R.color.amaranth)
                                         else -> ContextCompat.getColor(this,R.color.amaranth)
                                     })
-                    when(data.effectNew){
-                        EFFECT_NEWS.NONE -> injector.gone(R.id.badge_textView)
-                        else -> {}//nothing
-                    }
+                            .visibility(R.id.badge_textView,
+                                    when(data.effectNew){
+                                        EFFECT_NEWS.NONE -> GONE
+                                        else -> VISIBLE
+                                    })
+
                 }
                 .attachTo(effectList)
     }
