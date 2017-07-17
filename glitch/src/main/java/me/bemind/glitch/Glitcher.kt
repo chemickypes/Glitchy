@@ -642,7 +642,7 @@ object Glitcher {
 
         val paint : Paint = Paint()
 
-        val cols : Double = if(density>1)density.toDouble()+30 else 30.0
+        val cols : Double = if(density>25)density.toDouble() else 25.0
         val blockSize : Double = w/cols
        // val rows : Double = Math.ceil(h/blockSize)
 
