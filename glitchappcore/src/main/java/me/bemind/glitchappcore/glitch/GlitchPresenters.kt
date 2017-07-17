@@ -423,9 +423,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         }
 
         //DEBUG
-        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.PIXEL) {
+        /*if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.PIXEL) {
             glithce.drawPath(canvas,touchPoint.x,touchPoint.y)
-        }
+        }*/
 
         canvas?.restore()
 
