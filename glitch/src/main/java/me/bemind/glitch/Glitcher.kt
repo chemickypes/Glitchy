@@ -73,6 +73,9 @@ object Glitcher {
 
     private val malpha: Int = 150
 
+    private var mPixelBitmap : Bitmap? = null
+    private var mPixelCanvas : Canvas? = null
+
 
 
     fun corruptBitmap(result:Bitmap?) : Bitmap{
@@ -519,10 +522,16 @@ object Glitcher {
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE){
             initGhost()
+        }else if(effect == Effect.PIXEL){
+            initPixelEffect()
         }
 
     }
 
+    private fun initPixelEffect() {
+        mPixelBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+        mPixelCanvas = Canvas(mPixelBitmap)
+    }
 
 
     private fun initGhost() {
@@ -531,8 +540,6 @@ object Glitcher {
         InitSmudgeMatrix()
         setGhostColor()
     }
-
-
 
     private fun setGhostColor() {
         redPaint.isFilterBitmap = true
@@ -554,7 +561,6 @@ object Glitcher {
         bluePaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
 
     }
-
 
     private fun InitSmudgeMatrix() {
         SMCOUNT = (WWIDTH+1)*(WHEIGHT+1)
@@ -632,15 +638,35 @@ object Glitcher {
         //canvas?.drawFilter
     }
 
-    fun pixelCanvas(canvas: Canvas?,density: Int = 70){
+    fun pixelCanvas(canvas: Canvas?,density: Int = 70, x: Int, y: Int){
 
         val paint : Paint = Paint()
 
         val cols : Double = if(density>1)density.toDouble()+30 else 30.0
         val blockSize : Double = w/cols
-        val rows : Double = Math.ceil(h/blockSize)
+       // val rows : Double = Math.ceil(h/blockSize)
 
-        for(row in 0 until rows.toInt()){
+
+        val pixelCoordX : Int = ((x/blockSize ).toInt()) * blockSize.toInt()
+        val pixelCoordY : Int = (y/blockSize).toInt() * blockSize.toInt()
+
+        val midY = pixelCoordY + (blockSize / 2)
+        val midX = pixelCoordX + (blockSize / 2)
+
+        if((midX >= w || midX < 0) || (midY >= h || midY < 0)) {
+            //ntohing
+        }else {
+
+            paint.color = baseBitmap?.getPixel(midX.toInt(), midY.toInt()) ?: 0
+            mPixelCanvas?.drawRect(pixelCoordX.toFloat(), pixelCoordY.toFloat(),
+                    (pixelCoordX + blockSize).toFloat(), (pixelCoordY + blockSize).toFloat(), paint)
+        }
+
+        canvas?.drawBitmap(mPixelBitmap,0f,0f,paint)
+
+
+
+        /*for(row in 0 until rows.toInt()){
             for (col in 0 until cols.toInt()){
                 val pixelCoordX : Double = (blockSize * col)
                 val pixelCoordY : Double = (blockSize * row)
@@ -655,7 +681,7 @@ object Glitcher {
                 canvas?.drawRect(pixelCoordX.toFloat(),pixelCoordY.toFloat(),
                         (pixelCoordX+blockSize).toFloat(),(pixelCoordY+blockSize).toFloat(),paint)
             }
-        }
+        }*/
 
     }
 

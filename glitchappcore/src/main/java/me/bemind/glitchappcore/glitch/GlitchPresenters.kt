@@ -68,7 +68,7 @@ interface IGlitchPresenter{
     fun swap(canvas: Canvas?)
     fun noise(canvas: Canvas?,progress: Int = 170)
     fun hooloovooize(canvas: Canvas?,progress: Int = 20)
-    fun pixelize(canvas: Canvas?,progress: Int = 70)
+    fun pixelize(canvas: Canvas?,progress: Int = 70,x: Int,y: Int)
 
 
 }
@@ -171,8 +171,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         glithce.hooloovooizeCanvas(canvas,progress)
     }
 
-    override fun pixelize(canvas: Canvas?, progress: Int) {
-        glithce.pixelCanvas(canvas,progress)
+    override fun pixelize(canvas: Canvas?, progress: Int,x: Int,y: Int) {
+        glithce.pixelCanvas(canvas,progress,x,y)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -344,7 +344,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             }
         }
 
-        if(effect == Effect.GHOST || effect == Effect.WOBBLE){
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.PIXEL){
             glitchView?.invalidateGlitchView()
         }
 
@@ -409,7 +409,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             Effect.NOISE -> noise(canvas,effectProgress)
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
-            Effect.PIXEL -> pixelize(canvas,effectProgress)
+            Effect.PIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
             else -> Log.v("ImageView", "BASE")
         }
         canvas?.restore()
