@@ -698,7 +698,12 @@ object Glitcher {
         return 417
     }
 
-
+    fun drawPath(canvas: Canvas?, x: Int, y: Int) {
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        canvas?.drawCircle(x.toFloat(), y.toFloat(),4f,paint)
+    }
 
 
 }
