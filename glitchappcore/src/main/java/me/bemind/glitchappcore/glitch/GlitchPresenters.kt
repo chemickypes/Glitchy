@@ -256,7 +256,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
                 val canvas = Canvas(b)
 
-                if(effect == Effect.NOISE /*|| effect == Effect.HOOLOOVOO*/) {
+                if(effect == Effect.NOISE || effect == Effect.PIXEL) {
                     canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
                 }
 
