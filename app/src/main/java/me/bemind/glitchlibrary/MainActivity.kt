@@ -32,6 +32,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
+import com.shamanland.fonticon.FontIconView
 import io.fabric.sdk.android.Fabric
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
@@ -65,7 +66,12 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var toolbar : Toolbar? = null
 
-    private var toolbarEffect : Toolbar? = null
+    //private var toolbarEffect : Toolbar? = null
+    private var actionBar : View? = null
+
+    private var saveAction : FontIconView? = null
+
+    private var cleaAction : FontIconView? = null
 
     private var appPresenter : IAppPresenter = AppPresenter()
 
@@ -127,16 +133,29 @@ SaveImageBottomSheet.OnSaveImageListener{
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
+
+        actionBar = findViewById(R.id.action_panel)
+
+        cleaAction = findViewById(R.id.clear_effect) as FontIconView?
+        cleaAction?.setOnClickListener {
+            if(appPresenter.modState == State.EFFECT){
+                appPresenter.modState = State.BASE
+                mImageView?.clearEffect()
+            }
+        }
+        /*toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
         toolbarEffect?.navigationIcon = FontIconDrawable.inflate(this,R.xml.ic_close)
         toolbarEffect?.setNavigationOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
-        }
+        }*/
 
-        toolbarEffect?.inflateMenu(R.menu.ok_menu)
+        saveAction = findViewById(R.id.save_effect) as FontIconView?
+        saveAction?.setOnClickListener { applyEffect() }
+
+        /*toolbarEffect?.inflateMenu(R.menu.ok_menu)
         toolbarEffect?.menu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.ic_done)
         toolbarEffect?.setOnMenuItemClickListener {  item ->
             when (item.itemId){
@@ -146,7 +165,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 }
                 else -> true //do nothing
             }
-        }
+        }*/
 
         setSupportActionBar(toolbar)
 
@@ -218,10 +237,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(effectPanel?.visibility== VISIBLE)animateAlpha(effectPanel, runnable, 350, false, 0f)
 
         val runnable2 :Runnable = Runnable {
-            toolbarEffect?.visibility = GONE
-            toolbarEffect?.alpha = 1f
+            actionBar?.visibility = GONE
+            actionBar?.alpha = 1f
         }
-        if(toolbarEffect?.visibility == VISIBLE)animateAlpha(toolbarEffect,runnable2, 350, false, 0f)
+        if(actionBar?.visibility == VISIBLE)animateAlpha(actionBar,runnable2, 350, false, 0f)
 
     }
 
@@ -237,13 +256,13 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
 
         val runnable2 :Runnable = Runnable {
-            toolbarEffect?.alpha = 0f
-            toolbarEffect?.visibility = VISIBLE
+            actionBar?.alpha = 0f
+            actionBar?.visibility = VISIBLE
         }
 
         if(mImageView?.hasHistory?:false) {
             if(effectPanel?.visibility == GONE) animateAlpha(effectPanel,runnable, 450, true, 1f)
-            if(toolbarEffect?.visibility == GONE)animateAlpha(toolbarEffect,runnable2, 450, true, 1f)
+            if(actionBar?.visibility == GONE)animateAlpha(actionBar,runnable2, 450, true, 1f)
         }
 
     }

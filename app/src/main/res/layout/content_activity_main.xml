@@ -93,14 +93,43 @@
 
 
     <FrameLayout
-        android:id="@+id/effect_panel"
+        android:id="@+id/action_panel"
         style="@style/SeekBarPanelTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@+id/list_effect"
         android:visibility="gone"
-        android:background="@color/han_purple"/>
+        android:background="@color/han_purple">
+
+        <com.shamanland.fonticon.FontIconView
+            android:id="@+id/save_effect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="16dp"
+            android:text="@string/done_char"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:textColor="@color/white"
+            android:clickable="true"
+            app:overridePressed="true"
+            app:pressedGlowColor="@color/white_smoke"
+            app:pressedGlowRadius="20dp"/>
+
+        <com.shamanland.fonticon.FontIconView
+            android:id="@+id/clear_effect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="16dp"
+            android:text="@string/close_char"
+            android:textSize="@dimen/menu_icon_size_sp"
+            android:textColor="@color/white"
+            android:clickable="true"
+            app:overridePressed="true"
+            app:pressedGlowColor="@color/white_smoke"
+            app:pressedGlowRadius="20dp"/>
+        </FrameLayout>
 
 
 
