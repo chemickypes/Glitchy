@@ -688,7 +688,7 @@ object Glitcher {
     fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
         val paint : Paint = Paint()
 
-        val cols : Double = if(density>25)density.toDouble() else 25.0
+        val cols : Double = density.toDouble()+20
         val blockSize : Double = w/cols
          val rows : Double = Math.ceil(h/blockSize)
 
