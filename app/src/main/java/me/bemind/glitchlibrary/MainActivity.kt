@@ -142,7 +142,6 @@ SaveImageBottomSheet.OnSaveImageListener{
                     data, injector ->
                     injector.text(R.id.text, data.toString())
                 }
-                .attachTo(densityRv)
     }
 
     private val densityPanel by lazy {
@@ -814,6 +813,12 @@ SaveImageBottomSheet.OnSaveImageListener{
                                     super.onAnimationEnd(animation)
                                     densityPanel.alpha = 0f
                                     densityPanel.visibility = VISIBLE
+
+                                    densityAdapter.updateData(intArrayOf(20,40,50,60,75,80,100).asList())
+
+                                    densityAdapter.attachTo(densityRv)
+
+                                    densityRv.smoothScrollBy(10,0) //need
                                 }
                             })
                 }
@@ -827,7 +832,9 @@ SaveImageBottomSheet.OnSaveImageListener{
                 snapHelper.attachToRecyclerView(densityRv)
                 densityRv.layoutManager = pickerLayoutManager
 
-                densityAdapter.updateData(intArrayOf(25,50,75,100).asList())
+
+
+
 
                 val save = findViewById(R.id.save_selection) as ImageView
                 save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
@@ -848,7 +855,11 @@ SaveImageBottomSheet.OnSaveImageListener{
                 }
 
                 pickerLayoutManager.setOnScrollStopListener {
-                    v -> sel = (v as TextView).text.toString().toInt()
+                    v ->
+                    v?.let {
+                        sel = (v as TextView).text.toString().toInt()
+                    }
+
                 }
 
 
