@@ -24,6 +24,7 @@ import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.common.ConnectionResult
@@ -56,7 +57,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var effectPanel: ViewGroup? = null
 
-    private val effectList by lazy<RecyclerView> {
+    private val effectList by lazy {
         (findViewById(R.id.effect_list) as RecyclerView).apply {
             layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
         }
@@ -71,9 +72,13 @@ SaveImageBottomSheet.OnSaveImageListener{
     //private var toolbarEffect : Toolbar? = null
     private var actionBar : View? = null
 
-    private var saveAction : FontIconView? = null
+    private val saveAction : ImageView by lazy {
+        findViewById(R.id.save_effect) as ImageView
+    }
 
-    private var cleaAction : FontIconView? = null
+    private val cleaAction : ImageView by lazy {
+        findViewById(R.id.clear_effect) as ImageView
+    }
 
     private var appPresenter : IAppPresenter = AppPresenter()
 
@@ -142,16 +147,16 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         actionBar = findViewById(R.id.action_panel)
 
-        cleaAction = findViewById(R.id.clear_effect) as FontIconView?
-        cleaAction?.setOnClickListener {
+        cleaAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_close))
+        cleaAction.setOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
         }
 
-        saveAction = findViewById(R.id.save_effect) as FontIconView?
-        saveAction?.setOnClickListener { applyEffect() }
+        saveAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+        saveAction.setOnClickListener { applyEffect() }
 
 
         setSupportActionBar(toolbar)

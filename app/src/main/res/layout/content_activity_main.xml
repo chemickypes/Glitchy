@@ -113,13 +113,15 @@
         android:visibility="gone"
         android:background="@color/han_purple">
 
-        <com.shamanland.fonticon.FontIconView
+        <!--<com.shamanland.fonticon.FontIconView
             android:id="@+id/save_effect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_gravity="end|center_vertical"
             android:layout_margin="16dp"
             android:text="@string/done_char"
+            android:padding="16dp"
             android:textSize="@dimen/menu_icon_size_sp"
             android:textColor="@color/white"
             android:clickable="true"
@@ -130,16 +132,34 @@
         <com.shamanland.fonticon.FontIconView
             android:id="@+id/clear_effect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_gravity="start|center_vertical"
             android:layout_margin="16dp"
+            android:padding="16dp"
             android:text="@string/close_char"
             android:textSize="@dimen/menu_icon_size_sp"
             android:textColor="@color/white"
             android:clickable="true"
             app:overridePressed="true"
             app:pressedGlowColor="@color/white_smoke"
-            app:pressedGlowRadius="20dp"/>
+            app:pressedGlowRadius="20dp"/>-->
+
+        <ImageView
+            android:id="@+id/clear_effect"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"/>
+
+        <ImageView
+            android:id="@+id/save_effect"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"/>
+
+
         </FrameLayout>
 
 
