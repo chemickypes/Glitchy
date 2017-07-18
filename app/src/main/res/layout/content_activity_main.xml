@@ -165,8 +165,6 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/rv"
-            android:layout_toEndOf="@+id/rv"
             android:layout_margin="16dp"/>
 
     </RelativeLayout>

@@ -257,6 +257,17 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
         if(actionBar?.visibility == VISIBLE)animateAlpha(actionBar,runnable2, 350, false, 0f)
 
+        if(densityPanel.visibility == VISIBLE){
+            densityPanel.animate().alpha(0f)
+                    .setDuration(200)
+                    .setListener(object: AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            densityPanel.visibility = GONE
+                        }
+                    })
+        }
+
     }
 
     private fun openEffectPanel() {
