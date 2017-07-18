@@ -665,27 +665,9 @@ object Glitcher {
         canvas?.drawBitmap(mPixelBitmap,0f,0f,paint)
 
 
-
-        /*for(row in 0 until rows.toInt()){
-            for (col in 0 until cols.toInt()){
-                val pixelCoordX : Double = (blockSize * col)
-                val pixelCoordY : Double = (blockSize * row)
-
-                val midY = pixelCoordY + (blockSize / 2)
-                val midX = pixelCoordX + (blockSize / 2)
-
-                if(midX >= w || midX < 0) continue
-                if(midY >= h || midY < 0) continue
-
-                paint.color = baseBitmap?.getPixel(midX.toInt(),midY.toInt())?:0
-                canvas?.drawRect(pixelCoordX.toFloat(),pixelCoordY.toFloat(),
-                        (pixelCoordX+blockSize).toFloat(),(pixelCoordY+blockSize).toFloat(),paint)
-            }
-        }*/
-
     }
 
-    fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
+    @Synchronized fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
         val paint : Paint = Paint()
 
         val cols : Double = density.toDouble()+20
