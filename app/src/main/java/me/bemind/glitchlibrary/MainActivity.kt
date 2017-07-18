@@ -747,6 +747,8 @@ SaveImageBottomSheet.OnSaveImageListener{
                 /*val bar = view.findViewById(R.id.bar) as BarView?
                 bar?.progress = effectState.progress*/
 
+                bar.visibility = VISIBLE
+
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
