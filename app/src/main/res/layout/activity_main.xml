@@ -39,13 +39,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"/>
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar_effect"
+                <FrameLayout
+                    android:id="@+id/effect_panel"
                     style="@style/AppBarOverlay"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@color/colorAccent"/>
+                    android:background="@color/dark_gunmetal"/>
 
             </RelativeLayout>
 

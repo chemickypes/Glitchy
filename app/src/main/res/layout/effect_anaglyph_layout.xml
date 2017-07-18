@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:minHeight="?actionBarSize"
+    android:layout_height="?actionBarSize">
 
-    <SeekBar
+    <!--<SeekBar
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:max="100"
         android:progress="20"
-        android:padding="16dp"/>
+        android:padding="16dp"/>-->
+    <me.bemind.glitchlibrary.GlithcyTextView
+        android:id="@+id/tap_to_glitch_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:glitchyTypeface="mono"
+        android:textAllCaps="false"
+        android:text="@string/swipe_on_image"
+        android:gravity="center"
+        android:textSize="18sp"/>
 
-</LinearLayout>
+
+</FrameLayout>
