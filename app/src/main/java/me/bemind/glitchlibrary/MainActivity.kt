@@ -254,6 +254,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             bar.visibility = GONE
             actionBar?.visibility = GONE
             actionBar?.alpha = 1f
+            plusInfoPanel.removeAllViews()
         }
         if(actionBar?.visibility == VISIBLE)animateAlpha(actionBar,runnable2, 350, false, 0f)
 
