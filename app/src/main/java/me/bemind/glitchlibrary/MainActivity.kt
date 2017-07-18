@@ -195,6 +195,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         effectAdapter.updateData(EffectList.data).notifyDataSetChanged()
 
 
+        //listener
+        bar.onProgressChangeListener = {
+            progress -> mImageView?.makeEffect(progress)
+        }
 
 
 

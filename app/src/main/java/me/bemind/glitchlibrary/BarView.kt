@@ -16,10 +16,14 @@ class BarView : View {
 
     private var mPaint: Paint? = null
 
+    var onProgressChangeListener : ((progress : Int) -> Unit)? = null
+
     var progress : Int = 0
     set(value) {
         field = value
         invalidate()
+
+        onProgressChangeListener?.invoke(field)
     }
 
     constructor(context: Context) : super(context) {
@@ -95,5 +99,6 @@ class BarView : View {
             }
         }
     }
+
 
 }
