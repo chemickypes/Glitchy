@@ -151,6 +151,27 @@ data class HooloovooEffectState (override val layout: Int,val progress: Int) : E
     }
 }
 
+data class PixelEffectState(override val layout: Int,val progress: Int) : EffectState(layout),Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<PixelEffectState> = object : Parcelable.Creator<PixelEffectState> {
+            override fun createFromParcel(source: Parcel): PixelEffectState = PixelEffectState(source)
+            override fun newArray(size: Int): Array<PixelEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(
+    source.readInt(),
+    source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(layout)
+        dest.writeInt(progress)
+    }
+}
+
 data class GlitchEffectState(override val layout: Int) : EffectState(layout), Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<GlitchEffectState> = object : Parcelable.Creator<GlitchEffectState> {

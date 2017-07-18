@@ -3,6 +3,7 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/misc.xml
 /app/*.apk
 .DS_Store
 /build

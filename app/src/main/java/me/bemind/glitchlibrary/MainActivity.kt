@@ -105,10 +105,12 @@ SaveImageBottomSheet.OnSaveImageListener{
                                         EFFECT_NEWS.NEW -> ContextCompat.getColor(this,R.color.amaranth)
                                         else -> ContextCompat.getColor(this,R.color.amaranth)
                                     })
-                    when(data.effectNew){
-                        EFFECT_NEWS.NONE -> injector.gone(R.id.badge_textView)
-                        else -> {}//nothing
-                    }
+                            .visibility(R.id.badge_textView,
+                                    when(data.effectNew){
+                                        EFFECT_NEWS.NONE -> GONE
+                                        else -> VISIBLE
+                                    })
+
                 }
                 .attachTo(effectList)
     }
@@ -550,6 +552,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.SWAP -> makeSwapEffect(true)
                 Effect.NOISE -> makeNoiseEffect(true)
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
+                Effect.PIXEL -> makePixelEffect(true)
                 else -> {
                 }
             }
@@ -619,6 +622,19 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.effectState = effect
             mImageView?.makeEffect(progress)
         // imagePresenter.glitchImage(Effect.ANAGLYPH, progress, init)
+        }
+    }
+
+    private fun makePixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = PixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.PIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
         }
     }
 
@@ -722,8 +738,30 @@ SaveImageBottomSheet.OnSaveImageListener{
                 seekbar?.progress = effectState.progress
 
                 seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    var pro = 0
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeHooloovooEffect(false,arg1)
+                        if(arg2){
+                            pro = arg1
+                            if(pro%10 == 0) makeHooloovooEffect(false,arg1)
+                        }
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+                        makeHooloovooEffect(false,pro)
+                    }
+                })
+            }
+            is AnaglyphEffectState -> {
+               val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+                seekbar?.progress = effectState.progress
+
+                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
+                        if(arg2) makeAnaglyphEffect(false,arg1)
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -735,13 +773,13 @@ SaveImageBottomSheet.OnSaveImageListener{
                     }
                 })
             }
-            is AnaglyphEffectState -> {
-               val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
+            is PixelEffectState ->{
+                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
                 seekbar?.progress = effectState.progress
 
                 seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeAnaglyphEffect(false,arg1)
+                        if(arg2) makePixelEffect(false,arg1)
                     }
 
                     override fun onStartTrackingTouch(seekBar: SeekBar) {
