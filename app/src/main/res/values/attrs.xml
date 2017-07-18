@@ -8,4 +8,14 @@
             <enum name="mono" value="3"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="BarView">
+        <attr name="barViewProgress" format="integer" />
+        <attr name="barViewColor" format="color"/>
+        <attr name="barViewBackgroundColor" format="color"/>
+        <attr name="barViewThickness" format="dimension" />
+        <attr name="barViewCap" format="enum">
+            <enum name="square" value="0"/>
+            <enum name="round" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>
