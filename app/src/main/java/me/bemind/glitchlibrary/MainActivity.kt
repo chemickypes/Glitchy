@@ -1,13 +1,13 @@
 package me.bemind.glitchlibrary
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
-import android.widget.SeekBar
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
@@ -19,12 +19,11 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.*
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.common.ConnectionResult
@@ -32,13 +31,17 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
+import com.shamanland.fonticon.FontIconView
 import io.fabric.sdk.android.Fabric
+import io.reactivex.disposables.Disposable
+import me.bemind.customcanvas.BarView
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
 import org.jraf.android.alibglitch.GlitchEffect
 import permissions.dispatcher.*
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 
 
 @RuntimePermissions
@@ -46,6 +49,7 @@ class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPick
 SaveImageBottomSheet.OnSaveImageListener{
     private val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
 
+    private var disposable: Disposable? = null
 
     private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
@@ -53,7 +57,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var effectPanel: ViewGroup? = null
 
-    private val effectList by lazy<RecyclerView> {
+    private val effectList by lazy {
         (findViewById(R.id.effect_list) as RecyclerView).apply {
             layoutManager = LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
         }
@@ -65,7 +69,16 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var toolbar : Toolbar? = null
 
-    private var toolbarEffect : Toolbar? = null
+    //private var toolbarEffect : Toolbar? = null
+    private var actionBar : View? = null
+
+    private val saveAction : ImageView by lazy {
+        findViewById(R.id.save_effect) as ImageView
+    }
+
+    private val cleaAction : ImageView by lazy {
+        findViewById(R.id.clear_effect) as ImageView
+    }
 
     private var appPresenter : IAppPresenter = AppPresenter()
 
@@ -79,6 +92,10 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     val sidemenu : SideMenu by lazy {
         findViewById(R.id.side_menu) as SideMenu
+    }
+
+    val bar : BarView by lazy {
+        findViewById(R.id.bar) as BarView
     }
 
     val sideMenuToggle : SideMenuToggle by lazy {
@@ -105,14 +122,35 @@ SaveImageBottomSheet.OnSaveImageListener{
                                         EFFECT_NEWS.NEW -> ContextCompat.getColor(this,R.color.amaranth)
                                         else -> ContextCompat.getColor(this,R.color.amaranth)
                                     })
-                    when(data.effectNew){
-                        EFFECT_NEWS.NONE -> injector.gone(R.id.badge_textView)
-                        else -> {}//nothing
-                    }
+                            .visibility(R.id.badge_textView,
+                                    when(data.effectNew){
+                                        EFFECT_NEWS.NONE -> GONE
+                                        else -> VISIBLE
+                                    })
+
                 }
                 .attachTo(effectList)
     }
 
+    private val densityRv by lazy {
+        findViewById(R.id.rv) as RecyclerView
+    }
+
+    private val densityAdapter by lazy {
+        SlimAdapter.create()
+                .register<Int>(R.layout.density_row){
+                    data, injector ->
+                    injector.text(R.id.text, data.toString())
+                }
+    }
+
+    private val densityPanel by lazy {
+        findViewById(R.id.density_panel)
+    }
+
+    private val plusInfoPanel by lazy {
+        findViewById(R.id.plus_info_panel) as ViewGroup
+    }
 
 
 
@@ -125,26 +163,20 @@ SaveImageBottomSheet.OnSaveImageListener{
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
-        toolbarEffect?.navigationIcon = FontIconDrawable.inflate(this,R.xml.ic_close)
-        toolbarEffect?.setNavigationOnClickListener {
+
+        actionBar = findViewById(R.id.action_panel)
+
+        cleaAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_close))
+        cleaAction.setOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
         }
 
-        toolbarEffect?.inflateMenu(R.menu.ok_menu)
-        toolbarEffect?.menu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.ic_done)
-        toolbarEffect?.setOnMenuItemClickListener {  item ->
-            when (item.itemId){
-                R.id.ok_action -> {
-                    applyEffect()
-                    true
-                }
-                else -> true //do nothing
-            }
-        }
+        saveAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+        saveAction.setOnClickListener { applyEffect() }
+
 
         setSupportActionBar(toolbar)
 
@@ -188,9 +220,11 @@ SaveImageBottomSheet.OnSaveImageListener{
         effectAdapter.updateData(EffectList.data).notifyDataSetChanged()
 
 
-
-
-
+        //listener
+        bar.onProgressChangeListener = {
+            progress -> mImageView?.makeEffect(progress)
+        }
+        
 
     }
 
@@ -216,10 +250,23 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(effectPanel?.visibility== VISIBLE)animateAlpha(effectPanel, runnable, 350, false, 0f)
 
         val runnable2 :Runnable = Runnable {
-            toolbarEffect?.visibility = GONE
-            toolbarEffect?.alpha = 1f
+            bar.visibility = GONE
+            actionBar?.visibility = GONE
+            actionBar?.alpha = 1f
+            plusInfoPanel.removeAllViews()
         }
-        if(toolbarEffect?.visibility == VISIBLE)animateAlpha(toolbarEffect,runnable2, 350, false, 0f)
+        if(actionBar?.visibility == VISIBLE)animateAlpha(actionBar,runnable2, 350, false, 0f)
+
+        if(densityPanel.visibility == VISIBLE){
+            densityPanel.animate().alpha(0f)
+                    .setDuration(200)
+                    .setListener(object: AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            densityPanel.visibility = GONE
+                        }
+                    })
+        }
 
     }
 
@@ -235,13 +282,13 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
 
         val runnable2 :Runnable = Runnable {
-            toolbarEffect?.alpha = 0f
-            toolbarEffect?.visibility = VISIBLE
+            actionBar?.alpha = 0f
+            actionBar?.visibility = VISIBLE
         }
 
         if(mImageView?.hasHistory?:false) {
             if(effectPanel?.visibility == GONE) animateAlpha(effectPanel,runnable, 450, true, 1f)
-            if(toolbarEffect?.visibility == GONE)animateAlpha(toolbarEffect,runnable2, 450, true, 1f)
+            if(actionBar?.visibility == GONE)animateAlpha(actionBar,runnable2, 450, true, 1f)
         }
 
     }
@@ -290,6 +337,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         super.onStop()
         appPresenter.appView = null
         ioPresenter.ioView = null
+
+        disposable?.dispose()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -341,6 +390,9 @@ SaveImageBottomSheet.OnSaveImageListener{
         startActivity(Intent.createChooser(share, getString(R.string.share)))
     }
 
+
+
+
     override fun onResume() {
         super.onResume()
 
@@ -365,8 +417,14 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
         }
+        
+        disposable = ProgressUpdate.progressSubject.subscribe(
+                {progress -> bar.addProgressOnSwipe(progress)}
+        )
 
     }
+    
+    
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -550,6 +608,8 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.SWAP -> makeSwapEffect(true)
                 Effect.NOISE -> makeNoiseEffect(true)
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
+                Effect.PIXEL -> makePixelEffect(true)
+                Effect.TPIXEL -> makeTPixelEffect(true)
                 else -> {
                 }
             }
@@ -557,8 +617,8 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
-    private fun makeHooloovooEffect(init: Boolean = false) {
-        val effect =HooloovooEffectState(R.layout.effect_hooloovoo_layout);
+    private fun makeHooloovooEffect(init: Boolean = false,progress:Int = 20) {
+        val effect = HooloovooEffectState(R.layout.effect_anaglyph_layout,progress)
         if(init){
             appPresenter.modState = State.EFFECT
 
@@ -566,7 +626,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             inflateEffectLayout(effect)
         }else{
             appPresenter.effectState = effect
-            mImageView?.makeEffect(0)
+            mImageView?.makeEffect(progress)
         }
     }
 
@@ -622,6 +682,32 @@ SaveImageBottomSheet.OnSaveImageListener{
         }
     }
 
+    private fun makePixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = PixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.PIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
+        }
+    }
+
+    private fun makeTPixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = TPixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.TPIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
+        }
+    }
+
     private fun makeGlitchEffect(init: Boolean = false){
         if(init){
             appPresenter.modState = State.EFFECT
@@ -664,48 +750,24 @@ SaveImageBottomSheet.OnSaveImageListener{
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
             is NoiseEffectState ->{
-                /*val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
-                b.setText(R.string.tap_here_to_create_noise)
-                b.setOnClickListener {
-                    makeNoiseEffect()
-                }*/
 
-                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+                bar.visibility = VISIBLE
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeNoiseEffect(false,arg1)
-                    }
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                    }
-                })
             }
             is WebpEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_glitch_webp)
-                b.setOnClickListener {
-                    makeWebpEffect()
-                }
+
             }
             is SwapEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_swap)
-                b.setOnClickListener {
-                    makeSwapEffect()
-                }
+
             }
             is GlitchEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button)
-                b.setOnClickListener {
-                    makeGlitchEffect()
-                }
+
             }
             is GhostEffectState -> {
                 //nothing
@@ -714,28 +776,98 @@ SaveImageBottomSheet.OnSaveImageListener{
                 //nothing
             }
             is HooloovooEffectState ->{
-                val b = view.findViewById(R.id.text_effect) as TextView
-                b.setOnClickListener {
-                    makeHooloovooEffect()
-                }
+
+               /* val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
+                bar.visibility = VISIBLE
+
             }
             is AnaglyphEffectState -> {
-               val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+              /*  val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeAnaglyphEffect(false,arg1)
+                bar.visibility = VISIBLE
+            }
+            is PixelEffectState ->{
+                /*val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
+
+                bar.visibility = VISIBLE
+
+            }
+
+            is TPixelEffectState ->{
+
+                var sel = 25
+
+                val densP = layoutInflater.inflate(R.layout.density_panel,plusInfoPanel,false)
+                plusInfoPanel.addView(densP)
+
+                val denstext = densP.findViewById(R.id.text_density) as TextView
+
+                densP.setOnClickListener {
+                    densityPanel.animate().alpha(1f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationStart(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.alpha = 0f
+                                    densityPanel.visibility = VISIBLE
+
+                                    densityAdapter.updateData(intArrayOf(20,40,50,60,75,80,100).asList())
+
+                                    densityAdapter.attachTo(densityRv)
+
+                                    densityRv.smoothScrollBy(10,0) //need
+                                }
+                            })
+                }
+
+                val pickerLayoutManager = PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false)
+                pickerLayoutManager.isChangeAlpha = true
+                pickerLayoutManager.scaleDownBy = 0.99f
+                pickerLayoutManager.scaleDownDistance = 0.8f
+
+                try{
+                    val snapHelper =  LinearSnapHelper()
+                    snapHelper.attachToRecyclerView(densityRv)
+                }catch (e:Exception ){
+                    e.printStackTrace()
+                }
+
+                densityRv.layoutManager = pickerLayoutManager
+
+
+
+
+
+                val save = findViewById(R.id.save_selection) as ImageView
+                save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+                save.setOnClickListener {
+                    //set sel
+
+                    denstext.text = sel.toString()
+                    densityPanel.animate().alpha(0f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.visibility = GONE
+
+                                    mImageView?.makeEffect(sel)
+                                }
+                            })
+                }
+
+                pickerLayoutManager.setOnScrollStopListener {
+                    v ->
+                    v?.let {
+                        sel = (v as TextView).text.toString().toInt()
                     }
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+                }
 
-                    }
 
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                    }
-                })
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
@@ -744,19 +876,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         effectPanel?.addView(view)
     }
 
-    private fun applyFont(menu: Menu?) {
-        for(i in 0 until menu?.size()!!){
-            val item = menu.getItem(i)
-            val tv = LayoutInflater.from(this).inflate(R.layout.menu_text_item,toolbar,false) as TextView
-            tv.text = item.title
-            item.actionView = tv
-
-            tv.setOnClickListener {
-                val onOptionsItemSelected = onOptionsItemSelected(item)
-            }
-
-        }
-    }
 
     private fun checkPlayServices() : Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()

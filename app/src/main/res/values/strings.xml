@@ -17,7 +17,7 @@
     <string name="tap_to_open_ad_image">Tap to open image</string>
     <string name="ok">OK</string>
     <string name="glitch">Glitch</string>
-    <string name="tap_here_to_glitch">Tap here to glitch</string>
+    <string name="tap_here_to_glitch">Tap on image to glitch</string>
     <string name="get_image_error">Error pick of image</string>
     <string name="image_saved">Image %1$s saved!</string>
     <string name="image_saving_error">Image Saving error!</string>
@@ -36,7 +36,7 @@
     <string name="close">Close</string>
     <string name="bemind_interavtive_srl">by <u>Bemind Interactive</u></string>
     <string name="donate">Donate</string>
-    <string name="text_desc_app">\"The most beautiful experience wa can have is the mysterious. It is the fundamental emotion that stands a the cradle of true art and true science\"\nAlbert Einstein</string>
+    <string name="text_desc_app">\"The most beautiful experience we can have is the mysterious. It is the fundamental emotion that stands at the cradle of true art and true science\"\nAlbert Einstein</string>
     <string name="v_d">%1$s</string>
     <string name="hooloovoo">Hooloovoo</string>
     <string name="do_you_like_hooloovoo_image">do u like hooloovoo image?</string>
@@ -58,4 +58,8 @@
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
     <string name="permission_camera_rationale">Storage permissions are fundamental for Glitchy! Without them, you won\'t be able to save your glitched pics!</string>
+    <string name="pixel">Pixel</string>
+    <string name="swipe_on_image">Swipe on Image</string>
+    <string name="t_pixel">Touch Pixel</string>
+    <string name="density_string">Density</string>
 </resources>

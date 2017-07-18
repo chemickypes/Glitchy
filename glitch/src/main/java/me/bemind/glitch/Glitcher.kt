@@ -5,6 +5,9 @@ import android.util.FloatMath
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
+import android.R.attr.bitmap
+
+
 
 /**
  * Created by angelomoroni on 27/03/17.
@@ -69,6 +72,9 @@ object Glitcher {
     val MAX_VALUE = 10
 
     private val malpha: Int = 150
+
+    private var mPixelBitmap : Bitmap? = null
+    private var mPixelCanvas : Canvas? = null
 
 
 
@@ -516,10 +522,16 @@ object Glitcher {
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE){
             initGhost()
+        }else if(effect == Effect.TPIXEL){
+            initPixelEffect()
         }
 
     }
 
+    private fun initPixelEffect() {
+        mPixelBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+        mPixelCanvas = Canvas(mPixelBitmap)
+    }
 
 
     private fun initGhost() {
@@ -528,8 +540,6 @@ object Glitcher {
         InitSmudgeMatrix()
         setGhostColor()
     }
-
-
 
     private fun setGhostColor() {
         redPaint.isFilterBitmap = true
@@ -551,7 +561,6 @@ object Glitcher {
         bluePaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
 
     }
-
 
     private fun InitSmudgeMatrix() {
         SMCOUNT = (WWIDTH+1)*(WHEIGHT+1)
@@ -585,7 +594,7 @@ object Glitcher {
         fArr[i * 2 + 1] = f2
     }
 
-    fun hooloovooizeCanvas(canvas: Canvas?) {
+    fun hooloovooizeCanvas(canvas: Canvas?,progress: Int = 20) {
         //nothing
 
         val debossPaint = Paint()
@@ -595,8 +604,10 @@ object Glitcher {
         colorMatrix.setSaturation(1.25f)
 
         val m = colorMatrix.array
-        val c = RANDOM.nextInt(10)+1/* * (if(RANDOM.nextBoolean()) 1 else -1)*///10 //14
-        val bright = RANDOM.nextInt(10)+1 //10 //56
+        val c :Float = ((progress.toFloat()/10)+1)/* * (if(RANDOM.nextBoolean()) 1 else -1)*///10 //14
+        val bright :Float = ((progress.toFloat()*2/3)/10)+1 /*RANDOM.nextInt(10)+1*/ //10 //56
+
+        Log.d("HOOLOOVOO","c: $c bright: $bright")
         colorMatrix.set(floatArrayOf(m[ 0] * c, m[ 1] * c, m[ 2] * c, m[ 3] * c, m[ 4] * c + bright,
                 m[ 5] * c, m[ 6] * c, m[ 7] * c, m[ 8] * c, m[ 9] * c + bright,
                 m[10] * c, m[11] * c, m[12] * c, m[13] * c, m[14] * c + bright,
@@ -627,6 +638,62 @@ object Glitcher {
         //canvas?.drawFilter
     }
 
+    fun pixelCanvas(canvas: Canvas?,density: Int = 70, x: Int, y: Int){
+
+        val paint : Paint = Paint()
+
+        val cols : Double = if(density>25)density.toDouble() else 25.0
+        val blockSize : Double = w/cols
+       // val rows : Double = Math.ceil(h/blockSize)
+
+
+        val pixelCoordX : Int = ((x/blockSize ).toInt()) * blockSize.toInt()
+        val pixelCoordY : Int = (y/blockSize).toInt() * blockSize.toInt()
+
+        val midY = pixelCoordY + (blockSize / 2)
+        val midX = pixelCoordX + (blockSize / 2)
+
+        if((midX >= w || midX < 0) || (midY >= h || midY < 0)) {
+            //ntohing
+        }else {
+
+            paint.color = baseBitmap?.getPixel(midX.toInt(), midY.toInt()) ?: 0
+            mPixelCanvas?.drawRect(pixelCoordX.toFloat(), pixelCoordY.toFloat(),
+                    (pixelCoordX + blockSize).toFloat(), (pixelCoordY + blockSize).toFloat(), paint)
+        }
+
+        canvas?.drawBitmap(mPixelBitmap,0f,0f,paint)
+
+
+    }
+
+    @Synchronized fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
+        val paint : Paint = Paint()
+
+        val cols : Double = density.toDouble()+20
+        val blockSize : Double = w/cols
+         val rows : Double = Math.ceil(h/blockSize)
+
+
+        for(row in 0 until rows.toInt()){
+            for (col in 0 until cols.toInt()){
+                val pixelCoordX : Double = (blockSize * col)
+                val pixelCoordY : Double = (blockSize * row)
+
+                val midY = pixelCoordY + (blockSize / 2)
+                val midX = pixelCoordX + (blockSize / 2)
+
+                if(midX >= w || midX < 0) continue
+                if(midY >= h || midY < 0) continue
+
+                paint.color = baseBitmap?.getPixel(midX.toInt(),midY.toInt())?:0
+                canvas?.drawRect(pixelCoordX.toFloat(),pixelCoordY.toFloat(),
+                        (pixelCoordX+blockSize).toFloat(),(pixelCoordY+blockSize).toFloat(),paint)
+            }
+        }
+
+
+    }
     private fun getJpegHeaderSize(byteArrayIn: ByteArray): Int {
         val byteFF = java.lang.Byte.valueOf((-1).toByte())
         val byteDA = java.lang.Byte.valueOf((-38).toByte())
@@ -640,7 +707,12 @@ object Glitcher {
         return 417
     }
 
-
+    fun drawPath(canvas: Canvas?, x: Int, y: Int) {
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        canvas?.drawCircle(x.toFloat(), y.toFloat(),4f,paint)
+    }
 
 
 }

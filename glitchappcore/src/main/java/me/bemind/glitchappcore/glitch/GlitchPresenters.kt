@@ -1,23 +1,23 @@
 package me.bemind.glitchappcore.glitch
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.util.Log
 import me.bemind.glitch.Effect
 import me.bemind.glitch.Glitcher
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.Point
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.widget.ImageView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bemind.glitch.Motion
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import me.bemind.glitchappcore.app.ProgressUpdate
 import java.lang.Exception
 
 
@@ -38,8 +38,6 @@ interface IGlitchPresenter{
     var glitchView : IGlitchView?
 
     var restore: Boolean
-
-    var canvas: Canvas?
 
     fun onDraw(canvas: Canvas?,scale:Boolean = false)
 
@@ -67,7 +65,9 @@ interface IGlitchPresenter{
     fun webp(canvas: Canvas?)
     fun swap(canvas: Canvas?)
     fun noise(canvas: Canvas?,progress: Int = 170)
-    fun hooloovooize(canvas: Canvas?)
+    fun hooloovooize(canvas: Canvas?,progress: Int = 20)
+    fun pixelize(canvas: Canvas?,progress: Int = 70,x: Int,y: Int)
+    fun pixelizeTot(canvas: Canvas?,progress: Int = 70)
 
 
 }
@@ -101,15 +101,14 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     private var scaledFactory: Float = 1f
 
-    override var canvas: Canvas? = null
-
     var gestureDetector : GestureDetectorCompat? = null
 
     val viewCoords = IntArray(2)
 
     //touch properties
 
-    private var touchPoint = Point(0,0)
+    private var touchPoint = Point(-1,-1)
+    private var proviousPoint: Point? = null
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
@@ -139,6 +138,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.GHOST -> TypeEffect.CANVAS
             Effect.WOBBLE -> TypeEffect.CANVAS
             Effect.HOOLOOVOO -> TypeEffect.CANVAS
+            Effect.PIXEL -> TypeEffect.CANVAS
+            Effect.TPIXEL -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
 
@@ -165,8 +166,16 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
 
-    override fun hooloovooize(canvas: Canvas?) {
-        glithce.hooloovooizeCanvas(canvas)
+    override fun hooloovooize(canvas: Canvas?,progress: Int) {
+        glithce.hooloovooizeCanvas(canvas,progress)
+    }
+
+    override fun pixelize(canvas: Canvas?, progress: Int,x: Int,y: Int) {
+        glithce.pixelCanvas(canvas,progress,x,y)
+    }
+
+    override fun pixelizeTot(canvas: Canvas?, progress: Int) {
+        glithce.totalPixelCanvas(canvas,progress)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -250,7 +259,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
                 val canvas = Canvas(b)
 
-                if(effect == Effect.NOISE /*|| effect == Effect.HOOLOOVOO*/) {
+                if(effect == Effect.NOISE || effect == Effect.TPIXEL) {
                     canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
                 }
 
@@ -284,9 +293,14 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
         calculateScaleFactory(bitmap)
 
+        touchPoint = Point(-1,-1)
+
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
             Effect.NOISE -> effectProgress = 120
+            Effect.HOOLOOVOO -> effectProgress = 20
+            Effect.PIXEL -> effectProgress = 70
+            Effect.TPIXEL -> effectProgress = 25
             else -> effectProgress = 0
         }
     }
@@ -315,31 +329,68 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         motion = Motion.NONE
     }
 
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector?.onTouchEvent(event)
 
-        touchPoint = Point(event?.x?.toInt()?:0 - viewCoords[0],event?.y?.toInt()?:0 - viewCoords[1])
+        val index = event!!.actionIndex
+        val flI = floatArrayOf(event.getX(index),event.getY(index))
+        touchPoint = calculateTouchPoint(flI)
 
-        when (event?.action){
+        if(proviousPoint==null){
+            proviousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
+                    ((glitchView?.viewY?:0f)/2f).toInt())
+        }
+
+
+        when (event.action){
             MotionEvent.ACTION_DOWN -> {
                 startTouchX = touchPoint.x
                 startTouchY = touchPoint.y
                 motion = Motion.NONE
+
+                proviousPoint?.copy(touchPoint)
             }
             MotionEvent.ACTION_UP -> {
                 //touchX  = -1
                 //touchY  = -1
+                if(effect == Effect.GLITCH || effect == Effect.SWAP ){
+                    makeEffect(0)
+                }
+
             }
             MotionEvent.ACTION_MOVE -> {
+               /* startTouchX = touchPoint.x
+                startTouchY = touchPoint.y*/
 
+                if(effect == Effect.ANAGLYPH || effect == Effect.NOISE || effect == Effect.PIXEL){
+
+                    val p =  (touchPoint.x) - (proviousPoint?.x?:0)
+                    ProgressUpdate.updateProgress(p.toFloat())
+
+                    proviousPoint?.copy(touchPoint)
+                }
             }
         }
 
-        if(effect == Effect.GHOST || effect == Effect.WOBBLE){
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL){
             glitchView?.invalidateGlitchView()
         }
 
         return true
+    }
+
+    private fun calculateTouchPoint(event: FloatArray): Point {
+
+        val im :ImageView = (glitchView as? ImageView)!!
+
+        val dr : Drawable = glitchView?.viewDrawable!!
+
+        val bX = (event[0] * dr.intrinsicWidth)/im.width
+        val bY = (event[1] * dr.intrinsicHeight)/im.height
+
+        return Point(bX.toInt(),bY.toInt())
+
     }
 
     override fun onShowPress(p0: MotionEvent?) {
@@ -356,6 +407,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+
+
         return false
     }
 
@@ -382,8 +435,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun onDraw(canvas: Canvas?,scale: Boolean){
 
 
-        if(this.canvas == null) this.canvas = canvas
-
         canvas?.save()
 
 //       canvas?.scale(glitchView?.scaleXG?:0f, glitchView?.scaleYG?:0f)
@@ -399,9 +450,17 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.WOBBLE -> wobble(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
             Effect.NOISE -> noise(canvas,effectProgress)
-            Effect.HOOLOOVOO -> hooloovooize(canvas)
+            Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
+            Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
+            Effect.TPIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
             else -> Log.v("ImageView", "BASE")
         }
+
+        //DEBUG
+        /*if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.PIXEL) {
+            glithce.drawPath(canvas,touchPoint.x,touchPoint.y)
+        }*/
+
         canvas?.restore()
 
     }
@@ -443,4 +502,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                         }
                 )
     }
+}
+
+private fun Point.copy(p1: Point) {
+    x = p1.x
+    y = p1.y
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <me.bemind.glitchlibrary.GlithcyTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAllCaps="false"
+        app:glitchyTypeface="mono"
+        android:layout_gravity="center"
+        android:text="@string/density_string"
+        android:gravity="center"
+        android:textSize="12sp"/>
+
+    <me.bemind.glitchlibrary.GlithcyTextView
+        android:id="@+id/text_density"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        app:glitchyTypeface="mono"
+        android:text="25"
+        android:gravity="center"
+        android:textSize="18sp"/>
+
+</LinearLayout>

@@ -11,17 +11,15 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.res.Configuration
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewPropertyAnimator
-import android.view.animation.Animation
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.history.HistoryPresenter
 import me.bemind.glitchappcore.history.IHistoryView
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import me.bemind.glitchappcore.R
 
@@ -57,6 +55,11 @@ interface IGlitchView {
     val glitchHeight : Float
 
     val canInitEffect : Boolean
+
+    val viewX : Float
+    val viewY : Float
+
+    val viewDrawable : Drawable
 
     fun clearEffect()
 
@@ -99,11 +102,19 @@ class ExtendedImageView : ImageView, IGlitchView,IHistoryView, View.OnLayoutChan
 
     var loaderAnimation : ViewPropertyAnimator? = null
 
+    override val viewX: Float
+        get() = x
+
+    override val viewY: Float
+        get() = y
+
 
     override val canInitEffect: Boolean
         get() = hasHistory && !glitcPresenter.effectON
 
 
+    override val viewDrawable: Drawable
+            get() = drawable
 
 
     val glitcPresenter = GlitchPresenter(context)
