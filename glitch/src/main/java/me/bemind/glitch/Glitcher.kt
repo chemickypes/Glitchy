@@ -685,6 +685,33 @@ object Glitcher {
 
     }
 
+    fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
+        val paint : Paint = Paint()
+
+        val cols : Double = if(density>25)density.toDouble() else 25.0
+        val blockSize : Double = w/cols
+         val rows : Double = Math.ceil(h/blockSize)
+
+
+        for(row in 0 until rows.toInt()){
+            for (col in 0 until cols.toInt()){
+                val pixelCoordX : Double = (blockSize * col)
+                val pixelCoordY : Double = (blockSize * row)
+
+                val midY = pixelCoordY + (blockSize / 2)
+                val midX = pixelCoordX + (blockSize / 2)
+
+                if(midX >= w || midX < 0) continue
+                if(midY >= h || midY < 0) continue
+
+                paint.color = baseBitmap?.getPixel(midX.toInt(),midY.toInt())?:0
+                canvas?.drawRect(pixelCoordX.toFloat(),pixelCoordY.toFloat(),
+                        (pixelCoordX+blockSize).toFloat(),(pixelCoordY+blockSize).toFloat(),paint)
+            }
+        }
+
+
+    }
     private fun getJpegHeaderSize(byteArrayIn: ByteArray): Int {
         val byteFF = java.lang.Byte.valueOf((-1).toByte())
         val byteDA = java.lang.Byte.valueOf((-38).toByte())
