@@ -335,6 +335,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             MotionEvent.ACTION_UP -> {
                 //touchX  = -1
                 //touchY  = -1
+                if(effect == Effect.GLITCH || effect == Effect.SWAP ){
+                    makeEffect(0)
+                }
+                touchPoint = Point(-1,-1)
             }
             MotionEvent.ACTION_MOVE -> {
                 startTouchX = touchPoint.x
