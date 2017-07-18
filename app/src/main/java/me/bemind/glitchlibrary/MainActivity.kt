@@ -828,8 +828,13 @@ SaveImageBottomSheet.OnSaveImageListener{
                 pickerLayoutManager.scaleDownBy = 0.99f
                 pickerLayoutManager.scaleDownDistance = 0.8f
 
-                val snapHelper =  LinearSnapHelper()
-                snapHelper.attachToRecyclerView(densityRv)
+                try{
+                    val snapHelper =  LinearSnapHelper()
+                    snapHelper.attachToRecyclerView(densityRv)
+                }catch (e:Exception ){
+                    e.printStackTrace()
+                }
+
                 densityRv.layoutManager = pickerLayoutManager
 
 
