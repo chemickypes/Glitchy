@@ -522,7 +522,7 @@ object Glitcher {
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE){
             initGhost()
-        }else if(effect == Effect.PIXEL){
+        }else if(effect == Effect.TPIXEL){
             initPixelEffect()
         }
 

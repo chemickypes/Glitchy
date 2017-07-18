@@ -578,6 +578,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.NOISE -> makeNoiseEffect(true)
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
                 Effect.PIXEL -> makePixelEffect(true)
+                Effect.TPIXEL -> makeTPixelEffect(true)
                 else -> {
                 }
             }
@@ -656,6 +657,19 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(init) {
             appPresenter.modState = State.EFFECT
             mImageView?.initEffect(Effect.PIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
+        }
+    }
+
+    private fun makeTPixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = TPixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.TPIXEL)
             inflateEffectLayout(effect)
         }else{
             appPresenter.effectState = effect
@@ -749,6 +763,9 @@ SaveImageBottomSheet.OnSaveImageListener{
 
                 bar.visibility = VISIBLE
 
+            }
+
+            is TPixelEffectState ->{
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
