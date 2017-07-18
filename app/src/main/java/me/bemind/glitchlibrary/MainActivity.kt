@@ -34,6 +34,7 @@ import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
 import com.shamanland.fonticon.FontIconView
 import io.fabric.sdk.android.Fabric
+import me.bemind.customcanvas.BarView
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
 import me.bemind.sidemenu.SideMenuToggle
@@ -686,10 +687,10 @@ SaveImageBottomSheet.OnSaveImageListener{
                     makeNoiseEffect()
                 }*/
 
-                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+                val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                /*seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
                         if(arg2) makeNoiseEffect(false,arg1)
                     }
@@ -701,7 +702,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                     override fun onStopTrackingTouch(seekBar: SeekBar) {
 
                     }
-                })
+                })*/
             }
             is WebpEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
@@ -734,10 +735,10 @@ SaveImageBottomSheet.OnSaveImageListener{
                 b.setOnClickListener {
                     makeHooloovooEffect()
                 }*/
-                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+                val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     var pro = 0
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
                         if(arg2){
@@ -753,13 +754,13 @@ SaveImageBottomSheet.OnSaveImageListener{
                     override fun onStopTrackingTouch(seekBar: SeekBar) {
                         makeHooloovooEffect(false,pro)
                     }
-                })
+                })*/
             }
             is AnaglyphEffectState -> {
-               val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+                val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
                         if(arg2) makeAnaglyphEffect(false,arg1)
                     }
@@ -771,13 +772,13 @@ SaveImageBottomSheet.OnSaveImageListener{
                     override fun onStopTrackingTouch(seekBar: SeekBar) {
 
                     }
-                })
+                })*/
             }
             is PixelEffectState ->{
-                val seekbar = view.findViewById(R.id.seekbar) as SeekBar?
-                seekbar?.progress = effectState.progress
+                val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress
 
-                seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
                         if(arg2) makePixelEffect(false,arg1)
                     }
@@ -789,7 +790,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                     override fun onStopTrackingTouch(seekBar: SeekBar) {
 
                     }
-                })
+                })*/
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
