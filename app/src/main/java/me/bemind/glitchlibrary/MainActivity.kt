@@ -1,12 +1,13 @@
 package me.bemind.glitchlibrary
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
@@ -18,9 +19,7 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.*
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
@@ -42,6 +41,7 @@ import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
 import org.jraf.android.alibglitch.GlitchEffect
 import permissions.dispatcher.*
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 
 
 @RuntimePermissions
@@ -132,6 +132,25 @@ SaveImageBottomSheet.OnSaveImageListener{
                 .attachTo(effectList)
     }
 
+    private val densityRv by lazy {
+        findViewById(R.id.rv) as RecyclerView
+    }
+
+    private val densityAdapter by lazy {
+        SlimAdapter.create()
+                .register<Int>(R.layout.density_row){
+                    data, injector ->
+                    injector.text(R.id.text, data.toString())
+                }
+    }
+
+    private val densityPanel by lazy {
+        findViewById(R.id.density_panel)
+    }
+
+    private val plusInfoPanel by lazy {
+        findViewById(R.id.plus_info_panel) as ViewGroup
+    }
 
 
 
@@ -234,8 +253,20 @@ SaveImageBottomSheet.OnSaveImageListener{
             bar.visibility = GONE
             actionBar?.visibility = GONE
             actionBar?.alpha = 1f
+            plusInfoPanel.removeAllViews()
         }
         if(actionBar?.visibility == VISIBLE)animateAlpha(actionBar,runnable2, 350, false, 0f)
+
+        if(densityPanel.visibility == VISIBLE){
+            densityPanel.animate().alpha(0f)
+                    .setDuration(200)
+                    .setListener(object: AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            densityPanel.visibility = GONE
+                        }
+                    })
+        }
 
     }
 
@@ -578,6 +609,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.NOISE -> makeNoiseEffect(true)
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
                 Effect.PIXEL -> makePixelEffect(true)
+                Effect.TPIXEL -> makeTPixelEffect(true)
                 else -> {
                 }
             }
@@ -656,6 +688,19 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(init) {
             appPresenter.modState = State.EFFECT
             mImageView?.initEffect(Effect.PIXEL)
+            inflateEffectLayout(effect)
+        }else{
+            appPresenter.effectState = effect
+            mImageView?.makeEffect(progress)
+        }
+    }
+
+    private fun makeTPixelEffect(init: Boolean = false,progress: Int = 70) {
+        val effect = TPixelEffectState(R.layout.effect_anaglyph_layout,progress)
+
+        if(init) {
+            appPresenter.modState = State.EFFECT
+            mImageView?.initEffect(Effect.TPIXEL)
             inflateEffectLayout(effect)
         }else{
             appPresenter.effectState = effect
@@ -747,6 +792,82 @@ SaveImageBottomSheet.OnSaveImageListener{
                 /*val bar = view.findViewById(R.id.bar) as BarView?
                 bar?.progress = effectState.progress*/
 
+                bar.visibility = VISIBLE
+
+            }
+
+            is TPixelEffectState ->{
+
+                var sel = 25
+
+                val densP = layoutInflater.inflate(R.layout.density_panel,plusInfoPanel,false)
+                plusInfoPanel.addView(densP)
+
+                val denstext = densP.findViewById(R.id.text_density) as TextView
+
+                densP.setOnClickListener {
+                    densityPanel.animate().alpha(1f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationStart(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.alpha = 0f
+                                    densityPanel.visibility = VISIBLE
+
+                                    densityAdapter.updateData(intArrayOf(20,40,50,60,75,80,100).asList())
+
+                                    densityAdapter.attachTo(densityRv)
+
+                                    densityRv.smoothScrollBy(10,0) //need
+                                }
+                            })
+                }
+
+                val pickerLayoutManager = PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false)
+                pickerLayoutManager.isChangeAlpha = true
+                pickerLayoutManager.scaleDownBy = 0.99f
+                pickerLayoutManager.scaleDownDistance = 0.8f
+
+                try{
+                    val snapHelper =  LinearSnapHelper()
+                    snapHelper.attachToRecyclerView(densityRv)
+                }catch (e:Exception ){
+                    e.printStackTrace()
+                }
+
+                densityRv.layoutManager = pickerLayoutManager
+
+
+
+
+
+                val save = findViewById(R.id.save_selection) as ImageView
+                save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+                save.setOnClickListener {
+                    //set sel
+
+                    denstext.text = sel.toString()
+                    densityPanel.animate().alpha(0f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.visibility = GONE
+
+                                    mImageView?.makeEffect(sel)
+                                }
+                            })
+                }
+
+                pickerLayoutManager.setOnScrollStopListener {
+                    v ->
+                    v?.let {
+                        sel = (v as TextView).text.toString().toInt()
+                    }
+
+                }
+
+
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
@@ -755,19 +876,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         effectPanel?.addView(view)
     }
 
-    private fun applyFont(menu: Menu?) {
-        for(i in 0 until menu?.size()!!){
-            val item = menu.getItem(i)
-            val tv = LayoutInflater.from(this).inflate(R.layout.menu_text_item,toolbar,false) as TextView
-            tv.text = item.title
-            item.actionView = tv
-
-            tv.setOnClickListener {
-                val onOptionsItemSelected = onOptionsItemSelected(item)
-            }
-
-        }
-    }
 
     private fun checkPlayServices() : Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()

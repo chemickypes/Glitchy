@@ -172,6 +172,27 @@ data class PixelEffectState(override val layout: Int,val progress: Int) : Effect
     }
 }
 
+data class TPixelEffectState(override val layout: Int,val progress: Int) : EffectState(layout),Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<TPixelEffectState> = object : Parcelable.Creator<TPixelEffectState> {
+            override fun createFromParcel(source: Parcel): TPixelEffectState = TPixelEffectState(source)
+            override fun newArray(size: Int): Array<TPixelEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(
+    source.readInt(),
+    source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(layout)
+        dest.writeInt(progress)
+    }
+}
+
 data class GlitchEffectState(override val layout: Int) : EffectState(layout), Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<GlitchEffectState> = object : Parcelable.Creator<GlitchEffectState> {

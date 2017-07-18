@@ -60,4 +60,6 @@
     <string name="permission_camera_rationale">Storage permissions are fundamental for Glitchy! Without them, you won\'t be able to save your glitched pics!</string>
     <string name="pixel">Pixel</string>
     <string name="swipe_on_image">Swipe on Image</string>
+    <string name="t_pixel">Touch Pixel</string>
+    <string name="density_string">Density</string>
 </resources>
