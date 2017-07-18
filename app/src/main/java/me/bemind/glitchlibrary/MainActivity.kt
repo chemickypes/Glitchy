@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.widget.SeekBar
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
@@ -34,6 +33,7 @@ import com.shamanland.fonticon.FontIconDrawable
 import com.shamanland.fonticon.FontIconTypefaceHolder
 import com.shamanland.fonticon.FontIconView
 import io.fabric.sdk.android.Fabric
+import io.reactivex.disposables.Disposable
 import me.bemind.customcanvas.BarView
 import me.bemind.glitchappcore.app.*
 import me.bemind.sidemenu.SideMenu
@@ -48,6 +48,7 @@ class MainActivity : GlitchyBaseActivity(),IAppView, PickPhotoBottomSheet.OnPick
 SaveImageBottomSheet.OnSaveImageListener{
     private val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
 
+    private var disposable: Disposable? = null
 
     private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
@@ -199,9 +200,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         bar.onProgressChangeListener = {
             progress -> mImageView?.makeEffect(progress)
         }
-
-
-
+        
 
     }
 
@@ -302,6 +301,8 @@ SaveImageBottomSheet.OnSaveImageListener{
         super.onStop()
         appPresenter.appView = null
         ioPresenter.ioView = null
+
+        disposable?.dispose()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -353,6 +354,9 @@ SaveImageBottomSheet.OnSaveImageListener{
         startActivity(Intent.createChooser(share, getString(R.string.share)))
     }
 
+
+
+
     override fun onResume() {
         super.onResume()
 
@@ -377,8 +381,14 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
         }
+        
+        disposable = ProgressUpdate.progressSubject.subscribe(
+                {progress -> bar.addProgressOnSwipe(progress)}
+        )
 
     }
+    
+    
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

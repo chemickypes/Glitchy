@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 import me.bemind.glitch.Motion
 import me.bemind.glitch.TypeEffect
 import me.bemind.glitchappcore.GlitchyBaseActivity
+import me.bemind.glitchappcore.app.ProgressUpdate
 import java.lang.Exception
 
 
@@ -105,7 +106,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     //touch properties
 
-    private var touchPoint = Point(0,0)
+    private var touchPoint = Point(-1,-1)
+    private var proviousPoint: Point? = null
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
@@ -285,6 +287,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
         calculateScaleFactory(bitmap)
 
+        touchPoint = Point(-1,-1)
+
         when (effect){
             Effect.ANAGLYPH -> effectProgress = 20
             Effect.NOISE -> effectProgress = 120
@@ -318,6 +322,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         motion = Motion.NONE
     }
 
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector?.onTouchEvent(event)
 
@@ -325,12 +330,19 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         val flI = floatArrayOf(event.getX(index),event.getY(index))
         touchPoint = calculateTouchPoint(flI)
 
+        if(proviousPoint==null){
+            proviousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
+                    ((glitchView?.viewY?:0f)/2f).toInt())
+        }
+
 
         when (event.action){
             MotionEvent.ACTION_DOWN -> {
                 startTouchX = touchPoint.x
                 startTouchY = touchPoint.y
                 motion = Motion.NONE
+
+                proviousPoint?.copy(touchPoint)
             }
             MotionEvent.ACTION_UP -> {
                 //touchX  = -1
@@ -338,11 +350,19 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 if(effect == Effect.GLITCH || effect == Effect.SWAP ){
                     makeEffect(0)
                 }
-                touchPoint = Point(-1,-1)
+
             }
             MotionEvent.ACTION_MOVE -> {
-                startTouchX = touchPoint.x
-                startTouchY = touchPoint.y
+               /* startTouchX = touchPoint.x
+                startTouchY = touchPoint.y*/
+
+                if(effect == Effect.ANAGLYPH || effect == Effect.NOISE){
+
+                    val p =  (touchPoint.x) - (proviousPoint?.x?:0)
+                    ProgressUpdate.updateProgress(p.toFloat())
+
+                    proviousPoint?.copy(touchPoint)
+                }
             }
         }
 
@@ -380,6 +400,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+
+
         return false
     }
 
@@ -472,4 +494,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                         }
                 )
     }
+}
+
+private fun Point.copy(p1: Point) {
+    x = p1.x
+    y = p1.y
 }
