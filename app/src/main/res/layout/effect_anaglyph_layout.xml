@@ -24,14 +24,5 @@
         android:gravity="center"
         android:textSize="18sp"/>
 
-    <me.bemind.customcanvas.BarView
-        android:id="@+id/bar"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_gravity="bottom"
-        app:barViewColor="@color/colorAccent"
-        app:barViewThickness="10dp"
-        app:barViewCap="square"
-        app:barViewProgress="60" />
 
 </FrameLayout>

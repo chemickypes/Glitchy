@@ -90,6 +90,17 @@
 
 
 
+    <me.bemind.customcanvas.BarView
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_above="@+id/action_panel"
+        app:barViewColor="@color/colorAccent"
+        app:barViewThickness="10dp"
+        app:barViewCap="square"
+        app:barViewProgress="60"
+        android:visibility="gone"/>
+
 
 
     <FrameLayout

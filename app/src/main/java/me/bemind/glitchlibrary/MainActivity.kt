@@ -88,6 +88,10 @@ SaveImageBottomSheet.OnSaveImageListener{
         findViewById(R.id.side_menu) as SideMenu
     }
 
+    val bar : BarView by lazy {
+        findViewById(R.id.bar) as BarView
+    }
+
     val sideMenuToggle : SideMenuToggle by lazy {
         SideMenuToggle(this,sidemenu,toolbar,R.string.open,R.string.close)
     }
@@ -219,6 +223,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         if(effectPanel?.visibility== VISIBLE)animateAlpha(effectPanel, runnable, 350, false, 0f)
 
         val runnable2 :Runnable = Runnable {
+            bar.visibility = GONE
             actionBar?.visibility = GONE
             actionBar?.alpha = 1f
         }
@@ -681,48 +686,24 @@ SaveImageBottomSheet.OnSaveImageListener{
         val view = LayoutInflater.from(this).inflate(effectState.layout,null,false)
         when (effectState){
             is NoiseEffectState ->{
-                /*val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
-                b.setText(R.string.tap_here_to_create_noise)
-                b.setOnClickListener {
-                    makeNoiseEffect()
-                }*/
 
-                val bar = view.findViewById(R.id.bar) as BarView?
-                bar?.progress = effectState.progress
+                bar.visibility = VISIBLE
 
-                /*seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeNoiseEffect(false,arg1)
-                    }
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                    }
-                })*/
             }
             is WebpEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_glitch_webp)
-                b.setOnClickListener {
-                    makeWebpEffect()
-                }
+
             }
             is SwapEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
                 b.setText(R.string.tap_here_to_swap)
-                b.setOnClickListener {
-                    makeSwapEffect()
-                }
+
             }
             is GlitchEffectState -> {
                 val b = view.findViewById(R.id.tap_to_glitch_button)
-                b.setOnClickListener {
-                    makeGlitchEffect()
-                }
+
             }
             is GhostEffectState -> {
                 //nothing
@@ -731,66 +712,22 @@ SaveImageBottomSheet.OnSaveImageListener{
                 //nothing
             }
             is HooloovooEffectState ->{
-                /*val b = view.findViewById(R.id.text_effect) as TextView
-                b.setOnClickListener {
-                    makeHooloovooEffect()
-                }*/
-                val bar = view.findViewById(R.id.bar) as BarView?
-                bar?.progress = effectState.progress
 
-               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    var pro = 0
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2){
-                            pro = arg1
-                            if(pro%10 == 0) makeHooloovooEffect(false,arg1)
-                        }
-                    }
+               /* val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
+                bar.visibility = VISIBLE
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-                        makeHooloovooEffect(false,pro)
-                    }
-                })*/
             }
             is AnaglyphEffectState -> {
-                val bar = view.findViewById(R.id.bar) as BarView?
-                bar?.progress = effectState.progress
+              /*  val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
 
-               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makeAnaglyphEffect(false,arg1)
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                    }
-                })*/
+                bar.visibility = VISIBLE
             }
             is PixelEffectState ->{
-                val bar = view.findViewById(R.id.bar) as BarView?
-                bar?.progress = effectState.progress
+                /*val bar = view.findViewById(R.id.bar) as BarView?
+                bar?.progress = effectState.progress*/
 
-               /* seekbar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(arg0: SeekBar, arg1: Int, arg2: Boolean) {
-                        if(arg2) makePixelEffect(false,arg1)
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-                    }
-                })*/
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
