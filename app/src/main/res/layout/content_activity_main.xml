@@ -103,6 +103,8 @@
 
 
 
+
+
     <FrameLayout
         android:id="@+id/action_panel"
         style="@style/SeekBarPanelTheme"
@@ -113,37 +115,6 @@
         android:visibility="gone"
         android:background="@color/han_purple">
 
-        <!--<com.shamanland.fonticon.FontIconView
-            android:id="@+id/save_effect"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_gravity="end|center_vertical"
-            android:layout_margin="16dp"
-            android:text="@string/done_char"
-            android:padding="16dp"
-            android:textSize="@dimen/menu_icon_size_sp"
-            android:textColor="@color/white"
-            android:clickable="true"
-            app:overridePressed="true"
-            app:pressedGlowColor="@color/white_smoke"
-            app:pressedGlowRadius="20dp"/>
-
-        <com.shamanland.fonticon.FontIconView
-            android:id="@+id/clear_effect"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:text="@string/close_char"
-            android:textSize="@dimen/menu_icon_size_sp"
-            android:textColor="@color/white"
-            android:clickable="true"
-            app:overridePressed="true"
-            app:pressedGlowColor="@color/white_smoke"
-            app:pressedGlowRadius="20dp"/>-->
 
         <ImageView
             android:id="@+id/clear_effect"
@@ -151,6 +122,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:layout_margin="16dp"/>
+
+        <FrameLayout
+            android:id="@+id/plus_info_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
 
         <ImageView
             android:id="@+id/save_effect"
@@ -160,7 +137,39 @@
             android:layout_margin="16dp"/>
 
 
-        </FrameLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/density_panel"
+        style="@style/SeekBarPanelTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/list_effect"
+        android:visibility="gone"
+        android:background="@color/colorAccent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:clipToPadding="false"
+            android:paddingLeft="183dp"
+            android:paddingRight="183dp" />
+
+        <ImageView
+            android:id="@+id/save_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/rv"
+            android:layout_toEndOf="@+id/rv"
+            android:layout_margin="16dp"/>
+
+    </RelativeLayout>
 
 
 

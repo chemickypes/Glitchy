@@ -300,6 +300,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.NOISE -> effectProgress = 120
             Effect.HOOLOOVOO -> effectProgress = 20
             Effect.PIXEL -> effectProgress = 70
+            Effect.TPIXEL -> effectProgress = 25
             else -> effectProgress = 0
         }
     }

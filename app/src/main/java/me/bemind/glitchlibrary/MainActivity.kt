@@ -1,12 +1,13 @@
 package me.bemind.glitchlibrary
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.GONE
@@ -18,9 +19,7 @@ import me.bemind.glitchappcore.*
 import me.bemind.glitchappcore.io.IIOPresenter
 import me.bemind.glitchappcore.io.IOPresenter
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.*
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.Log
@@ -42,6 +41,7 @@ import me.bemind.sidemenu.SideMenuToggle
 import net.idik.lib.slimadapter.SlimAdapter
 import org.jraf.android.alibglitch.GlitchEffect
 import permissions.dispatcher.*
+import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
 
 
 @RuntimePermissions
@@ -132,6 +132,26 @@ SaveImageBottomSheet.OnSaveImageListener{
                 .attachTo(effectList)
     }
 
+    private val densityRv by lazy {
+        findViewById(R.id.rv) as RecyclerView
+    }
+
+    private val densityAdapter by lazy {
+        SlimAdapter.create()
+                .register<Int>(R.layout.density_row){
+                    data, injector ->
+                    injector.text(R.id.text, data.toString())
+                }
+                .attachTo(densityRv)
+    }
+
+    private val densityPanel by lazy {
+        findViewById(R.id.density_panel)
+    }
+
+    private val plusInfoPanel by lazy {
+        findViewById(R.id.plus_info_panel) as ViewGroup
+    }
 
 
 
@@ -766,6 +786,60 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
             is TPixelEffectState ->{
+
+                var sel = 25
+
+                val densP = layoutInflater.inflate(R.layout.density_panel,plusInfoPanel,false)
+                plusInfoPanel.addView(densP)
+
+                val denstext = densP.findViewById(R.id.text_density) as TextView
+
+                densP.setOnClickListener {
+                    densityPanel.animate().alpha(1f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationStart(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.alpha = 0f
+                                    densityPanel.visibility = VISIBLE
+                                }
+                            })
+                }
+
+                val pickerLayoutManager = PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false)
+                pickerLayoutManager.isChangeAlpha = true
+                pickerLayoutManager.scaleDownBy = 0.99f
+                pickerLayoutManager.scaleDownDistance = 0.8f
+
+                val snapHelper =  LinearSnapHelper()
+                snapHelper.attachToRecyclerView(densityRv)
+                densityRv.layoutManager = pickerLayoutManager
+
+                densityAdapter.updateData(intArrayOf(25,50,75,100).asList())
+
+                val save = findViewById(R.id.save_selection) as ImageView
+                save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+                save.setOnClickListener {
+                    //set sel
+
+                    denstext.text = sel.toString()
+                    densityPanel.animate().alpha(0f)
+                            .setDuration(200)
+                            .setListener(object: AnimatorListenerAdapter(){
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    densityPanel.visibility = GONE
+
+                                    mImageView?.makeEffect(sel)
+                                }
+                            })
+                }
+
+                pickerLayoutManager.setOnScrollStopListener {
+                    v -> sel = (v as TextView).text.toString().toInt()
+                }
+
+
             }
             else -> /*nothing*/ Log.i("Glitchy","base layout")
         }
