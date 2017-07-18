@@ -860,19 +860,6 @@ SaveImageBottomSheet.OnSaveImageListener{
         effectPanel?.addView(view)
     }
 
-    private fun applyFont(menu: Menu?) {
-        for(i in 0 until menu?.size()!!){
-            val item = menu.getItem(i)
-            val tv = LayoutInflater.from(this).inflate(R.layout.menu_text_item,toolbar,false) as TextView
-            tv.text = item.title
-            item.actionView = tv
-
-            tv.setOnClickListener {
-                val onOptionsItemSelected = onOptionsItemSelected(item)
-            }
-
-        }
-    }
 
     private fun checkPlayServices() : Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
