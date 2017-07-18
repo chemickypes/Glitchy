@@ -143,29 +143,10 @@ SaveImageBottomSheet.OnSaveImageListener{
                 mImageView?.clearEffect()
             }
         }
-        /*toolbarEffect = findViewById(R.id.toolbar_effect) as Toolbar
-        toolbarEffect?.navigationIcon = FontIconDrawable.inflate(this,R.xml.ic_close)
-        toolbarEffect?.setNavigationOnClickListener {
-            if(appPresenter.modState == State.EFFECT){
-                appPresenter.modState = State.BASE
-                mImageView?.clearEffect()
-            }
-        }*/
 
         saveAction = findViewById(R.id.save_effect) as FontIconView?
         saveAction?.setOnClickListener { applyEffect() }
 
-        /*toolbarEffect?.inflateMenu(R.menu.ok_menu)
-        toolbarEffect?.menu?.getItem(0)?.icon = FontIconDrawable.inflate(this,R.xml.ic_done)
-        toolbarEffect?.setOnMenuItemClickListener {  item ->
-            when (item.itemId){
-                R.id.ok_action -> {
-                    applyEffect()
-                    true
-                }
-                else -> true //do nothing
-            }
-        }*/
 
         setSupportActionBar(toolbar)
 
