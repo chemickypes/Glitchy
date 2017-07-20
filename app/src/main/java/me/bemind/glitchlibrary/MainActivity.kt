@@ -80,6 +80,14 @@ SaveImageBottomSheet.OnSaveImageListener{
         findViewById(R.id.clear_effect) as ImageView
     }
 
+    private val saveSAction by lazy {
+        findViewById(R.id.save_s_button)
+    }
+
+    private val clearSAction by lazy {
+        findViewById(R.id.clear_s_button)
+    }
+
     private var appPresenter : IAppPresenter = AppPresenter()
 
     private var ioPresenter: IIOPresenter = IOPresenter()
@@ -138,10 +146,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private val densityAdapter by lazy {
         SlimAdapter.create()
-                .register<Int>(R.layout.density_row){
-                    data, injector ->
-                    injector.text(R.id.text, data.toString())
-                }
+
     }
 
     private val densityPanel by lazy {
@@ -173,9 +178,16 @@ SaveImageBottomSheet.OnSaveImageListener{
                 mImageView?.clearEffect()
             }
         }
+        clearSAction.setOnClickListener {
+            if(appPresenter.modState == State.EFFECT){
+                appPresenter.modState = State.BASE
+                mImageView?.clearEffect()
+            }
+        }
 
         saveAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
         saveAction.setOnClickListener { applyEffect() }
+        saveSAction.setOnClickListener { applyEffect() }
 
 
         setSupportActionBar(toolbar)
@@ -786,7 +798,7 @@ SaveImageBottomSheet.OnSaveImageListener{
               /*  val bar = view.findViewById(R.id.bar) as BarView?
                 bar?.progress = effectState.progress*/
 
-                bar.visibility = VISIBLE
+               // bar.visibility = VISIBLE
             }
             is PixelEffectState ->{
                 /*val bar = view.findViewById(R.id.bar) as BarView?
@@ -837,11 +849,36 @@ SaveImageBottomSheet.OnSaveImageListener{
 
                 densityRv.layoutManager = pickerLayoutManager
 
+                densityAdapter
+                        .register<Int>(R.layout.density_row){
+                            data, injector ->
+                            injector.text(R.id.text, data.toString())
+                            injector.clicked(R.id.text,{
+                                v ->
+                                v?.let {
+                                    sel = (v as TextView).text.toString().toInt()
+
+                                    denstext.text = sel.toString()
+                                    densityPanel.animate().alpha(0f)
+                                            .setDuration(200)
+                                            .setListener(object: AnimatorListenerAdapter(){
+                                                override fun onAnimationEnd(animation: Animator?) {
+                                                    super.onAnimationEnd(animation)
+                                                    densityPanel.visibility = GONE
+
+                                                    mImageView?.makeEffect(sel)
+                                                }
+                                            })
+                                }
+                            })
+                        }
 
 
 
 
-                val save = findViewById(R.id.save_selection) as ImageView
+
+
+               /* val save = findViewById(R.id.save_selection) as ImageView
                 save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
                 save.setOnClickListener {
                     //set sel
@@ -865,7 +902,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                         sel = (v as TextView).text.toString().toInt()
                     }
 
-                }
+                }*/
 
 
             }

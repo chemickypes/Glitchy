@@ -1,12 +1,9 @@
 package me.bemind.glitch
 
 import android.graphics.*
-import android.util.FloatMath
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
-import android.R.attr.bitmap
-
 
 
 /**
@@ -68,6 +65,9 @@ object Glitcher {
 
     var w = 0
     var h = 0
+
+    private var transY: Float = 0f
+    private var transX: Float = 0f
 
     val MAX_VALUE = 10
 
@@ -358,6 +358,31 @@ object Glitcher {
     }
 
 
+    fun anaglyphCanvas(c:Canvas?, absX:Float, absY:Float){
+
+        val colorMatrix = ColorMatrix()
+        transX += absX
+        transY += absY
+        c?.drawColor(0, PorterDuff.Mode.CLEAR)
+
+        //left
+        val matrix = Matrix()
+        matrix.setTranslate((-transX), (-transY))
+        anaglyphShader?.setLocalMatrix(matrix)
+        colorMatrix.set(leftArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+
+        //right
+        val matrix2 = Matrix()
+        matrix2.setTranslate((transX), transY)
+        anaglyphShader?.setLocalMatrix(matrix2)
+        colorMatrix.set(rightArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+    }
+
+
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
         c?.drawColor(0,PorterDuff.Mode.CLEAR)
@@ -587,6 +612,9 @@ object Glitcher {
         anaglyphShader = BitmapShader(result, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         anaglyphPaint.xfermode = XFE_ADD
         anaglyphPaint.shader = anaglyphShader
+
+        transX = 20f
+        transY = 20f
     }
 
     private fun setXY(fArr: FloatArray, i: Int, f: Float, f2: Float) {
@@ -647,24 +675,46 @@ object Glitcher {
        // val rows : Double = Math.ceil(h/blockSize)
 
 
+
+
         val pixelCoordX : Int = ((x/blockSize ).toInt()) * blockSize.toInt()
         val pixelCoordY : Int = (y/blockSize).toInt() * blockSize.toInt()
 
-        val midY = pixelCoordY + (blockSize / 2)
-        val midX = pixelCoordX + (blockSize / 2)
 
-        if((midX >= w || midX < 0) || (midY >= h || midY < 0)) {
-            //ntohing
-        }else {
+        val list :List<Point> = getPointList(pixelCoordX,pixelCoordY,density,blockSize)
 
-            paint.color = baseBitmap?.getPixel(midX.toInt(), midY.toInt()) ?: 0
-            mPixelCanvas?.drawRect(pixelCoordX.toFloat(), pixelCoordY.toFloat(),
-                    (pixelCoordX + blockSize).toFloat(), (pixelCoordY + blockSize).toFloat(), paint)
+        for (p in list) {
+
+            val midY = p.y + (blockSize / 2)
+            val midX = p.x + (blockSize / 2)
+
+            if ((midX >= w || midX < 0) || (midY >= h || midY < 0)) {
+                //ntohing
+            } else {
+
+                paint.color = baseBitmap?.getPixel(midX.toInt(), midY.toInt()) ?: 0
+                mPixelCanvas?.drawRect(p.x.toFloat(), p.y.toFloat(),
+                        (p.x + blockSize).toFloat(), (p.y + blockSize).toFloat(), paint)
+            }
         }
 
         canvas?.drawBitmap(mPixelBitmap,0f,0f,paint)
 
 
+    }
+
+    private fun getPointList(pixelCoordX: Int, pixelCoordY: Int, density: Int, blockSize: Double): List<Point> {
+        val p = Point(pixelCoordX,pixelCoordY)
+        val list = MutableList(1, {p})
+
+        if(density >= 50){
+            list.add(Point((p.x-blockSize).toInt(),p.y))
+            list.add(Point((p.x+blockSize).toInt(),p.y))
+            list.add(Point(p.x,(p.y-blockSize).toInt()))
+            list.add(Point(p.x,(p.y+blockSize).toInt()))
+        }
+
+        return list
     }
 
     @Synchronized fun totalPixelCanvas(canvas: Canvas?, density: Int = 70){
