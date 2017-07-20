@@ -786,7 +786,7 @@ SaveImageBottomSheet.OnSaveImageListener{
               /*  val bar = view.findViewById(R.id.bar) as BarView?
                 bar?.progress = effectState.progress*/
 
-                bar.visibility = VISIBLE
+               // bar.visibility = VISIBLE
             }
             is PixelEffectState ->{
                 /*val bar = view.findViewById(R.id.bar) as BarView?
