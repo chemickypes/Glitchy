@@ -138,10 +138,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private val densityAdapter by lazy {
         SlimAdapter.create()
-                .register<Int>(R.layout.density_row){
-                    data, injector ->
-                    injector.text(R.id.text, data.toString())
-                }
+
     }
 
     private val densityPanel by lazy {
@@ -837,11 +834,36 @@ SaveImageBottomSheet.OnSaveImageListener{
 
                 densityRv.layoutManager = pickerLayoutManager
 
+                densityAdapter
+                        .register<Int>(R.layout.density_row){
+                            data, injector ->
+                            injector.text(R.id.text, data.toString())
+                            injector.clicked(R.id.text,{
+                                v ->
+                                v?.let {
+                                    sel = (v as TextView).text.toString().toInt()
+
+                                    denstext.text = sel.toString()
+                                    densityPanel.animate().alpha(0f)
+                                            .setDuration(200)
+                                            .setListener(object: AnimatorListenerAdapter(){
+                                                override fun onAnimationEnd(animation: Animator?) {
+                                                    super.onAnimationEnd(animation)
+                                                    densityPanel.visibility = GONE
+
+                                                    mImageView?.makeEffect(sel)
+                                                }
+                                            })
+                                }
+                            })
+                        }
 
 
 
 
-                val save = findViewById(R.id.save_selection) as ImageView
+
+
+               /* val save = findViewById(R.id.save_selection) as ImageView
                 save.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
                 save.setOnClickListener {
                     //set sel
@@ -865,7 +887,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                         sel = (v as TextView).text.toString().toInt()
                     }
 
-                }
+                }*/
 
 
             }

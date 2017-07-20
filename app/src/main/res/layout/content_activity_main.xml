@@ -159,13 +159,13 @@
             android:paddingLeft="183dp"
             android:paddingRight="183dp" />
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/save_selection"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp"/>-->
 
     </RelativeLayout>
 
