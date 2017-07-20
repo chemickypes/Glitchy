@@ -69,6 +69,9 @@ object Glitcher {
     var w = 0
     var h = 0
 
+    private var transY: Float = 0f
+    private var transX: Float = 0f
+
     val MAX_VALUE = 10
 
     private val malpha: Int = 150
@@ -358,6 +361,31 @@ object Glitcher {
     }
 
 
+    fun anaglyphCanvas(c:Canvas?, startPoint:Point, endPoint:Point){
+
+        val colorMatrix = ColorMatrix()
+        transX = transX + Math.abs(endPoint.x - startPoint.x)
+        transY = transY + Math.abs(endPoint.y - startPoint.y)
+        c?.drawColor(0, PorterDuff.Mode.CLEAR)
+
+        //left
+        val matrix = Matrix()
+        matrix.setTranslate((-transX).toFloat(), (-transY).toFloat())
+        anaglyphShader?.setLocalMatrix(matrix)
+        colorMatrix.set(leftArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+
+        //right
+        val matrix2 = Matrix()
+        matrix2.setTranslate((transX).toFloat(), transY.toFloat())
+        anaglyphShader?.setLocalMatrix(matrix2)
+        colorMatrix.set(rightArray)
+        anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
+    }
+
+
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
         c?.drawColor(0,PorterDuff.Mode.CLEAR)
@@ -587,6 +615,9 @@ object Glitcher {
         anaglyphShader = BitmapShader(result, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         anaglyphPaint.xfermode = XFE_ADD
         anaglyphPaint.shader = anaglyphShader
+
+        transX = 0f
+        transY = 0f
     }
 
     private fun setXY(fArr: FloatArray, i: Int, f: Float, f2: Float) {
