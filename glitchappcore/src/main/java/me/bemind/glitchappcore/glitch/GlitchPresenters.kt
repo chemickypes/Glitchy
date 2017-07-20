@@ -68,8 +68,7 @@ interface IGlitchPresenter{
     fun hooloovooize(canvas: Canvas?,progress: Int = 20)
     fun pixelize(canvas: Canvas?,progress: Int = 70,x: Int,y: Int)
     fun pixelizeTot(canvas: Canvas?,progress: Int = 70)
-
-
+    fun anaglyphPoint(canvas: Canvas?, absX: Float, absY: Float)
 }
 
 class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener {
@@ -105,10 +104,13 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     val viewCoords = IntArray(2)
 
+    var absDeltaX = 0f
+    var absDeltaY = 0f
+
     //touch properties
 
     private var touchPoint = Point(-1,-1)
-    private var proviousPoint: Point? = null
+    private var previousPoint: Point? = null
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
@@ -151,6 +153,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         //glitchLogic.anaglyph(canvas, progress)
 
         glithce.anaglyphCanvas(canvas,progress)
+    }
+
+    override fun anaglyphPoint(canvas: Canvas?, absX:Float, absY:Float) {
+        glithce.anaglyphCanvas(canvas,absX,absY)
     }
 
     override fun ghost(canvas: Canvas?, x: Int, y: Int, motion: Motion) {
@@ -337,8 +343,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         val flI = floatArrayOf(event.getX(index),event.getY(index))
         touchPoint = calculateTouchPoint(flI)
 
-        if(proviousPoint==null){
-            proviousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
+        if(previousPoint==null){
+            previousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
                     ((glitchView?.viewY?:0f)/2f).toInt())
         }
 
@@ -349,7 +355,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 startTouchY = touchPoint.y
                 motion = Motion.NONE
 
-                proviousPoint?.copy(touchPoint)
+                previousPoint?.copy(touchPoint)
             }
             MotionEvent.ACTION_UP -> {
                 //touchX  = -1
@@ -363,19 +369,29 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                /* startTouchX = touchPoint.x
                 startTouchY = touchPoint.y*/
 
-                if(effect == Effect.ANAGLYPH || effect == Effect.NOISE || effect == Effect.PIXEL){
+                val p =  (touchPoint.x) - (previousPoint?.x?:0)
 
-                    val p =  (touchPoint.x) - (proviousPoint?.x?:0)
+                absDeltaX = p.toFloat()
+                absDeltaY = (touchPoint.y - (previousPoint?.y?:0)).toFloat()
+
+                previousPoint?.copy(touchPoint)
+
+
+                if(/*effect == Effect.ANAGLYPH ||*/ effect == Effect.NOISE || effect == Effect.PIXEL){
+
                     ProgressUpdate.updateProgress(p.toFloat())
 
-                    proviousPoint?.copy(touchPoint)
+
                 }
             }
         }
 
-        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL){
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
+                || effect == Effect.ANAGLYPH) {
             glitchView?.invalidateGlitchView()
         }
+
+
 
         return true
     }
@@ -448,7 +464,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         when (effect) {
             Effect.GHOST -> ghost(canvas,touchPoint.x,touchPoint.y,motion)
             Effect.WOBBLE -> wobble(canvas,touchPoint.x,touchPoint.y,motion)
-            Effect.ANAGLYPH -> anaglyph(canvas, effectProgress)
+            Effect.ANAGLYPH -> anaglyphPoint(canvas, absDeltaX,absDeltaY)
             Effect.NOISE -> noise(canvas,effectProgress)
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
@@ -464,6 +480,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         canvas?.restore()
 
     }
+
 
     private fun drawJPEGEffect(){
         when (effect){

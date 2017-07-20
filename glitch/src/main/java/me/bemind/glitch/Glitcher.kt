@@ -361,16 +361,16 @@ object Glitcher {
     }
 
 
-    fun anaglyphCanvas(c:Canvas?, startPoint:Point, endPoint:Point){
+    fun anaglyphCanvas(c:Canvas?, absX:Float, absY:Float){
 
         val colorMatrix = ColorMatrix()
-        transX = transX + Math.abs(endPoint.x - startPoint.x)
-        transY = transY + Math.abs(endPoint.y - startPoint.y)
+        transX += absX
+        transY += absY
         c?.drawColor(0, PorterDuff.Mode.CLEAR)
 
         //left
         val matrix = Matrix()
-        matrix.setTranslate((-transX).toFloat(), (-transY).toFloat())
+        matrix.setTranslate((-transX), (-transY))
         anaglyphShader?.setLocalMatrix(matrix)
         colorMatrix.set(leftArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
@@ -378,7 +378,7 @@ object Glitcher {
 
         //right
         val matrix2 = Matrix()
-        matrix2.setTranslate((transX).toFloat(), transY.toFloat())
+        matrix2.setTranslate((transX), transY)
         anaglyphShader?.setLocalMatrix(matrix2)
         colorMatrix.set(rightArray)
         anaglyphPaint.colorFilter = ColorMatrixColorFilter(colorMatrix)
@@ -616,8 +616,8 @@ object Glitcher {
         anaglyphPaint.xfermode = XFE_ADD
         anaglyphPaint.shader = anaglyphShader
 
-        transX = 0f
-        transY = 0f
+        transX = 20f
+        transY = 20f
     }
 
     private fun setXY(fArr: FloatArray, i: Int, f: Float, f2: Float) {
