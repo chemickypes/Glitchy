@@ -80,6 +80,14 @@ SaveImageBottomSheet.OnSaveImageListener{
         findViewById(R.id.clear_effect) as ImageView
     }
 
+    private val saveSAction by lazy {
+        findViewById(R.id.save_s_button)
+    }
+
+    private val clearSAction by lazy {
+        findViewById(R.id.clear_s_button)
+    }
+
     private var appPresenter : IAppPresenter = AppPresenter()
 
     private var ioPresenter: IIOPresenter = IOPresenter()
@@ -170,9 +178,16 @@ SaveImageBottomSheet.OnSaveImageListener{
                 mImageView?.clearEffect()
             }
         }
+        clearSAction.setOnClickListener {
+            if(appPresenter.modState == State.EFFECT){
+                appPresenter.modState = State.BASE
+                mImageView?.clearEffect()
+            }
+        }
 
         saveAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
         saveAction.setOnClickListener { applyEffect() }
+        saveSAction.setOnClickListener { applyEffect() }
 
 
         setSupportActionBar(toolbar)

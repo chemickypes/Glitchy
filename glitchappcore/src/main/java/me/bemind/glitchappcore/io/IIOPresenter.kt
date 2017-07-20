@@ -147,7 +147,9 @@ class IOPresenter : IIOPresenter {
 
 
     private fun openImageFromCamera(activity: GlitchyBaseActivity,w:Int,h:Int) {
-        handleObservable(RxPaparazzo.single(activity)
+        handleObservable(
+                RxPaparazzo
+                        .single(activity)
                 .usingCamera(),w,h)
 
     }

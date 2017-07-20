@@ -13,7 +13,7 @@ open class GlitchyCoreApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        RxPaparazzo.register(this)
+        RxPaparazzo.register(this).withFileProviderPath("Glitchy/saved/")
         Log.d(getString(R.string.app_name),"Create")
     }
 }
