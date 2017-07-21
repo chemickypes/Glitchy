@@ -5,7 +5,9 @@ package me.bemind.glitch
  */
 
 enum class Effect {
-    BASE,ANAGLYPH, GLITCH, WEBP, SWAP,NOISE,GHOST,HOOLOOVOO,WOBBLE, PIXEL, TPIXEL
+    BASE,ANAGLYPH, GLITCH, WEBP, SWAP,
+    NOISE,GHOST,HOOLOOVOO,WOBBLE, PIXEL,
+    TPIXEL, CENSORED
 }
 
 enum class TypeEffect {

@@ -142,6 +142,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> TypeEffect.CANVAS
             Effect.PIXEL -> TypeEffect.CANVAS
             Effect.TPIXEL -> TypeEffect.CANVAS
+            Effect.CENSORED -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
 
