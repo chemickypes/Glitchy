@@ -17,3 +17,7 @@ enum class TypeEffect {
 enum class Motion{
     NONE, LEFT, RIGHT, UP, DOWN
 }
+
+enum class MotionType {
+    ZOOM,MOVE, ROTATE
+}
