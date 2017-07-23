@@ -95,8 +95,8 @@ class GRect : GShape{
         val topLeft = Point(center.x - w/2,center.y - h/2)
         vv.add(topLeft)
         vv.add(Point(topLeft.x + w,topLeft.y))
-        vv.add(Point(topLeft.x,topLeft.y+h))
         vv.add(Point(topLeft.x + w,topLeft.y+h))
+        vv.add(Point(topLeft.x,topLeft.y+h))
         return rotateVertices(vv)
     }
 }

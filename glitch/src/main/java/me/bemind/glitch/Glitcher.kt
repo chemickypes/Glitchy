@@ -405,12 +405,12 @@ object Glitcher {
         paint.color = Color.BLACK
         paint.style = Paint.Style.FILL
 
-        if(gRect == null) gRect = GRect(100,50,w.toFloat(),h.toFloat())
+        if(gRect == null) gRect = GRect(300,150,w.toFloat(),h.toFloat())
 
         when(motionType){
             MotionType.MOVE -> {
                 gRect?.move(absX.toInt(),absY.toInt())
-                //c?.drawPath(getPathFromShape(gRect!!),paint)
+                c?.drawPath(getPathFromShape(gRect!!),paint)
             }
 
             else -> {
@@ -418,10 +418,10 @@ object Glitcher {
             }
         }
 
-        polygonDrawingUtil.drawPolygon(
+        /*polygonDrawingUtil.drawPolygon(
                 c!!, gRect?.vertices?.size?:0, gRect?.center?.x?.toFloat()?:0f,
                 gRect?.center?.y?.toFloat()?:0f,100f,0f, gRect?.angle?.toFloat()?:0f,paint
-        )
+        )*/
     }
 
 
