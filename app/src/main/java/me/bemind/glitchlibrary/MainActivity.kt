@@ -622,6 +622,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
                 Effect.PIXEL -> makePixelEffect(true)
                 Effect.TPIXEL -> makeTPixelEffect(true)
+                Effect.CENSORED -> makeCensoderEffect(true)
                 else -> {
                 }
             }
@@ -733,6 +734,18 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
+    private fun makeCensoderEffect(init:Boolean = false){
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.CENSORED)
+            inflateEffectLayout(GlitchEffectState(R.layout.effect_glitch_layout))
+        }
+
+        //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
+    }
+
     private fun makeWebpEffect(init: Boolean = false){
         if(init){
             appPresenter.modState = State.EFFECT
@@ -805,6 +818,10 @@ SaveImageBottomSheet.OnSaveImageListener{
                 bar?.progress = effectState.progress*/
 
                 bar.visibility = VISIBLE
+
+            }
+
+            is CensoredEffectState ->{
 
             }
 

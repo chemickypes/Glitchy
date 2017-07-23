@@ -390,7 +390,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         }
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
-                || effect == Effect.ANAGLYPH) {
+                || effect == Effect.ANAGLYPH || effect == Effect.CENSORED) {
             glitchView?.invalidateGlitchView()
         }
 
