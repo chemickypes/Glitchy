@@ -1,18 +1,27 @@
 package me.bemind.glitch
 
 import android.graphics.Point
+import android.graphics.Region
 
 /**
  * Created by angelomoroni on 21/07/17.
  */
 
+abstract class  GShape{
+    abstract var vertices : List<Point>
+    abstract fun contains(tap: Point): Boolean
+}
 
-class GRect{
+class GRect : GShape{
+
+
     var w :Int = 0
     var h :Int = 0
     val center :Point = Point(0,0)
     var angle : Int = 0
-    var vertices : List<Point> = arrayListOf()
+    override var vertices : List<Point> = arrayListOf()
+
+    var polygon = Region()
 
     init {
         vertices = generateVertices()
@@ -27,6 +36,10 @@ class GRect{
     }
 
     constructor(w: Int,h: Int,imageW:Float,imageH:Float):this(w,h, Point((imageW/2).toInt(),(imageH/2).toInt()))
+
+    override fun contains(tap: Point): Boolean {
+       return false
+    }
 
     fun move(deltaX:Int,deltaY:Int) : List<Point>{
         center.x += deltaX

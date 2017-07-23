@@ -21,7 +21,7 @@ enum class Motion{
 }
 
 enum class MotionType {
-    ZOOM,MOVE, ROTATE
+    ZOOM,MOVE, ROTATE,NONE
 }
 
 fun Point.copy(p: Point) {

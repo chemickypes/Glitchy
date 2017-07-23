@@ -6,7 +6,7 @@ android {
     buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion target_version
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "com.android.support:appcompat-v7:$android_version"
+    compile 'com.stkent:polygondrawingutil:1.0.0'
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

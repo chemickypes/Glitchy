@@ -4,6 +4,9 @@ import android.graphics.*
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
+import com.stkent.polygondrawingutil.PolygonDrawingUtil
+
+
 
 
 /**
@@ -27,7 +30,9 @@ object GlitcherUtil {
 object Glitcher {
 
 
+    private val polygonDrawingUtil = PolygonDrawingUtil()
 
+    private var gRect: GRect? = null
 
     private var baseArray: ByteArray = kotlin.ByteArray(0)
 
@@ -382,21 +387,41 @@ object Glitcher {
         c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
     }
 
-    fun censoredCanvas(c:Canvas?,absX:Float, absY:Float, motionType: MotionType = MotionType.MOVE){
+    fun tapIsInTheRect(tap:Point):Boolean{
+        return tapIsInTheShape(tap, gRect)
+    }
+
+    private fun tapIsInTheShape(tap: Point, shape: GShape?): Boolean {
+        if(shape == null){
+            return false
+        }else{
+            return shape.contains(tap)
+        }
+    }
+
+    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, motionType: MotionType = MotionType.MOVE){
 
         val paint = Paint()
         paint.color = Color.BLACK
         paint.style = Paint.Style.FILL
 
+        if(gRect == null) gRect = GRect(100,50,w.toFloat(),h.toFloat())
+
         when(motionType){
             MotionType.MOVE -> {
-
+                gRect?.move(absX.toInt(),absY.toInt())
+                //c?.drawPath(getPathFromShape(gRect!!),paint)
             }
 
             else -> {
                 //nothing for now
             }
         }
+
+        polygonDrawingUtil.drawPolygon(
+                c!!, gRect?.vertices?.size?:0, gRect?.center?.x?.toFloat()?:0f,
+                gRect?.center?.y?.toFloat()?:0f,100f,0f, gRect?.angle?.toFloat()?:0f,paint
+        )
     }
 
 

@@ -1,8 +1,6 @@
 package me.bemind.glitchappcore.glitch
 
 import android.util.Log
-import me.bemind.glitch.Effect
-import me.bemind.glitch.Glitcher
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -14,8 +12,7 @@ import android.widget.ImageView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bemind.glitch.Motion
-import me.bemind.glitch.TypeEffect
+import me.bemind.glitch.*
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.app.ProgressUpdate
 import java.lang.Exception
@@ -69,6 +66,7 @@ interface IGlitchPresenter{
     fun pixelize(canvas: Canvas?,progress: Int = 70,x: Int,y: Int)
     fun pixelizeTot(canvas: Canvas?,progress: Int = 70)
     fun anaglyphPoint(canvas: Canvas?, absX: Float, absY: Float)
+    fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,motionType: MotionType = MotionType.MOVE)
 }
 
 class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener {
@@ -183,6 +181,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     override fun pixelizeTot(canvas: Canvas?, progress: Int) {
         glithce.totalPixelCanvas(canvas,progress)
+    }
+
+    override fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,motionType: MotionType){
+        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,motionType)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -470,6 +472,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
             Effect.TPIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
+            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY)
             else -> Log.v("ImageView", "BASE")
         }
 
@@ -481,6 +484,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         canvas?.restore()
 
     }
+
+
 
 
     private fun drawJPEGEffect(){
