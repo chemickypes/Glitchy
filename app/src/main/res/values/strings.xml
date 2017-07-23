@@ -62,4 +62,5 @@
     <string name="swipe_on_image">Swipe on Image</string>
     <string name="t_pixel">Touch Pixel</string>
     <string name="density_string">Density</string>
+    <string name="censored">Censored</string>
 </resources>

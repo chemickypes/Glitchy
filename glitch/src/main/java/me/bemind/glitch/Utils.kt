@@ -6,7 +6,7 @@ import android.graphics.Path
  * Created by angelomoroni on 23/07/17.
  */
 
-fun getPathFromShape (shape: Shape) : Path {
+fun getPathFromShape (shape: GShape) : Path {
     val p = Path()
     for(i in 0 until shape.vertices.size){
         val point = shape.vertices[i]
