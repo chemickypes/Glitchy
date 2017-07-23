@@ -382,6 +382,22 @@ object Glitcher {
         c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
     }
 
+    fun censoredCanvas(c:Canvas?,absX:Float, absY:Float, motionType: MotionType = MotionType.MOVE){
+
+        val paint = Paint()
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
+
+        when(motionType){
+            MotionType.MOVE -> {
+
+            }
+
+            else -> {
+                //nothing for now
+            }
+        }
+    }
 
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {

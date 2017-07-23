@@ -1,5 +1,7 @@
 package me.bemind.glitch
 
+import android.graphics.Point
+
 /**
  * Created by angelomoroni on 13/04/17.
  */
@@ -20,4 +22,9 @@ enum class Motion{
 
 enum class MotionType {
     ZOOM,MOVE, ROTATE
+}
+
+fun Point.copy(p: Point) {
+    x = p.x
+    y = p.y
 }
