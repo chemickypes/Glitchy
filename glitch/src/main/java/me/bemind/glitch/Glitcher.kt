@@ -399,7 +399,7 @@ object Glitcher {
         }
     }
 
-    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, motionType: MotionType = MotionType.MOVE){
+    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, motionType: MotionType = MotionType.MOVE){
 
         val paint = Paint()
         paint.color = Color.BLACK
@@ -411,6 +411,11 @@ object Glitcher {
             MotionType.MOVE -> {
                 gRect?.move(absX.toInt(),absY.toInt())
                 c?.drawPath(getPathFromShape(gRect!!),paint)
+            }
+            MotionType.ROTATE -> {
+                gRect?.rotate(rotation.toInt())
+                c?.drawPath(getPathFromShape(gRect!!),paint)
+                //c?.rotate(rotation,)
             }
 
             else -> {

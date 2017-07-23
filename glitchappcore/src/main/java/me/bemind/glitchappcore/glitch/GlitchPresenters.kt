@@ -105,6 +105,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     var absDeltaX = 0f
     var absDeltaY = 0f
 
+    private var motionType: MotionType = MotionType.MOVE
+
     //touch properties
 
     private var touchPoint = Point(-1,-1)
@@ -184,7 +186,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,motionType: MotionType){
-        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,motionType)
+        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,45f,motionType)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -372,6 +374,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                /* startTouchX = touchPoint.x
                 startTouchY = touchPoint.y*/
 
+                motionType = MotionType.MOVE
+
                 val p =  (touchPoint.x) - (previousPoint?.x?:0)
 
                 absDeltaX = p.toFloat()
@@ -451,7 +455,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun onLongPress(p0: MotionEvent?) {
     }
 
-    override fun onDraw(canvas: Canvas?,scale: Boolean){
+
+
+    override fun onDraw(canvas: Canvas?, scale: Boolean){
 
 
         canvas?.save()
@@ -472,7 +478,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
             Effect.TPIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
-            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY)
+            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY,motionType)
             else -> Log.v("ImageView", "BASE")
         }
 
