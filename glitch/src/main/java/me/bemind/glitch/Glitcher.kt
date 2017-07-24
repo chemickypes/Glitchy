@@ -423,55 +423,10 @@ object Glitcher {
         c?.drawPath(mCesuredPath,paint)
         c?.restore()
 
-        Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n XScaledFactor $xScaledFactor")
+        //Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n XScaledFactor $xScaledFactor")
 
 
 
-
-//        gRect?.rotate(rotation.toInt())
-        //gRect?.scale(scaledFactor)
-//        c?.rotate(rotation,rectF.centerX(),rectF.centerY())
-
-
-
-//        mCensoredMatrix?.reset()
-
-
-        /* mCensoredMatrix?.setScale(scaledFactor, scaledFactor,rectF.centerX(),rectF.centerY())
-         mCensoredMatrix?.setTranslate(absX,absY)
-         mCensoredMatrix?.setRotate(gRect?.angle?.toFloat()?:0f,rectF.centerX(),rectF.centerY())*/
-
-
-
-        // mCesuredPath?.transform(mCensoredMatrix)
-
-
-       /* when(motionType){
-            MotionType.MOVE -> {
-                gRect?.move(absX.toInt(),absY.toInt())
-                c?.drawPath(getPathFromShape(gRect!!),paint)
-            }
-            MotionType.ROTATE -> {
-                c?.save()
-                gRect?.rotate(rotation.toInt())
-                c?.rotate(rotation, gRect?.center?.x?.toFloat()?:0f,gRect?.center?.y?.toFloat()?:0f)
-                c?.drawPath(getPathFromShape(gRect!!),paint)
-                c?.restore()
-                //c?.drawPath(getPathFromShape(gRect!!),paint)
-                //c?.rotate(rotation,)
-            }
-
-            else -> {
-                //nothing for now
-            }
-        }*/
-
-        //c?.drawBitmap(mCensoredBitmap,0f,0f,paint)
-
-        /*polygonDrawingUtil.drawPolygon(
-                c!!, gRect?.vertices?.size?:0, gRect?.center?.x?.toFloat()?:0f,
-                gRect?.center?.y?.toFloat()?:0f,100f,0f, gRect?.angle?.toFloat()?:0f,paint
-        )*/
     }
 
 

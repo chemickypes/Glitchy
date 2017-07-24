@@ -371,8 +371,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                     ((glitchView?.viewY?:0f)/2f).toInt())
         }
 
-        scaleDetector?.onTouchEvent(event)
         mRotateDetector?.onTouchEvent(event)
+        scaleDetector?.onTouchEvent(event)
         mMoveDetector?.onTouchEvent(event)
         gestureDetector?.onTouchEvent(event)
 
@@ -529,10 +529,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             mScaleFactor *= detector.scaleFactor // scale change since previous event
 
-            // Don't let the object get too small or too large.
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f))
 
-            //mPrevSpan > 0 ? mCurrSpan / mPrevSpan : 1
 
             if(detector.currentSpanX>detector.currentSpanY) {
                 mXScaleFactor *= if (detector.previousSpanX > 0) {

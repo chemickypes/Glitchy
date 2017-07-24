@@ -8,6 +8,7 @@ import android.graphics.Region
  */
 
 abstract class  GShape{
+    val SCALE_SLOP: Float = 0.005f
     abstract var vertices : List<Point>
     abstract fun contains(tap: Point): Boolean
 }
@@ -21,13 +22,10 @@ class GRect : GShape{
     var BASE_H : Int = 0
     val center :Point = Point(0,0)
     var angle : Int = 0
-    var scaleFactor: Float = 1f
     var xScaleFactor: Float = 1f
     var yScaleFactor: Float = 1f
 
     override var vertices : List<Point> = arrayListOf()
-
-    var polygon = Region()
 
     init {
         vertices = generateVertices()
@@ -87,8 +85,10 @@ class GRect : GShape{
         return vertices
     }
 
-    fun scale(xScaledFactor: Float,yScaledFactor:Float) :List<Point> {
-        if(Math.abs(this.xScaleFactor - Math.abs(xScaledFactor)) > 0.05 || Math.abs(this.yScaleFactor - Math.abs(yScaledFactor)) > 0.05) {
+
+
+    fun scale(xScaledFactor: Float, yScaledFactor:Float) :List<Point> {
+        if(Math.abs(this.xScaleFactor - Math.abs(xScaledFactor)) > SCALE_SLOP || Math.abs(this.yScaleFactor - Math.abs(yScaledFactor)) > SCALE_SLOP) {
             this.yScaleFactor = yScaledFactor
             this.xScaleFactor = xScaledFactor
             w = (BASE_W * xScaleFactor).toInt()
