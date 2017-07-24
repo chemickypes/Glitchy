@@ -371,10 +371,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                     ((glitchView?.viewY?:0f)/2f).toInt())
         }
 
-        gestureDetector?.onTouchEvent(event)
-       // scaleDetector?.onTouchEvent(event)
-       // mRotateDetector?.onTouchEvent(event)
+        scaleDetector?.onTouchEvent(event)
+        mRotateDetector?.onTouchEvent(event)
         mMoveDetector?.onTouchEvent(event)
+        gestureDetector?.onTouchEvent(event)
 
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
@@ -655,7 +655,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     private inner class RotateListener : RotateGestureDetector.SimpleOnRotateGestureListener() {
         override fun onRotate(detector: RotateGestureDetector): Boolean {
-            angleToRotate -= detector.rotationDegreesDelta.toInt()
+            angleToRotate -= (detector.rotationDegreesDelta.toInt() )
             return true
         }
     }

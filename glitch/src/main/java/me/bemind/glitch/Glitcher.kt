@@ -82,6 +82,7 @@ object Glitcher {
     /*private var mCensoredBitmap : Bitmap? = null
     private var mCensoredCanvas : Canvas? = null*/
     private var mCesuredPath: Path? = null
+    private var mCensoredMatrix: Matrix? = null
 
 
 
@@ -410,15 +411,39 @@ object Glitcher {
         paint.style = Paint.Style.FILL
 
 
-        c?.save()
-        gRect?.rotate(rotation.toInt())
-        gRect?.move(absX.toInt(),absY.toInt())
-        gRect?.scale(scaledFactor)
-        c?.rotate(rotation, gRect?.center?.x?.toFloat()?:0f,gRect?.center?.y?.toFloat()?:0f)
 
+        val rectF = RectF()
+
+        gRect?.move(absX.toInt(),absY.toInt())
         mCesuredPath = getPathFromShape(gRect!!, mCesuredPath)
+        mCesuredPath?.computeBounds(rectF,true)
+        c?.save()
+        c?.rotate(rotation,rectF.centerX(),rectF.centerY())
         c?.drawPath(mCesuredPath,paint)
         c?.restore()
+
+        Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n ScaledFactor $scaledFactor")
+
+
+
+
+//        gRect?.rotate(rotation.toInt())
+        //gRect?.scale(scaledFactor)
+//        c?.rotate(rotation,rectF.centerX(),rectF.centerY())
+
+
+
+//        mCensoredMatrix?.reset()
+
+
+        /* mCensoredMatrix?.setScale(scaledFactor, scaledFactor,rectF.centerX(),rectF.centerY())
+         mCensoredMatrix?.setTranslate(absX,absY)
+         mCensoredMatrix?.setRotate(gRect?.angle?.toFloat()?:0f,rectF.centerX(),rectF.centerY())*/
+
+
+
+        // mCesuredPath?.transform(mCensoredMatrix)
+
 
        /* when(motionType){
             MotionType.MOVE -> {
@@ -624,9 +649,10 @@ object Glitcher {
 
     private fun initCensoredEffect() {
         gRect = GRect(300,150, Glitcher.w.toFloat(), Glitcher.h.toFloat())
+        mCensoredMatrix = Matrix()
 
-       /* mCensoredBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
-        mCensoredCanvas = Canvas(mCensoredBitmap)*/
+        /* mCensoredBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+         mCensoredCanvas = Canvas(mCensoredBitmap)*/
     }
 
     private fun initPixelEffect() {
