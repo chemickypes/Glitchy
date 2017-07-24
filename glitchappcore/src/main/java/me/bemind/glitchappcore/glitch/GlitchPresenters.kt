@@ -641,21 +641,24 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
             //mPrevSpan > 0 ? mCurrSpan / mPrevSpan : 1
 
-            mXScaleFactor *= if (detector.previousSpanX >0 ){
-                detector.currentSpanX/detector.previousSpanX
-            }else{
-                1f
+            if(detector.currentSpanX>detector.currentSpanY) {
+                mXScaleFactor *= if (detector.previousSpanX > 0) {
+                    detector.currentSpanX / detector.previousSpanX
+                } else {
+                    1f
+                }
+
+                mXScaleFactor = Math.max(0.1f, Math.min(mXScaleFactor, 10.0f))
+            }else {
+
+                mYScaleFactor *= if (detector.previousSpanY > 0) {
+                    detector.currentSpanY / detector.previousSpanY
+                } else {
+                    1f
+                }
+
+                mYScaleFactor = Math.max(0.1f, Math.min(mYScaleFactor, 10.0f))
             }
-
-            mXScaleFactor = Math.max(0.1f, Math.min(mXScaleFactor, 10.0f))
-
-            mYScaleFactor *= if (detector.previousSpanY>0){
-                detector.currentSpanY / detector.previousSpanY
-            }else{
-                1f
-            }
-
-            mYScaleFactor = Math.max(0.1f, Math.min(mYScaleFactor, 10.0f))
 
             return true
         }
