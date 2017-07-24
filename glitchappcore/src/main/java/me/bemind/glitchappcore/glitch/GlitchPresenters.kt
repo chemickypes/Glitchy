@@ -289,7 +289,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
                 val canvas = Canvas(b)
 
-                if(effect == Effect.NOISE || effect == Effect.TPIXEL) {
+                if(effect == Effect.NOISE || effect == Effect.TPIXEL || effect == Effect.CENSORED) {
                     canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
                 }
 
@@ -381,18 +381,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                 || effect == Effect.ANAGLYPH || effect == Effect.CENSORED) {
             glitchView?.invalidateGlitchView()
         }
-
-
-
-/*
-        if(event?.pointerCount?:1 >1){
-
-            doubleTouchEvent(event)
-        }else{
-            singleTouchEvent(event)
-        }
-
-*/
 
 
 
