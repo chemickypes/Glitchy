@@ -17,8 +17,12 @@ class GRect : GShape{
 
     var w :Int = 0
     var h :Int = 0
+    var BASE_W : Int = 0
+    var BASE_H : Int = 0
     val center :Point = Point(0,0)
     var angle : Int = 0
+    var scaleFactor: Float = 1f
+
     override var vertices : List<Point> = arrayListOf()
 
     var polygon = Region()
@@ -31,6 +35,9 @@ class GRect : GShape{
         this.w = w
         this.h = h
         this.center.copy(center)
+
+        this.BASE_H = h
+        this.BASE_W = w
 
         vertices = generateVertices()
     }
@@ -79,9 +86,12 @@ class GRect : GShape{
     }
 
     fun scale(scaledFactor: Float) :List<Point> {
-        w  = (w * scaledFactor).toInt()
-        h = (h * scaledFactor).toInt()
-        vertices = generateVertices()
+        if(Math.abs(this.scaleFactor - Math.abs(scaledFactor)) > 0.05) {
+            this.scaleFactor = scaledFactor
+            w = (BASE_W * scaledFactor).toInt()
+            h = (BASE_H * scaledFactor).toInt()
+            vertices = generateVertices()
+        }
 
         return vertices
 

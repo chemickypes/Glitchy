@@ -415,6 +415,7 @@ object Glitcher {
         val rectF = RectF()
 
         gRect?.move(absX.toInt(),absY.toInt())
+        gRect?.scale(scaledFactor)
         mCesuredPath = getPathFromShape(gRect!!, mCesuredPath)
         mCesuredPath?.computeBounds(rectF,true)
         c?.save()
