@@ -4,7 +4,6 @@ import android.graphics.*
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.util.*
-import com.stkent.polygondrawingutil.PolygonDrawingUtil
 
 
 
@@ -30,7 +29,6 @@ object GlitcherUtil {
 object Glitcher {
 
 
-    private val polygonDrawingUtil = PolygonDrawingUtil()
 
     private var gRect: GRect? = null
 
@@ -80,6 +78,10 @@ object Glitcher {
 
     private var mPixelBitmap : Bitmap? = null
     private var mPixelCanvas : Canvas? = null
+
+    /*private var mCensoredBitmap : Bitmap? = null
+    private var mCensoredCanvas : Canvas? = null*/
+    private var mCesuredPath: Path? = null
 
 
 
@@ -399,29 +401,46 @@ object Glitcher {
         }
     }
 
-    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, motionType: MotionType = MotionType.MOVE){
+
+
+    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, scaledFactor:Float,motionType: MotionType = MotionType.MOVE){
 
         val paint = Paint()
         paint.color = Color.BLACK
         paint.style = Paint.Style.FILL
 
-        if(gRect == null) gRect = GRect(300,150,w.toFloat(),h.toFloat())
 
-        when(motionType){
+        c?.save()
+        gRect?.rotate(rotation.toInt())
+        gRect?.move(absX.toInt(),absY.toInt())
+        gRect?.scale(scaledFactor)
+        c?.rotate(rotation, gRect?.center?.x?.toFloat()?:0f,gRect?.center?.y?.toFloat()?:0f)
+
+        mCesuredPath = getPathFromShape(gRect!!, mCesuredPath)
+        c?.drawPath(mCesuredPath,paint)
+        c?.restore()
+
+       /* when(motionType){
             MotionType.MOVE -> {
                 gRect?.move(absX.toInt(),absY.toInt())
                 c?.drawPath(getPathFromShape(gRect!!),paint)
             }
             MotionType.ROTATE -> {
+                c?.save()
                 gRect?.rotate(rotation.toInt())
+                c?.rotate(rotation, gRect?.center?.x?.toFloat()?:0f,gRect?.center?.y?.toFloat()?:0f)
                 c?.drawPath(getPathFromShape(gRect!!),paint)
+                c?.restore()
+                //c?.drawPath(getPathFromShape(gRect!!),paint)
                 //c?.rotate(rotation,)
             }
 
             else -> {
                 //nothing for now
             }
-        }
+        }*/
+
+        //c?.drawBitmap(mCensoredBitmap,0f,0f,paint)
 
         /*polygonDrawingUtil.drawPolygon(
                 c!!, gRect?.vertices?.size?:0, gRect?.center?.x?.toFloat()?:0f,
@@ -597,6 +616,17 @@ object Glitcher {
             initPixelEffect()
         }
 
+        if(effect == Effect.CENSORED){
+            initCensoredEffect()
+        }
+
+    }
+
+    private fun initCensoredEffect() {
+        gRect = GRect(300,150, Glitcher.w.toFloat(), Glitcher.h.toFloat())
+
+       /* mCensoredBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+        mCensoredCanvas = Canvas(mCensoredBitmap)*/
     }
 
     private fun initPixelEffect() {

@@ -52,7 +52,7 @@ class GRect : GShape{
 
     fun rotate(angle:Int) : List<Point>{
         this.angle = angle
-        vertices = rotateVertices(vertices)
+       // vertices = rotateVertices(vertices)
         return vertices
     }
 
@@ -78,6 +78,16 @@ class GRect : GShape{
         return vertices
     }
 
+    fun scale(scaledFactor: Float) :List<Point> {
+        w  = (w * scaledFactor).toInt()
+        h = (h * scaledFactor).toInt()
+        vertices = generateVertices()
+
+        return vertices
+
+
+    }
+
     private fun rotate(p: Point) : Point{
         val x:Int = p.x
         val y:Int = p.y
@@ -99,6 +109,8 @@ class GRect : GShape{
         vv.add(Point(topLeft.x,topLeft.y+h))
         return rotateVertices(vv)
     }
+
+
 }
 
 private fun <E> List<E>.copy(): List<E> {
