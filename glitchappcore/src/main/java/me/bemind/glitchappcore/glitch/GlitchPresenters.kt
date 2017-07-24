@@ -11,6 +11,8 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.ImageView
+import com.almeros.android.multitouch.MoveGestureDetector
+import com.almeros.android.multitouch.RotateGestureDetector
 import com.yalantis.ucrop.util.RotationGestureDetector
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -73,7 +75,8 @@ interface IGlitchPresenter{
                  mScaledFactor :Float = 1f,motionType: MotionType = MotionType.MOVE)
 }
 
-class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener{
+class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener
+        /*ScaleGestureDetector.OnScaleGestureListener, MoveGestureDetector.OnMoveGestureListener */{
 
 
 
@@ -104,6 +107,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     var gestureDetector : GestureDetectorCompat? = null
     var scaleDetector :  ScaleGestureDetector? = null
+    var mRotateDetector :  RotateGestureDetector? = null
+    var mMoveDetector : MoveGestureDetector? = null
 
     val viewCoords = IntArray(2)
 
@@ -159,7 +164,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     init {
         gestureDetector = GestureDetectorCompat(context,this)
-        scaleDetector = ScaleGestureDetector(context,this)
+        scaleDetector = ScaleGestureDetector(context,ScaleListener())
+        mMoveDetector = MoveGestureDetector(context,MoveListener())
+        mRotateDetector = RotateGestureDetector(context,RotateListener())
     }
 
     override fun anaglyph(canvas: Canvas?, progress: Int) {
@@ -354,22 +361,46 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        val index = event!!.actionIndex
+        val flI = floatArrayOf(event.getX(index),event.getY(index))
+        touchPoint = calculateTouchPoint(flI)
+
+        if(previousPoint==null){
+            previousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
+                    ((glitchView?.viewY?:0f)/2f).toInt())
+        }
+
         gestureDetector?.onTouchEvent(event)
+       // scaleDetector?.onTouchEvent(event)
+       // mRotateDetector?.onTouchEvent(event)
+        mMoveDetector?.onTouchEvent(event)
+
+
+        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
+                || effect == Effect.ANAGLYPH || effect == Effect.CENSORED) {
+            glitchView?.invalidateGlitchView()
+        }
 
 
 
+/*
         if(event?.pointerCount?:1 >1){
-            scaleDetector?.onTouchEvent(event)
+
             doubleTouchEvent(event)
         }else{
             singleTouchEvent(event)
         }
 
+*/
+
+
+
 
         return true
     }
 
-    override fun onScaleBegin(p0: ScaleGestureDetector?): Boolean {
+    /*override fun onScaleBegin(p0: ScaleGestureDetector?): Boolean {
         return true
     }
 
@@ -382,7 +413,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         //mScaleFactor *= (p0?.scaleFactor?.toFloat() ?: 1f)
         mScaleFactor = p0?.scaleFactor?:1f
         return true
-    }
+    }*/
 
      //#######################
     private fun doubleTouchEvent(event: MotionEvent?) {
@@ -487,7 +518,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     }
 
-    //######################
 
     override fun onShowPress(p0: MotionEvent?) {
         //nothing
@@ -495,7 +525,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     override fun onSingleTapUp(p0: MotionEvent?): Boolean {
         //nothing
-        return false
+        if(effect == Effect.GLITCH || effect == Effect.SWAP ){
+            makeEffect(0)
+        }
+        return true
     }
 
     override fun onDown(p0: MotionEvent?): Boolean {
@@ -607,6 +640,44 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                             glitchView?.showError(t)
                         }
                 )
+    }
+
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            mScaleFactor *= detector.scaleFactor // scale change since previous event
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f))
+
+            return true
+        }
+    }
+
+    private inner class RotateListener : RotateGestureDetector.SimpleOnRotateGestureListener() {
+        override fun onRotate(detector: RotateGestureDetector): Boolean {
+            angleToRotate -= detector.rotationDegreesDelta.toInt()
+            return true
+        }
+    }
+
+    private inner class MoveListener : MoveGestureDetector.SimpleOnMoveGestureListener() {
+        override fun onMove(detector: MoveGestureDetector): Boolean {
+            val d = detector.focusDelta
+           /* mFocusX += d.x
+            mFocusY += d.y*/
+
+            absDeltaY = d.y
+            absDeltaX = d.x
+
+            if (/*effect == Effect.ANAGLYPH ||*/ effect == Effect.NOISE || effect == Effect.PIXEL) {
+
+                ProgressUpdate.updateProgress(absDeltaX)
+
+            }
+            // mFocusX = detector.getFocusX();
+            // mFocusY = detector.getFocusY();
+            return true
+        }
     }
 
 
