@@ -72,7 +72,7 @@ interface IGlitchPresenter{
     fun pixelizeTot(canvas: Canvas?,progress: Int = 70)
     fun anaglyphPoint(canvas: Canvas?, absX: Float, absY: Float)
     fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,angleToRotate:Int,
-                 mScaledFactor :Float = 1f,motionType: MotionType = MotionType.MOVE)
+                 mXScaledFactor :Float = 1f,mYScaleFactor:Float = 1f,motionType: MotionType = MotionType.MOVE)
 }
 
 class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener
@@ -128,6 +128,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
     private var mScaleFactor: Float = 1f
+    private var mXScaleFactor: Float = 1f
+    private var mYScaleFactor: Float = 1f
 
     //end touch properties
 
@@ -204,8 +206,8 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         glithce.totalPixelCanvas(canvas,progress)
     }
 
-    override fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,angleToRotate:Int,mScaleFactor:Float,motionType: MotionType){
-        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,angleToRotate.toFloat(),mScaleFactor,motionType)
+    override fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,angleToRotate:Int,mXScaleFactor:Float,mYScaleFactor:Float,motionType: MotionType){
+        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,angleToRotate.toFloat(),mXScaleFactor,mYScaleFactor,motionType)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -572,7 +574,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
             Effect.TPIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
-            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY,angleToRotate,mScaleFactor,motionType)
+            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY,angleToRotate,mXScaleFactor,mYScaleFactor,motionType)
             else -> Log.v("ImageView", "BASE")
         }
 
@@ -636,6 +638,24 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
             // Don't let the object get too small or too large.
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f))
+
+            //mPrevSpan > 0 ? mCurrSpan / mPrevSpan : 1
+
+            mXScaleFactor *= if (detector.previousSpanX >0 ){
+                detector.currentSpanX/detector.previousSpanX
+            }else{
+                1f
+            }
+
+            mXScaleFactor = Math.max(0.1f, Math.min(mXScaleFactor, 10.0f))
+
+            mYScaleFactor *= if (detector.previousSpanY>0){
+                detector.currentSpanY / detector.previousSpanY
+            }else{
+                1f
+            }
+
+            mYScaleFactor = Math.max(0.1f, Math.min(mYScaleFactor, 10.0f))
 
             return true
         }

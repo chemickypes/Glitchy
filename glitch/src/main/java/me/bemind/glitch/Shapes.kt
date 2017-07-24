@@ -22,6 +22,8 @@ class GRect : GShape{
     val center :Point = Point(0,0)
     var angle : Int = 0
     var scaleFactor: Float = 1f
+    var xScaleFactor: Float = 1f
+    var yScaleFactor: Float = 1f
 
     override var vertices : List<Point> = arrayListOf()
 
@@ -85,11 +87,12 @@ class GRect : GShape{
         return vertices
     }
 
-    fun scale(scaledFactor: Float) :List<Point> {
-        if(Math.abs(this.scaleFactor - Math.abs(scaledFactor)) > 0.05) {
-            this.scaleFactor = scaledFactor
-            w = (BASE_W * scaledFactor).toInt()
-            h = (BASE_H * scaledFactor).toInt()
+    fun scale(xScaledFactor: Float,yScaledFactor:Float) :List<Point> {
+        if(Math.abs(this.xScaleFactor - Math.abs(xScaledFactor)) > 0.05 || Math.abs(this.yScaleFactor - Math.abs(yScaledFactor)) > 0.05) {
+            this.yScaleFactor = yScaledFactor
+            this.xScaleFactor = xScaledFactor
+            w = (BASE_W * xScaleFactor).toInt()
+            h = (BASE_H * yScaleFactor).toInt()
             vertices = generateVertices()
         }
 

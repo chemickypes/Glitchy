@@ -404,7 +404,7 @@ object Glitcher {
 
 
 
-    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, scaledFactor:Float,motionType: MotionType = MotionType.MOVE){
+    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, xScaledFactor:Float,yScaledFactor:Float,motionType: MotionType = MotionType.MOVE){
 
         val paint = Paint()
         paint.color = Color.BLACK
@@ -415,7 +415,7 @@ object Glitcher {
         val rectF = RectF()
 
         gRect?.move(absX.toInt(),absY.toInt())
-        gRect?.scale(scaledFactor)
+        gRect?.scale(xScaledFactor,yScaledFactor)
         mCesuredPath = getPathFromShape(gRect!!, mCesuredPath)
         mCesuredPath?.computeBounds(rectF,true)
         c?.save()
@@ -423,7 +423,7 @@ object Glitcher {
         c?.drawPath(mCesuredPath,paint)
         c?.restore()
 
-        Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n ScaledFactor $scaledFactor")
+        Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n XScaledFactor $xScaledFactor")
 
 
 
