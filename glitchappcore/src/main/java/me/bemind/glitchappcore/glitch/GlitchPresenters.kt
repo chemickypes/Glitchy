@@ -6,14 +6,12 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
-import android.support.v4.view.ScaleGestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.ImageView
 import com.almeros.android.multitouch.MoveGestureDetector
 import com.almeros.android.multitouch.RotateGestureDetector
-import com.yalantis.ucrop.util.RotationGestureDetector
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -390,110 +388,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
         return true
     }
 
-    /*override fun onScaleBegin(p0: ScaleGestureDetector?): Boolean {
-        return true
-    }
-
-    override fun onScaleEnd(p0: ScaleGestureDetector?) {
-    }
-
-
-
-    override fun onScale(p0: ScaleGestureDetector?): Boolean {
-        //mScaleFactor *= (p0?.scaleFactor?.toFloat() ?: 1f)
-        mScaleFactor = p0?.scaleFactor?:1f
-        return true
-    }*/
-
-     //#######################
-    private fun doubleTouchEvent(event: MotionEvent?) {
-        event?.let {
-            if(effect == Effect.CENSORED){
-                val deltaX = it.getX(0) - it.getX(1)
-                val deltaY = it.getY(0) - it.getY(1)
-                val radians = Math.atan((deltaY / deltaX).toDouble())
-                //Convert to degrees
-                val degrees = (radians * 180 / Math.PI).toInt()
-
-                when(it.actionMasked){
-                    MotionEvent.ACTION_MOVE -> {
-
-                        motionType = MotionType.ROTATE
-                        angleToRotate = degrees - mLastAngle
-                    }
-                    /*MotionEvent.ACTION_POINTER_UP -> {
-                    }*/
-                    else ->{
-                        mLastAngle = degrees
-                    }
-                }
-
-
-                glitchView?.invalidateGlitchView()
-            }
-        }
-
-    }
-
-    private fun singleTouchEvent(event: MotionEvent?){
-        val index = event!!.actionIndex
-        val flI = floatArrayOf(event.getX(index),event.getY(index))
-        touchPoint = calculateTouchPoint(flI)
-
-        if(previousPoint==null){
-            previousPoint = Point(((glitchView?.viewX?:0f)/2f).toInt(),
-                    ((glitchView?.viewY?:0f)/2f).toInt())
-        }
-
-
-        when (event.action){
-            MotionEvent.ACTION_DOWN -> {
-                startTouchX = touchPoint.x
-                startTouchY = touchPoint.y
-                motion = Motion.NONE
-
-                previousPoint?.copy(touchPoint)
-            }
-            MotionEvent.ACTION_UP -> {
-                //touchX  = -1
-                //touchY  = -1
-                if(effect == Effect.GLITCH || effect == Effect.SWAP ){
-                    makeEffect(0)
-                }
-
-                motionType = MotionType.NONE
-
-            }
-            MotionEvent.ACTION_MOVE -> {
-                /* startTouchX = touchPoint.x
-                 startTouchY = touchPoint.y*/
-
-                if(motionType != MotionType.ROTATE && motionType != MotionType.ZOOM) {
-
-                    motionType = MotionType.MOVE
-
-                    val p = (touchPoint.x) - (previousPoint?.x ?: 0)
-
-                    absDeltaX = p.toFloat()
-                    absDeltaY = (touchPoint.y - (previousPoint?.y ?: 0)).toFloat()
-
-                    previousPoint?.copy(touchPoint)
-
-
-                    if (/*effect == Effect.ANAGLYPH ||*/ effect == Effect.NOISE || effect == Effect.PIXEL) {
-
-                        ProgressUpdate.updateProgress(p.toFloat())
-
-                    }
-                }
-            }
-        }
-
-        if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
-                || effect == Effect.ANAGLYPH || effect == Effect.CENSORED) {
-            glitchView?.invalidateGlitchView()
-        }
-    }
 
     private fun calculateTouchPoint(event: FloatArray): Point {
 
@@ -514,7 +408,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     }
 
     override fun onSingleTapUp(p0: MotionEvent?): Boolean {
-        //nothing
         if(effect == Effect.GLITCH || effect == Effect.SWAP ){
             makeEffect(0)
         }
@@ -674,19 +567,16 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     private inner class MoveListener : MoveGestureDetector.SimpleOnMoveGestureListener() {
         override fun onMove(detector: MoveGestureDetector): Boolean {
             val d = detector.focusDelta
-           /* mFocusX += d.x
-            mFocusY += d.y*/
 
             absDeltaY = d.y
             absDeltaX = d.x
 
-            if (/*effect == Effect.ANAGLYPH ||*/ effect == Effect.NOISE || effect == Effect.PIXEL) {
+            if ( effect == Effect.NOISE || effect == Effect.PIXEL) {
 
                 ProgressUpdate.updateProgress(absDeltaX)
 
             }
-            // mFocusX = detector.getFocusX();
-            // mFocusY = detector.getFocusY();
+
             return true
         }
     }
