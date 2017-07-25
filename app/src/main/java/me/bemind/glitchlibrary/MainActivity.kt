@@ -739,7 +739,7 @@ SaveImageBottomSheet.OnSaveImageListener{
             appPresenter.modState = State.EFFECT
 
             mImageView?.initEffect(Effect.CENSORED)
-            inflateEffectLayout(GlitchEffectState(R.layout.effect_glitch_layout))
+            inflateEffectLayout(CensoredEffectState(R.layout.effect_glitch_layout))
         }
 
         //imagePresenter.glitchImage(Effect.GLITCH)
@@ -822,7 +822,8 @@ SaveImageBottomSheet.OnSaveImageListener{
             }
 
             is CensoredEffectState ->{
-
+                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                b.setText(R.string.double_tap_to_censored)
             }
 
             is TPixelEffectState ->{

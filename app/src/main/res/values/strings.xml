@@ -27,7 +27,7 @@
     <string name="webp">WEBP</string>
     <string name="tap_here_to_glitch_webp">Tap to glitch WEBP</string>
     <string name="swap">Swap</string>
-    <string name="tap_here_to_swap">Tap on image to Swap it</string>
+    <string name="tap_here_to_swap">Tap on image to swap it</string>
     <string name="double_tap_to_censored">Use two finger to censor</string>
     <string name="noise">Noise</string>
     <string name="tap_here_to_create_noise">Tap to create Noise</string>
