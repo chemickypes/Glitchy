@@ -51,7 +51,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var disposable: Disposable? = null
 
-    private var mFirebaseAnalytics : FirebaseAnalytics? = null
+    //private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
     private var mImageView : ExtendedImageView? = null
 
@@ -165,7 +165,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         FontIconTypefaceHolder.init(assets, "material_icons.ttf")
         setContentView(R.layout.activity_main)
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        GlitchyEventTracker.init(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
 
