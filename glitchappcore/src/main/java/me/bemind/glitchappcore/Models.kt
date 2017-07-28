@@ -113,6 +113,25 @@ data class NoiseEffectState(override val layout: Int,val progress:Int) : EffectS
     }
 }
 
+data class CensoredEffectState(override val layout: Int) : EffectState(layout),Parcelable{
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<CensoredEffectState> = object : Parcelable.Creator<CensoredEffectState> {
+            override fun createFromParcel(source: Parcel): CensoredEffectState = CensoredEffectState(source)
+            override fun newArray(size: Int): Array<CensoredEffectState?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(
+    source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(layout)
+    }
+}
+
 data class SwapEffectState (override val layout: Int) : EffectState(layout), Parcelable{
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<SwapEffectState> = object : Parcelable.Creator<SwapEffectState> {

@@ -42,6 +42,7 @@ import net.idik.lib.slimadapter.SlimAdapter
 import org.jraf.android.alibglitch.GlitchEffect
 import permissions.dispatcher.*
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager
+import java.util.*
 
 
 @RuntimePermissions
@@ -51,7 +52,7 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     private var disposable: Disposable? = null
 
-    private var mFirebaseAnalytics : FirebaseAnalytics? = null
+    //private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
     private var mImageView : ExtendedImageView? = null
 
@@ -165,7 +166,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         FontIconTypefaceHolder.init(assets, "material_icons.ttf")
         setContentView(R.layout.activity_main)
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        GlitchyEventTracker.init(this)
 
         toolbar = findViewById(R.id.toolbar) as Toolbar
 
@@ -397,7 +398,7 @@ SaveImageBottomSheet.OnSaveImageListener{
         Toast.makeText(this,R.string.text_copied_on_the_clipboard,Toast.LENGTH_LONG).show()
 
         val share = Intent(Intent.ACTION_SEND)
-        share.setType("image/jpg");
+        share.type = "image/jpg";
         share.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(Intent.createChooser(share, getString(R.string.share)))
     }
@@ -474,11 +475,15 @@ SaveImageBottomSheet.OnSaveImageListener{
     override fun saveImage() {
         ioPresenter.saveImage(mImageView?.getImageBitmap(),this)
         saveImageBS.dismiss()
+
+        GlitchyEventTracker.trackSaveImage()
     }
 
     override fun shareImage() {
         ioPresenter.shareImage(mImageView?.getImageBitmap(),this)
         saveImageBS.dismiss()
+
+        GlitchyEventTracker.trackShareImage()
     }
 
     override fun restoreView(effectState: EffectState?,emptyImageView:Boolean) {
@@ -611,6 +616,8 @@ SaveImageBottomSheet.OnSaveImageListener{
     private fun initEffect(effect:Effect) {
 
         if(mImageView?.canInitEffect?:false) {
+            GlitchyEventTracker.trackEffectClick("effect_"+effect.toString().toLowerCase(Locale.ITALY))
+
             when (effect) {
                 Effect.ANAGLYPH -> makeAnaglyphEffect(true)
                 Effect.GHOST -> makeGhostEffect(true)
@@ -622,6 +629,7 @@ SaveImageBottomSheet.OnSaveImageListener{
                 Effect.HOOLOOVOO -> makeHooloovooEffect(true)
                 Effect.PIXEL -> makePixelEffect(true)
                 Effect.TPIXEL -> makeTPixelEffect(true)
+                Effect.CENSORED -> makeCensoderEffect(true)
                 else -> {
                 }
             }
@@ -733,6 +741,18 @@ SaveImageBottomSheet.OnSaveImageListener{
 
     }
 
+    private fun makeCensoderEffect(init:Boolean = false){
+        if(init){
+            appPresenter.modState = State.EFFECT
+
+            mImageView?.initEffect(Effect.CENSORED)
+            inflateEffectLayout(CensoredEffectState(R.layout.effect_glitch_layout))
+        }
+
+        //imagePresenter.glitchImage(Effect.GLITCH)
+        mImageView?.makeEffect()
+    }
+
     private fun makeWebpEffect(init: Boolean = false){
         if(init){
             appPresenter.modState = State.EFFECT
@@ -806,6 +826,11 @@ SaveImageBottomSheet.OnSaveImageListener{
 
                 bar.visibility = VISIBLE
 
+            }
+
+            is CensoredEffectState ->{
+                val b = view.findViewById(R.id.tap_to_glitch_button) as TextView
+                b.setText(R.string.double_tap_to_censored)
             }
 
             is TPixelEffectState ->{

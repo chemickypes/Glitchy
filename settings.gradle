@@ -1,1 +1,1 @@
-include ':app', ':glitch', ':glitchappcore', ':sidemenu'
+include ':app', ':glitch', ':glitchappcore', ':sidemenu', ':android-gesture'
