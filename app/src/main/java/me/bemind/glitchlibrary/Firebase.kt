@@ -11,8 +11,9 @@ import java.util.*
  */
 
 object GlitchyEventTracker {
-    private val EFFECT_EVENT: String = "effect_name"
-    private val SAVE_EVENT: String = "save_event"
+    private const val EFFECT_EVENT: String = "effect_name"
+    private const val SAVE_EVENT: String = "save_event"
+    private const val SHARE_EVENT: String = "share_event"
 
     private var mFirebaseAnalytics : FirebaseAnalytics? = null
 
@@ -34,8 +35,8 @@ object GlitchyEventTracker {
         return trackEvent(SAVE_EVENT, getBaseBundle())
     }
 
-    fun trackUpdateImage() : GlitchyEventTracker {
-        return trackEvent(SAVE_EVENT, getBaseBundle())
+    fun trackShareImage() : GlitchyEventTracker {
+        return trackEvent(SHARE_EVENT, getBaseBundle())
     }
 
     fun trackEvent(event:String,b: Bundle) : GlitchyEventTracker{
