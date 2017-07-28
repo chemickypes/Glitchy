@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
+
+
 /**
  * Created by angelomoroni on 27/03/17.
  */
@@ -28,6 +30,7 @@ object Glitcher {
 
 
 
+    private var gRect: GRect? = null
 
     private var baseArray: ByteArray = kotlin.ByteArray(0)
 
@@ -75,6 +78,11 @@ object Glitcher {
 
     private var mPixelBitmap : Bitmap? = null
     private var mPixelCanvas : Canvas? = null
+
+    /*private var mCensoredBitmap : Bitmap? = null
+    private var mCensoredCanvas : Canvas? = null*/
+    private var mCesuredPath: Path? = null
+    private var mCensoredMatrix: Matrix? = null
 
 
 
@@ -382,6 +390,44 @@ object Glitcher {
         c?.drawRect(0.0f, 0.0f, w.toFloat(), h.toFloat(), anaglyphPaint)
     }
 
+    fun tapIsInTheRect(tap:Point):Boolean{
+        return tapIsInTheShape(tap, gRect)
+    }
+
+    private fun tapIsInTheShape(tap: Point, shape: GShape?): Boolean {
+        if(shape == null){
+            return false
+        }else{
+            return shape.contains(tap)
+        }
+    }
+
+
+
+    fun censoredCanvas(c:Canvas?, absX:Float, absY:Float, rotation:Float, xScaledFactor:Float,yScaledFactor:Float,motionType: MotionType = MotionType.MOVE){
+
+        val paint = Paint()
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
+
+
+
+        val rectF = RectF()
+
+        gRect?.move(absX.toInt(),absY.toInt())
+        gRect?.scale(xScaledFactor,yScaledFactor)
+        mCesuredPath = getPathFromShape(gRect!!, mCesuredPath)
+        mCesuredPath?.computeBounds(rectF,true)
+        c?.save()
+        c?.rotate(rotation,rectF.centerX(),rectF.centerY())
+        c?.drawPath(mCesuredPath,paint)
+        c?.restore()
+
+        //Log.d("Censored Effect", "rotation $rotation,\n absX $absX,\n absY $absY,\n XScaledFactor $xScaledFactor")
+
+
+
+    }
 
 
     fun ghostCanvas(c: Canvas?, x: Int, y: Int, motion: Motion) {
@@ -551,6 +597,18 @@ object Glitcher {
             initPixelEffect()
         }
 
+        if(effect == Effect.CENSORED){
+            initCensoredEffect()
+        }
+
+    }
+
+    private fun initCensoredEffect() {
+        gRect = GRect(300,150, Glitcher.w.toFloat(), Glitcher.h.toFloat())
+        mCensoredMatrix = Matrix()
+
+        /* mCensoredBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+         mCensoredCanvas = Canvas(mCensoredBitmap)*/
     }
 
     private fun initPixelEffect() {

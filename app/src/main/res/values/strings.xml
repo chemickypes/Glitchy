@@ -27,7 +27,8 @@
     <string name="webp">WEBP</string>
     <string name="tap_here_to_glitch_webp">Tap to glitch WEBP</string>
     <string name="swap">Swap</string>
-    <string name="tap_here_to_swap">Tap here to Swap image</string>
+    <string name="tap_here_to_swap">Tap on image to swap it</string>
+    <string name="double_tap_to_censored">Use two finger to censor</string>
     <string name="noise">Noise</string>
     <string name="tap_here_to_create_noise">Tap to create Noise</string>
     <string name="ghost">Ghost</string>
@@ -62,4 +63,5 @@
     <string name="swipe_on_image">Swipe on Image</string>
     <string name="t_pixel">Touch Pixel</string>
     <string name="density_string">Density</string>
+    <string name="censored">Censored</string>
 </resources>

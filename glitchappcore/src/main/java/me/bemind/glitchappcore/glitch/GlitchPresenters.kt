@@ -1,8 +1,6 @@
 package me.bemind.glitchappcore.glitch
 
 import android.util.Log
-import me.bemind.glitch.Effect
-import me.bemind.glitch.Glitcher
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
@@ -10,15 +8,17 @@ import android.os.Bundle
 import android.support.v4.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.widget.ImageView
+import com.almeros.android.multitouch.MoveGestureDetector
+import com.almeros.android.multitouch.RotateGestureDetector
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bemind.glitch.Motion
-import me.bemind.glitch.TypeEffect
+import me.bemind.glitch.*
 import me.bemind.glitchappcore.GlitchyBaseActivity
 import me.bemind.glitchappcore.app.ProgressUpdate
-import java.lang.Exception
+import kotlin.Exception
 
 
 /**
@@ -69,9 +69,12 @@ interface IGlitchPresenter{
     fun pixelize(canvas: Canvas?,progress: Int = 70,x: Int,y: Int)
     fun pixelizeTot(canvas: Canvas?,progress: Int = 70)
     fun anaglyphPoint(canvas: Canvas?, absX: Float, absY: Float)
+    fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,angleToRotate:Int,
+                 mXScaledFactor :Float = 1f,mYScaleFactor:Float = 1f,motionType: MotionType = MotionType.MOVE)
 }
 
-class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener {
+class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.OnGestureListener
+        /*ScaleGestureDetector.OnScaleGestureListener, MoveGestureDetector.OnMoveGestureListener */{
 
 
 
@@ -101,11 +104,19 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     private var scaledFactory: Float = 1f
 
     var gestureDetector : GestureDetectorCompat? = null
+    var scaleDetector :  ScaleGestureDetector? = null
+    var mRotateDetector :  RotateGestureDetector? = null
+    var mMoveDetector : MoveGestureDetector? = null
 
     val viewCoords = IntArray(2)
 
     var absDeltaX = 0f
     var absDeltaY = 0f
+
+    private var mLastAngle: Int = 0
+    private var angleToRotate: Int = 0
+
+    private var motionType: MotionType = MotionType.MOVE
 
     //touch properties
 
@@ -114,6 +125,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     private var startTouchX = 0
     private var startTouchY = 0
     private var motion: Motion = Motion.NONE
+    private var mScaleFactor: Float = 1f
+    private var mXScaleFactor: Float = 1f
+    private var mYScaleFactor: Float = 1f
+
     //end touch properties
 
     val setImageAction = {
@@ -142,11 +157,16 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> TypeEffect.CANVAS
             Effect.PIXEL -> TypeEffect.CANVAS
             Effect.TPIXEL -> TypeEffect.CANVAS
+            Effect.CENSORED -> TypeEffect.CANVAS
             else -> TypeEffect.NONE
         }
 
+
     init {
         gestureDetector = GestureDetectorCompat(context,this)
+        scaleDetector = ScaleGestureDetector(context,ScaleListener())
+        mMoveDetector = MoveGestureDetector(context,MoveListener())
+        mRotateDetector = RotateGestureDetector(context,RotateListener())
     }
 
     override fun anaglyph(canvas: Canvas?, progress: Int) {
@@ -182,6 +202,10 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     override fun pixelizeTot(canvas: Canvas?, progress: Int) {
         glithce.totalPixelCanvas(canvas,progress)
+    }
+
+    override fun censored(canvas: Canvas?, absDeltaX: Float, absDeltaY: Float,angleToRotate:Int,mXScaleFactor:Float,mYScaleFactor:Float,motionType: MotionType){
+        glithce.censoredCanvas(canvas,absDeltaX,absDeltaY,angleToRotate.toFloat(),mXScaleFactor,mYScaleFactor,motionType)
     }
 
     override fun glitch(canvas: Canvas?) {
@@ -265,7 +289,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
                 val canvas = Canvas(b)
 
-                if(effect == Effect.NOISE || effect == Effect.TPIXEL) {
+                if(effect == Effect.NOISE || effect == Effect.TPIXEL || effect == Effect.CENSORED) {
                     canvas.drawBitmap(glitchView?.getImageBitmap(),0f,0f,null)
                 }
 
@@ -337,7 +361,6 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gestureDetector?.onTouchEvent(event)
 
         val index = event!!.actionIndex
         val flI = floatArrayOf(event.getX(index),event.getY(index))
@@ -348,53 +371,23 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                     ((glitchView?.viewY?:0f)/2f).toInt())
         }
 
+        mRotateDetector?.onTouchEvent(event)
+        scaleDetector?.onTouchEvent(event)
+        mMoveDetector?.onTouchEvent(event)
+        gestureDetector?.onTouchEvent(event)
 
-        when (event.action){
-            MotionEvent.ACTION_DOWN -> {
-                startTouchX = touchPoint.x
-                startTouchY = touchPoint.y
-                motion = Motion.NONE
-
-                previousPoint?.copy(touchPoint)
-            }
-            MotionEvent.ACTION_UP -> {
-                //touchX  = -1
-                //touchY  = -1
-                if(effect == Effect.GLITCH || effect == Effect.SWAP ){
-                    makeEffect(0)
-                }
-
-            }
-            MotionEvent.ACTION_MOVE -> {
-               /* startTouchX = touchPoint.x
-                startTouchY = touchPoint.y*/
-
-                val p =  (touchPoint.x) - (previousPoint?.x?:0)
-
-                absDeltaX = p.toFloat()
-                absDeltaY = (touchPoint.y - (previousPoint?.y?:0)).toFloat()
-
-                previousPoint?.copy(touchPoint)
-
-
-                if(/*effect == Effect.ANAGLYPH ||*/ effect == Effect.NOISE || effect == Effect.PIXEL){
-
-                    ProgressUpdate.updateProgress(p.toFloat())
-
-
-                }
-            }
-        }
 
         if(effect == Effect.GHOST || effect == Effect.WOBBLE || effect == Effect.TPIXEL
-                || effect == Effect.ANAGLYPH) {
+                || effect == Effect.ANAGLYPH || effect == Effect.CENSORED) {
             glitchView?.invalidateGlitchView()
         }
 
 
 
+
         return true
     }
+
 
     private fun calculateTouchPoint(event: FloatArray): Point {
 
@@ -409,13 +402,16 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
 
     }
 
+
     override fun onShowPress(p0: MotionEvent?) {
         //nothing
     }
 
     override fun onSingleTapUp(p0: MotionEvent?): Boolean {
-        //nothing
-        return false
+        if(effect == Effect.GLITCH || effect == Effect.SWAP ){
+            makeEffect(0)
+        }
+        return true
     }
 
     override fun onDown(p0: MotionEvent?): Boolean {
@@ -448,7 +444,9 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
     override fun onLongPress(p0: MotionEvent?) {
     }
 
-    override fun onDraw(canvas: Canvas?,scale: Boolean){
+
+
+    override fun onDraw(canvas: Canvas?, scale: Boolean){
 
 
         canvas?.save()
@@ -469,6 +467,7 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             Effect.HOOLOOVOO -> hooloovooize(canvas,effectProgress)
             Effect.PIXEL -> pixelizeTot(canvas,effectProgress)
             Effect.TPIXEL -> pixelize(canvas,effectProgress,touchPoint.x,touchPoint.y)
+            Effect.CENSORED -> censored(canvas,absDeltaX,absDeltaY,angleToRotate,mXScaleFactor,mYScaleFactor,motionType)
             else -> Log.v("ImageView", "BASE")
         }
 
@@ -477,9 +476,15 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
             glithce.drawPath(canvas,touchPoint.x,touchPoint.y)
         }*/
 
-        canvas?.restore()
+        try{
+            canvas?.restore()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
 
     }
+
+
 
 
     private fun drawJPEGEffect(){
@@ -519,6 +524,62 @@ class GlitchPresenter(val context: Context) : IGlitchPresenter, GestureDetector.
                         }
                 )
     }
+
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            mScaleFactor *= detector.scaleFactor // scale change since previous event
+
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f))
+
+
+            if(detector.currentSpanX>detector.currentSpanY) {
+                mXScaleFactor *= if (detector.previousSpanX > 0) {
+                    detector.currentSpanX / detector.previousSpanX
+                } else {
+                    1f
+                }
+
+                mXScaleFactor = Math.max(0.1f, Math.min(mXScaleFactor, 10.0f))
+            }else {
+
+                mYScaleFactor *= if (detector.previousSpanY > 0) {
+                    detector.currentSpanY / detector.previousSpanY
+                } else {
+                    1f
+                }
+
+                mYScaleFactor = Math.max(0.1f, Math.min(mYScaleFactor, 10.0f))
+            }
+
+            return true
+        }
+    }
+
+    private inner class RotateListener : RotateGestureDetector.SimpleOnRotateGestureListener() {
+        override fun onRotate(detector: RotateGestureDetector): Boolean {
+            angleToRotate -= (detector.rotationDegreesDelta.toInt() )
+            return true
+        }
+    }
+
+    private inner class MoveListener : MoveGestureDetector.SimpleOnMoveGestureListener() {
+        override fun onMove(detector: MoveGestureDetector): Boolean {
+            val d = detector.focusDelta
+
+            absDeltaY = d.y
+            absDeltaX = d.x
+
+            if ( effect == Effect.NOISE || effect == Effect.PIXEL) {
+
+                ProgressUpdate.updateProgress(absDeltaX)
+
+            }
+
+            return true
+        }
+    }
+
+
 }
 
 private fun Point.copy(p1: Point) {
