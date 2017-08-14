@@ -73,19 +73,19 @@ SaveImageBottomSheet.OnSaveImageListener{
     //private var toolbarEffect : Toolbar? = null
     private var actionBar : View? = null
 
-    private val saveAction : ImageView by lazy {
-        findViewById(R.id.save_effect) as ImageView
+    private val saveAction : ImageView? by lazy {
+        findViewById(R.id.save_effect) as? ImageView?
     }
 
-    private val cleaAction : ImageView by lazy {
-        findViewById(R.id.clear_effect) as ImageView
+    private val cleaAction : ImageView? by lazy {
+        findViewById(R.id.clear_effect) as? ImageView?
     }
 
     private val saveSAction by lazy {
         findViewById(R.id.save_s_button)
     }
 
-    private val clearSAction by lazy {
+    private val clearSAction  : View? by lazy {
         findViewById(R.id.clear_s_button)
     }
 
@@ -172,22 +172,22 @@ SaveImageBottomSheet.OnSaveImageListener{
 
         actionBar = findViewById(R.id.action_panel)
 
-        cleaAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_close))
-        cleaAction.setOnClickListener {
+        cleaAction?.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_close))
+        cleaAction?.setOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
         }
-        clearSAction.setOnClickListener {
+        clearSAction?.setOnClickListener {
             if(appPresenter.modState == State.EFFECT){
                 appPresenter.modState = State.BASE
                 mImageView?.clearEffect()
             }
         }
 
-        saveAction.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
-        saveAction.setOnClickListener { applyEffect() }
+        saveAction?.setImageDrawable(FontIconDrawable.inflate(this,R.xml.ic_done))
+        saveAction?.setOnClickListener { applyEffect() }
         saveSAction.setOnClickListener { applyEffect() }
 
 
